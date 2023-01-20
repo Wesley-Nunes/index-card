@@ -1,0 +1,79 @@
+.index-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 3.2rem;
+
+  width: 70vw;
+  height: 75vh;
+
+  background-color: var(--card-bg-color);
+
+  padding: 3.2rem;
+  padding-right: 16rem;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.index-card__row {
+  display: flex;
+  align-items: baseline;
+  column-gap: 0.8rem;
+
+  width: 100%;
+}
+
+.index-card__row--full-height {
+  height: 100%;
+}
+
+.index-card__header {
+  width: 100%;
+
+  font: 500 2.3rem var(--font-mono);
+
+  color: var(--text-color);
+  background-color: var(--card-bg-color);
+  caret-color: var(--text-color);
+
+  border: none;
+}
+
+.index-card__header::placeholder {
+  color: var(--text-color);
+}
+
+.index-card__body {
+  height: 100%;
+  width: 100%;
+
+  font: 2.2rem var(--font-mono);
+
+  color: var(--text-color);
+  background-color: var(--card-bg-color);
+  caret-color: var(--text-color);
+
+  border: none;
+  resize: none;
+}
+
+.index-card__body::placeholder {
+  color: var(--text-color);
+}
+
+.index-card__footer {
+  width: 100%;
+
+  font: 400 2rem var(--font-mono);
+
+  color: var(--text-color);
+  background-color: var(--card-bg-color);
+  caret-color: var(--text-color);
+
+  border: none;
+}
+
+.index-card__footer::placeholder {
+  color: var(--text-color);
+}
