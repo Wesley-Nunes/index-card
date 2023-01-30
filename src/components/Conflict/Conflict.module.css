@@ -1,0 +1,38 @@
+.container {
+  display: flex;
+  align-items: baseline;
+  column-gap: 0.8rem;
+
+  width: 100%;
+}
+
+.default {
+  background-color: var(--card-bg-color);
+}
+
+.loading {
+  background-color: var(--card-bg-disabled);
+
+  cursor: wait;
+}
+
+.error {
+  color: var(--accent-color);
+  font-size: 3.2rem;
+}
+
+.input {
+  width: 100%;
+
+  font: 400 2rem var(--font-mono);
+
+  color: var(--text-color);
+  caret-color: var(--text-color);
+
+  border: none;
+  border-radius: 3px;
+}
+
+.input::placeholder {
+  color: var(--text-color);
+}
