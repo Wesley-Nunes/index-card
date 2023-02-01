@@ -17,7 +17,7 @@ function SceneHeading({ sceneHeading: sh, state }: SceneHeadingProps) {
         className={`${styles.input} ${styles[`${state}`]}`}
         disabled={state === 'loading'}
         value={sceneHeading}
-        onChange={e => state === 'default' && setSceneHeading(e.target.value)}
+        onChange={e => state === 'success' && setSceneHeading(e.target.value)}
       />
     </span>
   )

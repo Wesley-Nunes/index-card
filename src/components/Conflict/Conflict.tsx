@@ -17,7 +17,7 @@ function Conflict({ conflict: c, state }: ConflictProps) {
         className={`${styles.input} ${styles[`${state}`]}`}
         disabled={state === 'loading'}
         value={conflict}
-        onChange={e => state === 'default' && setConflict(e.target.value)}
+        onChange={e => state === 'success' && setConflict(e.target.value)}
       />
     </span>
   )

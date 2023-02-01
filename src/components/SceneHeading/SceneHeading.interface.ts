@@ -1,4 +1,4 @@
 export interface SceneHeadingProps {
   sceneHeading: string
-  state: 'default' | 'loading' | 'error'
+  state: 'success' | 'loading' | 'error'
 }
