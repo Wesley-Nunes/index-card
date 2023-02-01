@@ -4,7 +4,7 @@ import Synopsis from './Synopsis'
 
 describe('Synopsis', () => {
   it('should render a synopsis text area field', () => {
-    render(<Synopsis synopsis='' state='default' />)
+    render(<Synopsis synopsis='' state='success' />)
 
     const synopsis = screen.getByRole<HTMLInputElement>('textbox', {
       name: /synopsis/i
@@ -15,7 +15,7 @@ describe('Synopsis', () => {
   })
 
   it('should be possible to change the text content of the synopsis', () => {
-    render(<Synopsis synopsis='Luna corre pela floresta' state='default' />)
+    render(<Synopsis synopsis='Luna corre pela floresta' state='success' />)
 
     const synopsis = screen.getByRole<HTMLInputElement>('textbox', {
       name: /synopsis/i

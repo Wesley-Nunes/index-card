@@ -6,7 +6,7 @@
   width: 100%;
 }
 
-.default {
+.success {
   background-color: var(--card-bg-color);
 }
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import Head from 'next/head'
-import { IndexCard } from '@/components'
+import { IndexCard, IndexCardPosition } from '@/components'
 import styles from '@/styles/pages/editor.module.css'
 
 export default function Editor() {
@@ -38,8 +38,8 @@ export default function Editor() {
       timeline_id: 8
     }
   ]
-  const currentPosition = 13
-  const currentState = 'default'
+  const currentPosition = 1
+  const currentState = 'success'
   const currentCardIndex = indexCardValues.filter(
     indexCard => indexCard.position === currentPosition
   )[0]
@@ -60,6 +60,7 @@ export default function Editor() {
           conflict={conflict}
           state={currentState}
         />
+        <IndexCardPosition position={currentPosition} state={currentState} />
       </div>
     </>
   )

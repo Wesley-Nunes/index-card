@@ -22,7 +22,7 @@
   color: var(--text-color);
 }
 
-.default {
+.success {
   background-color: var(--card-bg-color);
 }
 

@@ -16,7 +16,7 @@ function Synopsis({ synopsis: s, state }: SynopsisProps) {
         className={`${styles.input} ${styles[`${state}`]}`}
         disabled={state === 'loading'}
         value={synopsis}
-        onChange={e => state === 'default' && setSynopsis(e.target.value)}
+        onChange={e => state === 'success' && setSynopsis(e.target.value)}
       />
     </span>
   )

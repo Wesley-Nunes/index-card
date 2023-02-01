@@ -1,4 +1,4 @@
 export interface SynopsisProps {
   synopsis: string
-  state: 'default' | 'loading' | 'error'
+  state: 'success' | 'loading' | 'error'
 }

@@ -4,7 +4,7 @@ import Conflict from './Conflict'
 
 describe('Conflict', () => {
   it('should render a conflict input field', () => {
-    render(<Conflict conflict='' state='default' />)
+    render(<Conflict conflict='' state='success' />)
 
     const conflict = screen.getByRole<HTMLInputElement>('textbox', {
       name: /conflict/i
@@ -15,7 +15,7 @@ describe('Conflict', () => {
   })
 
   it('should be possible to change the text content of the conflict', () => {
-    render(<Conflict conflict='O Vizir trama matar o sultão' state='default' />)
+    render(<Conflict conflict='O Vizir trama matar o sultão' state='success' />)
 
     const conflict = screen.getByRole<HTMLInputElement>('textbox', {
       name: /conflict/i
