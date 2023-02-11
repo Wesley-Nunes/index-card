@@ -22,6 +22,14 @@
   color: var(--text-color);
 }
 
+.fullHeight {
+  height: 100%;
+}
+
+.noResize {
+  resize: none;
+}
+
 .success {
   background-color: var(--card-bg-color);
 }

@@ -1,26 +1,17 @@
-import React, { useState } from 'react'
+import React, { memo } from 'react'
 import { IoLocationSharp } from '@react-icons/all-files/io5/IoLocationSharp'
-import type { SceneHeadingProps } from './SceneHeading.interface'
-import styles from './SceneHeading.module.css'
+import { TextLayout, TextLayoutWrapper } from '../@generics'
 
-function SceneHeading({ sceneHeading: sh, state }: SceneHeadingProps) {
-  const [sceneHeading, setSceneHeading] = useState(sh)
-
+function SceneHeading({ text, setText, state }: TextLayoutWrapper) {
   return (
-    <span className={styles.container}>
-      <IoLocationSharp />
-      <input
-        type='text'
-        name='scene heading'
-        aria-label='Scene Heading'
-        placeholder='Scene Heading'
-        className={`${styles.input} ${styles[`${state}`]}`}
-        disabled={state === 'loading'}
-        value={sceneHeading}
-        onChange={e => state === 'success' && setSceneHeading(e.target.value)}
-      />
-    </span>
+    <TextLayout
+      description='scene heading'
+      icon={<IoLocationSharp />}
+      text={text}
+      setText={setText}
+      state={state}
+    />
   )
 }
 
-export default SceneHeading
+export default memo(SceneHeading)
