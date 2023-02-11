@@ -1,26 +1,17 @@
-import React, { useState } from 'react'
+import React, { memo } from 'react'
 import { IoPulseSharp } from '@react-icons/all-files/io5/IoPulseSharp'
-import { ConflictProps } from './Conflict.interface'
-import styles from './Conflict.module.css'
+import { TextLayout, TextLayoutWrapper } from '../@generics'
 
-function Conflict({ conflict: c, state }: ConflictProps) {
-  const [conflict, setConflict] = useState(c)
-
+function Conflict({ text, setText, state }: TextLayoutWrapper) {
   return (
-    <span className={styles.container}>
-      <IoPulseSharp />
-      <input
-        type='text'
-        name='conflict'
-        aria-label='Conflict'
-        placeholder='Conflict'
-        className={`${styles.input} ${styles[`${state}`]}`}
-        disabled={state === 'loading'}
-        value={conflict}
-        onChange={e => state === 'success' && setConflict(e.target.value)}
-      />
-    </span>
+    <TextLayout
+      description='conflict'
+      icon={<IoPulseSharp />}
+      text={text}
+      setText={setText}
+      state={state}
+    />
   )
 }
 
-export default Conflict
+export default memo(Conflict)

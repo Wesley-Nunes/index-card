@@ -1,5 +1,5 @@
-import React from 'react'
-import type { IndexCardPositionProps } from './IndexCardPositionProps.interface'
+import React, { memo } from 'react'
+import type { IndexCardPositionProps } from './IndexCardPosition.interface'
 import styles from './IndexCardPosition.module.css'
 
 function IndexCardPosition({ position, state }: IndexCardPositionProps) {
@@ -14,4 +14,4 @@ function IndexCardPosition({ position, state }: IndexCardPositionProps) {
   )
 }
 
-export default IndexCardPosition
+export default memo(IndexCardPosition)

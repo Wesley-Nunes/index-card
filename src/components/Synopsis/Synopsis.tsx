@@ -1,25 +1,18 @@
-import React, { useState } from 'react'
+import React, { memo } from 'react'
 import { IoReaderSharp } from '@react-icons/all-files/io5/IoReaderSharp'
-import type { SynopsisProps } from './Synopsis.interface'
-import styles from './Synopsis.module.css'
+import { TextLayout, TextLayoutWrapper } from '../@generics'
 
-function Synopsis({ synopsis: s, state }: SynopsisProps) {
-  const [synopsis, setSynopsis] = useState(s)
-
+function Synopsis({ text, setText, state }: TextLayoutWrapper) {
   return (
-    <span className={styles.container}>
-      <IoReaderSharp />
-      <textarea
-        name='synopsis'
-        aria-label='Synopsis'
-        placeholder='Synopsis'
-        className={`${styles.input} ${styles[`${state}`]}`}
-        disabled={state === 'loading'}
-        value={synopsis}
-        onChange={e => state === 'success' && setSynopsis(e.target.value)}
-      />
-    </span>
+    <TextLayout
+      description='synopsis'
+      icon={<IoReaderSharp />}
+      text={text}
+      setText={setText}
+      state={state}
+      withTextArea
+    />
   )
 }
 
-export default Synopsis
+export default memo(Synopsis)

@@ -1,49 +1,89 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
-import { IndexCard, IndexCardPosition } from '@/components'
+import {
+  SceneHeading,
+  Synopsis,
+  Conflict,
+  IndexCardPosition
+} from '@/components'
 import styles from '@/styles/pages/editor.module.css'
 
 export default function Editor() {
-  const indexCardValues = [
-    {
-      id: 5,
-      position: 1,
-      sceneHeading: 'EXT. Jardins suspensos',
-      synopsis: 'Luta entre o último guarda real e o regicida.',
-      conflict: 'O guarda morre, a rainha está em apuros.',
-      timeline_id: 8
-    },
-    {
-      id: 7,
-      position: 2,
-      sceneHeading: 'EXT. Patio',
-      synopsis: '',
-      conflict: '',
-      timeline_id: 8
-    },
-    {
-      id: 5,
-      position: 3,
-      sceneHeading: '',
-      synopsis: '',
-      conflict: '',
-      timeline_id: 8
-    },
-    {
-      id: 1,
-      position: 13,
-      sceneHeading: 'INT. Palácio de Okie',
-      synopsis: 'A rainha pedinte busca ajuda.',
-      conflict: '',
-      timeline_id: 8
+  const [state, setState] = useState<'loading' | 'success' | 'error'>('loading')
+  const [sHeading, setSHeading] = useState('')
+  const [synopsis, setSynopsis] = useState('')
+  const [conflict, setConflict] = useState('')
+  const [curPosition] = useState(1)
+
+  useEffect(() => {
+    try {
+      // backend data
+      const indexCards = [
+        {
+          id: 5,
+          position: 1,
+          sceneHeading: 'EXT. Jardins suspensos',
+          synopsis: 'Luta entre o último guarda real e o regicida.',
+          conflict: 'O guarda morre, a rainha está em apuros.',
+          indexCardId: 21
+        },
+        {
+          id: 7,
+          position: 2,
+          sceneHeading: 'EXT. Patio',
+          synopsis: '',
+          conflict: '',
+          indexCardId: 24
+        },
+        {
+          id: 5,
+          position: 3,
+          sceneHeading: '',
+          synopsis: '',
+          conflict: '',
+          indexCardId: 12
+        },
+        {
+          id: 1,
+          position: 13,
+          sceneHeading: 'INT. Palácio de Okie',
+          synopsis: 'A rainha pedinte busca ajuda.',
+          conflict: '',
+          indexCardId: 18
+        }
+      ]
+
+      const indexCard = indexCards.find(
+        ({ position }) => position === curPosition
+      )!
+
+      setSHeading(indexCard.sceneHeading)
+      setSynopsis(indexCard.synopsis)
+      setConflict(indexCard.conflict)
+
+      setTimeout(() => {
+        // delay just for test
+        setState('success')
+      }, 100)
+    } catch (error) {
+      setState('error')
     }
-  ]
-  const currentPosition = 1
-  const currentState = 'success'
-  const currentCardIndex = indexCardValues.filter(
-    indexCard => indexCard.position === currentPosition
-  )[0]
-  const { sceneHeading, synopsis, conflict } = currentCardIndex
+  }, [curPosition])
+
+  if (state === 'error') {
+    return (
+      <div className={styles.container}>
+        <main className={`${styles.main} ${styles[`${state}`]}`}>
+          <strong>
+            <p>
+              An error occurred.
+              <br /> Please, check your internet connection.
+            </p>
+          </strong>
+        </main>
+      </div>
+    )
+  }
 
   return (
     <>
@@ -53,14 +93,13 @@ export default function Editor() {
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <div className={styles.main}>
-        <IndexCard
-          sceneHeading={sceneHeading}
-          synopsis={synopsis}
-          conflict={conflict}
-          state={currentState}
-        />
-        <IndexCardPosition position={currentPosition} state={currentState} />
+      <div className={styles.container}>
+        <main className={styles.main}>
+          <SceneHeading text={sHeading} setText={setSHeading} state={state} />
+          <Synopsis text={synopsis} setText={setSynopsis} state={state} />
+          <Conflict text={conflict} setText={setConflict} state={state} />
+        </main>
+        <IndexCardPosition position={curPosition} state={state} />
       </div>
     </>
   )
