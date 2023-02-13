@@ -22,13 +22,4 @@ describe('Index Card Position', () => {
 
     expect(indexCardPosition).toHaveTextContent('')
   })
-
-  it('should render an empty string if the state is error', () => {
-    const actualPosition = 44
-    render(<IndexCardPosition position={actualPosition} state='error' />)
-
-    const indexCardPosition = screen.getByTestId('index-card-position')
-
-    expect(indexCardPosition).toHaveTextContent('')
-  })
 })

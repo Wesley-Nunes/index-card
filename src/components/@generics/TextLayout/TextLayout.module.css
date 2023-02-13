@@ -39,8 +39,3 @@
 
   cursor: wait;
 }
-
-.error {
-  color: var(--accent-color);
-  font-size: 3.2rem;
-}

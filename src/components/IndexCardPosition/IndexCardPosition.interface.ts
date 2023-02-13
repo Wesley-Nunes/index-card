@@ -1,4 +1,4 @@
 export interface IndexCardPositionProps {
   position: number
-  state: 'success' | 'loading' | 'error'
+  state: 'success' | 'loading'
 }
