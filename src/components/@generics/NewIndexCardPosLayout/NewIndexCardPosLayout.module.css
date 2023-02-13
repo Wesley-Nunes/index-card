@@ -1,0 +1,19 @@
+.btn {
+  border: none;
+  border-radius: 50%;
+}
+
+.success {
+  background-color: var(--card-bg-color);
+  cursor: pointer;
+}
+
+.loading {
+  background-color: var(--card-bg-disabled);
+  cursor: wait;
+}
+
+.error {
+  background-color: var(--card-bg-disabled);
+  cursor: not-allowed;
+}
