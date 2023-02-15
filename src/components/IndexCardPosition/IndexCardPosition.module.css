@@ -1,4 +1,5 @@
 .position {
+  grid-column-start: 2;
   font-weight: bold;
   cursor: default;
 }

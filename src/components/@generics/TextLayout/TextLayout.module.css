@@ -20,6 +20,7 @@
 
 .input::placeholder {
   color: var(--text-color);
+  text-transform: capitalize;
 }
 
 .fullHeight {

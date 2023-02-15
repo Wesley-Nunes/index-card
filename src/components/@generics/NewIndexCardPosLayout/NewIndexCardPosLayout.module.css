@@ -1,4 +1,7 @@
 .btn {
+  width: 2.4rem;
+  height: 2.4rem;
+
   border: none;
   border-radius: 50%;
 }
