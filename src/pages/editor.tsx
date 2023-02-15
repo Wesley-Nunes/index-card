@@ -5,7 +5,8 @@ import {
   Synopsis,
   Conflict,
   IndexCardPosition,
-  NextIndexCard
+  NextIndexCard,
+  PreviousIndexCard
 } from '@/components'
 import styles from '@/styles/pages/editor.module.css'
 
@@ -18,6 +19,12 @@ export default function Editor() {
   const [positions, setPositions] = useState<number[]>([])
   const nextPosition = useMemo<number>(() => {
     const newIndex = positions.indexOf(curPosition) + 1
+    const newPosition = positions[newIndex]
+
+    return newPosition || 0
+  }, [curPosition, positions])
+  const previousPosition = useMemo<number>(() => {
+    const newIndex = positions.indexOf(curPosition) - 1
     const newPosition = positions[newIndex]
 
     return newPosition || 0
@@ -105,7 +112,11 @@ export default function Editor() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <div className={styles.container}>
-        <p>x</p>
+        <PreviousIndexCard
+          position={previousPosition}
+          setPosition={setCurPosition}
+          state={state}
+        />
         <main className={styles.main}>
           <SceneHeading text={sHeading} setText={setSHeading} state={state} />
           <Synopsis text={synopsis} setText={setSynopsis} state={state} />
