@@ -19,7 +19,7 @@ function TextLayout({
         <textarea
           name={description}
           aria-label={description}
-          placeholder={description.toUpperCase()}
+          placeholder={description}
           className={`${styles.input} ${styles.fullHeight} ${styles.noResize} ${
             styles[`${state}`]
           }`}
@@ -33,7 +33,7 @@ function TextLayout({
           type='text'
           name={description}
           aria-label={description}
-          placeholder={description.toUpperCase()}
+          placeholder={description}
           className={`${styles.input} ${styles[`${state}`]}`}
           disabled={state === 'loading'}
           readOnly={state === 'loading'}
