@@ -1,8 +1,11 @@
 .container {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 32px var(--main-container-size) 32px;
+  gap: 16px;
+  justify-content: center;
+  justify-items: center;
+  align-content: center;
   align-items: center;
-  justify-content: space-evenly;
 
   height: 100vh;
 }
@@ -14,7 +17,7 @@
   justify-content: space-between;
   gap: 3.2rem;
 
-  width: 70vw;
+  width: var(--main-container-size);
   height: 75vh;
 
   background-color: var(--card-bg-color);

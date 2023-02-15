@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Head from 'next/head'
 import {
   SceneHeading,
   Synopsis,
   Conflict,
-  IndexCardPosition
+  IndexCardPosition,
+  NextIndexCard
 } from '@/components'
 import styles from '@/styles/pages/editor.module.css'
 
@@ -13,7 +14,14 @@ export default function Editor() {
   const [sHeading, setSHeading] = useState('')
   const [synopsis, setSynopsis] = useState('')
   const [conflict, setConflict] = useState('')
-  const [curPosition] = useState(1)
+  const [curPosition, setCurPosition] = useState(1)
+  const [positions, setPositions] = useState<number[]>([])
+  const nextPosition = useMemo<number>(() => {
+    const newIndex = positions.indexOf(curPosition) + 1
+    const newPosition = positions[newIndex]
+
+    return newPosition || 0
+  }, [curPosition, positions])
 
   useEffect(() => {
     try {
@@ -55,11 +63,13 @@ export default function Editor() {
 
       const indexCard = indexCards.find(
         ({ position }) => position === curPosition
-      )!
+      ) || { sceneHeading: '', synopsis: '', conflict: '' }
+      const positionList = indexCards.map(({ position }) => position)
 
       setSHeading(indexCard.sceneHeading)
       setSynopsis(indexCard.synopsis)
       setConflict(indexCard.conflict)
+      setPositions(positionList)
 
       setTimeout(() => {
         // delay just for test
@@ -73,6 +83,7 @@ export default function Editor() {
   if (state === 'error') {
     return (
       <div className={styles.container}>
+        <div />
         <main className={`${styles.main} ${styles[`${state}`]}`}>
           <strong>
             <p>
@@ -94,11 +105,17 @@ export default function Editor() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <div className={styles.container}>
+        <p>x</p>
         <main className={styles.main}>
           <SceneHeading text={sHeading} setText={setSHeading} state={state} />
           <Synopsis text={synopsis} setText={setSynopsis} state={state} />
           <Conflict text={conflict} setText={setConflict} state={state} />
         </main>
+        <NextIndexCard
+          position={nextPosition}
+          setPosition={setCurPosition}
+          state={state}
+        />
         <IndexCardPosition position={curPosition} state={state} />
       </div>
     </>

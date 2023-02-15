@@ -9,6 +9,8 @@
   --card-bg-disabled: hsl(195, 70%, 12%);
   --accent-color: hsl(28, 100%, 88%);
 
+  --main-container-size: 70vw;
+
   font-size: 62.5%;
 }
 
