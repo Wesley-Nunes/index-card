@@ -27,6 +27,7 @@ function TextLayout({
           readOnly={state === 'loading'}
           value={text}
           onChange={e => state === 'success' && setText(e.target.value)}
+          data-testid={description}
         />
       ) : (
         <input
@@ -39,6 +40,7 @@ function TextLayout({
           readOnly={state === 'loading'}
           value={text}
           onChange={e => state === 'success' && setText(e.target.value)}
+          data-testid={description}
         />
       )}
     </span>

@@ -16,6 +16,7 @@ function NewIndexCardPosLayout({
       type='button'
       onClick={() => setPosition(position)}
       disabled={state === 'error' || state === 'loading'}
+      data-testid={description}
     >
       {icon}
     </button>
