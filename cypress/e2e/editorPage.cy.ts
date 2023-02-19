@@ -26,6 +26,8 @@ describe('Editor Page - Viewer and navigation', () => {
     )
 
     cy.getThe('index-card-position').contains('1')
+
+    cy.matchImageSnapshot('should show all the correct content')
   })
 
   it('should go to the next index card', () => {
@@ -38,6 +40,8 @@ describe('Editor Page - Viewer and navigation', () => {
     cy.getThe('conflict').should('have.value', '')
 
     cy.getThe('index-card-position').contains('2')
+
+    cy.matchImageSnapshot('should go to the next index card')
   })
 
   it('should go to the last index card and then not proceed further', () => {
@@ -59,6 +63,10 @@ describe('Editor Page - Viewer and navigation', () => {
     // still the fourth(last) index card, the button is disabled now.
     cy.getThe('Next Index Card').should('be.disabled')
     cy.getThe('scene heading').should('have.value', 'INT. Palácio de Okie')
+
+    cy.matchImageSnapshot(
+      'should go to the last index card and then not proceed further'
+    )
   })
 
   it('should go to the previous index card', () => {
@@ -69,9 +77,19 @@ describe('Editor Page - Viewer and navigation', () => {
     // first index card
     cy.goTo('Previous Index Card')
     cy.getThe('scene heading').should('have.value', 'EXT. Jardins suspensos')
+
+    cy.matchImageSnapshot('should go to the previous index card')
   })
 
   it('should not be possible to return before the first index card', () => {
+    // Add these milliseconds because the test is too small,
+    // when taking a snapshot, the page is not yet fully loaded.
+    cy.wait(500)
+
     cy.getThe('Previous Index Card').should('be.disabled')
+
+    cy.matchImageSnapshot(
+      'should not be possible to return before the first index card'
+    )
   })
 })
