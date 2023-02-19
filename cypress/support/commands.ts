@@ -1,4 +1,8 @@
 /// <reference types="cypress" />
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { addMatchImageSnapshotCommand } from 'cypress-image-snapshot/command'
+
+addMatchImageSnapshotCommand()
 
 Cypress.Commands.add('getThe', element => cy.get(`[data-testid='${element}']`))
 
