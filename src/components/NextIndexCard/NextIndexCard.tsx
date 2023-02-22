@@ -1,5 +1,5 @@
 import React from 'react'
-import { IoArrowForwardCircleSharp } from '@react-icons/all-files/io5/IoArrowForwardCircleSharp'
+import { IoIosArrowForward } from '@react-icons/all-files/io/IoIosArrowForward'
 import { NewIndexCardPosLayout, NewIndexCardPosWrapper } from '../@generics'
 
 function NextIndexCard({
@@ -11,7 +11,7 @@ function NextIndexCard({
 
   return (
     <NewIndexCardPosLayout
-      icon={<IoArrowForwardCircleSharp size={24} />}
+      icon={<IoIosArrowForward size={24} />}
       description='Next Index Card'
       position={position}
       setPosition={setPosition}

@@ -11,7 +11,12 @@ function NewIndexCardPosLayout({
 }: NewIndexCardPosProps) {
   return (
     <button
-      className={`${styles.btn} ${styles[`${state}`]}`}
+      className={`
+        ${styles.btn}
+        ${styles[`${state}`]} 
+        ${description === 'Next Index Card' ? styles['btn-next'] : ''} 
+        ${description === 'Previous Index Card' ? styles['btn-prev'] : ''}
+      `}
       aria-label={description}
       type='button'
       onClick={() => setPosition(position)}

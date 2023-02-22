@@ -10,7 +10,6 @@ function Synopsis({ text, setText, state }: TextLayoutWrapper) {
       text={text}
       setText={setText}
       state={state}
-      withTextArea
     />
   )
 }

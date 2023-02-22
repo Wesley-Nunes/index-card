@@ -1,5 +1,5 @@
 import React from 'react'
-import { IoArrowBackCircleSharp } from '@react-icons/all-files/io5/IoArrowBackCircleSharp'
+import { IoIosArrowBack } from '@react-icons/all-files/io/IoIosArrowBack'
 import { NewIndexCardPosLayout, NewIndexCardPosWrapper } from '../@generics'
 
 function PreviousIndexCard({
@@ -11,7 +11,7 @@ function PreviousIndexCard({
 
   return (
     <NewIndexCardPosLayout
-      icon={<IoArrowBackCircleSharp size={24} />}
+      icon={<IoIosArrowBack size={24} />}
       description='Previous Index Card'
       position={position}
       setPosition={setPosition}

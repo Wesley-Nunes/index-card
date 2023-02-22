@@ -7,42 +7,30 @@ function TextLayout({
   description,
   text,
   setText,
-  state,
-  withTextArea = false
+  state
 }: TextLayoutProps) {
   return (
     <span
-      className={`${styles.container} ${withTextArea ? styles.fullHeight : ''}`}
+      className={`
+        ${styles.container}
+        ${description !== 'conflict' ? styles.divider : ''}
+        ${description === 'synopsis' ? styles.fullHeight : ''}`}
     >
       {icon}
-      {withTextArea ? (
-        <textarea
-          name={description}
-          aria-label={description}
-          placeholder={description}
-          className={`${styles.input} ${styles.fullHeight} ${styles.noResize} ${
-            styles[`${state}`]
-          }`}
-          disabled={state === 'loading'}
-          readOnly={state === 'loading'}
-          value={text}
-          onChange={e => state === 'success' && setText(e.target.value)}
-          data-testid={description}
-        />
-      ) : (
-        <input
-          type='text'
-          name={description}
-          aria-label={description}
-          placeholder={description}
-          className={`${styles.input} ${styles[`${state}`]}`}
-          disabled={state === 'loading'}
-          readOnly={state === 'loading'}
-          value={text}
-          onChange={e => state === 'success' && setText(e.target.value)}
-          data-testid={description}
-        />
-      )}
+      <textarea
+        className={`
+          ${styles[`${state}`]}
+          ${styles.input} ${styles.noResize} ${styles.fullHeight}
+        `}
+        name={description}
+        aria-label={description}
+        placeholder={description}
+        disabled={state === 'loading'}
+        readOnly={state === 'loading'}
+        value={text}
+        onChange={e => state === 'success' && setText(e.target.value)}
+        data-testid={description}
+      />
     </span>
   )
 }

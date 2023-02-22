@@ -3,13 +3,11 @@
     'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
     'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
 
-  --text-color: hsl(140, 24%, 58%);
-  --bg-color: hsl(195, 52%, 21%);
-  --card-bg-color: hsl(195, 70%, 13%);
-  --card-bg-disabled: hsl(195, 70%, 12%);
-  --accent-color: hsl(28, 100%, 88%);
-
-  --main-container-size: 70vw;
+  --base-color: hsl(195, 70%, 13%);
+  --base-color-opacity: hsla(195, 70%, 13%, 0.6);
+  --container-color: hsl(195, 52%, 21%);
+  --text-color: hsl(140, 45%, 65%);
+  --accent-color: hsl(9, 100%, 95%);
 
   font-size: 62.5%;
 }
@@ -27,7 +25,7 @@ body {
 }
 
 body {
-  background-color: var(--bg-color);
+  background-color: var(--base-color);
 
   font: 1.8rem var(--font-mono);
   color: var(--text-color);
