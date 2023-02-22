@@ -1,22 +1,53 @@
 .btn {
-  width: 2.4rem;
+  width: 2.8rem;
   height: 2.4rem;
 
+  background-color: var(--container-color);
+
   border: none;
-  border-radius: 50%;
+  border-bottom: 1px solid var(--base-color);
+
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.btn:hover {
+  opacity: 1;
+}
+
+.btn > svg {
+  fill: var(--text-color);
+}
+
+.btn:hover > svg {
+  fill: var(--accent-color);
+}
+
+.btn-prev {
+  border-left: 1px solid var(--base-color);
+  border-radius: 0px 0px 0px 8px;
+  box-shadow: 0px 0px 1px 0px var(--base-color-opacity),
+    -2px 2px 2px 0px var(--base-color-opacity);
+}
+
+.btn-next {
+  border-right: 1px solid var(--base-color);
+  border-radius: 0px 0px 8px 0px;
+  box-shadow: 0px 0px 1px 0px var(--base-color-opacity),
+    2px 2px 2px 0px var(--base-color-opacity);
 }
 
 .success {
-  background-color: var(--card-bg-color);
+  background-color: var(--container-color);
   cursor: pointer;
 }
 
 .loading {
-  background-color: var(--card-bg-disabled);
+  opacity: 0.3;
   cursor: wait;
 }
 
 .error {
-  background-color: var(--card-bg-disabled);
+  opacity: 0.3;
   cursor: not-allowed;
 }

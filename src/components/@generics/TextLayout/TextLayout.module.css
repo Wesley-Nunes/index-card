@@ -1,20 +1,30 @@
 .container {
   display: flex;
   align-items: baseline;
-  column-gap: 0.8rem;
+  column-gap: 0.5rem;
+  flex-wrap: wrap;
 
   width: 100%;
 }
 
+.divider::after {
+  content: '-';
+}
+
+.container > svg {
+  margin-left: 0.5rem;
+}
+
 .input {
-  width: 100%;
+  width: 97.4%;
 
   font: 500 2.3rem var(--font-mono);
 
   color: var(--text-color);
-  caret-color: var(--text-color);
+  caret-color: var(--accent-color);
 
   border: none;
+  outline: none;
   border-radius: 3px;
 }
 
@@ -32,11 +42,10 @@
 }
 
 .success {
-  background-color: var(--card-bg-color);
+  background-color: var(--container-color);
 }
 
 .loading {
-  background-color: var(--card-bg-disabled);
-
+  opacity: 0.3;
   cursor: wait;
 }

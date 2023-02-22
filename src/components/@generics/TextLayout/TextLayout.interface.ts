@@ -9,5 +9,4 @@ export interface TextLayoutWrapper {
 export interface TextLayoutProps extends TextLayoutWrapper {
   icon: ReactNode
   description: string
-  withTextArea?: boolean
 }

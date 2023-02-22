@@ -90,7 +90,6 @@ export default function Editor() {
   if (state === 'error') {
     return (
       <div className={styles.container}>
-        <div />
         <main className={`${styles.main} ${styles[`${state}`]}`}>
           <strong>
             <p>
@@ -112,22 +111,24 @@ export default function Editor() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <div className={styles.container}>
-        <PreviousIndexCard
-          position={previousPosition}
-          setPosition={setCurPosition}
-          state={state}
-        />
         <main className={styles.main}>
           <SceneHeading text={sHeading} setText={setSHeading} state={state} />
           <Synopsis text={synopsis} setText={setSynopsis} state={state} />
           <Conflict text={conflict} setText={setConflict} state={state} />
+          <footer className={styles.footer}>
+            <PreviousIndexCard
+              position={previousPosition}
+              setPosition={setCurPosition}
+              state={state}
+            />
+            <IndexCardPosition position={curPosition} state={state} />
+            <NextIndexCard
+              position={nextPosition}
+              setPosition={setCurPosition}
+              state={state}
+            />
+          </footer>
         </main>
-        <NextIndexCard
-          position={nextPosition}
-          setPosition={setCurPosition}
-          state={state}
-        />
-        <IndexCardPosition position={curPosition} state={state} />
       </div>
     </>
   )
