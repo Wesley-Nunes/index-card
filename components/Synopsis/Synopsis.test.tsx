@@ -4,7 +4,7 @@ import Synopsis from './Synopsis'
 
 describe('Synopsis', () => {
   it('should render a synopsis text area field', () => {
-    render(<Synopsis text='' setText={() => {}} state='success' />)
+    render(<Synopsis text='' setText={() => {}} state='success' id={2} />)
 
     const synopsis = screen.getByRole<HTMLInputElement>('textbox', {
       name: /synopsis/i
@@ -20,6 +20,7 @@ describe('Synopsis', () => {
         text='Luna corre pela floresta'
         setText={() => {}}
         state='success'
+        id={2}
       />
     )
 
@@ -40,6 +41,7 @@ describe('Synopsis', () => {
         text='Luna corre pela floresta'
         setText={() => {}}
         state='loading'
+        id={2}
       />
     )
 

@@ -7,10 +7,6 @@
   width: 100%;
 }
 
-.divider::after {
-  content: '-';
-}
-
 .container > svg {
   margin-left: 0.5rem;
 }
@@ -18,7 +14,7 @@
 .input {
   width: 97.4%;
 
-  font: 500 2.3rem var(--font-mono);
+  font: 500 2.2rem var(--font-mono);
 
   color: var(--text-color);
   caret-color: var(--accent-color);

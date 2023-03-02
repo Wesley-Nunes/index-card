@@ -7,7 +7,8 @@ function TextLayout({
   description,
   text,
   setText,
-  state
+  state,
+  id
 }: TextLayoutProps) {
   return (
     <span
@@ -28,7 +29,9 @@ function TextLayout({
         disabled={state === 'loading'}
         readOnly={state === 'loading'}
         value={text}
-        onChange={e => state === 'success' && setText(e.target.value)}
+        onChange={e =>
+          state === 'success' && setText({ value: e.target.value, id })
+        }
         data-testid={description}
       />
     </span>

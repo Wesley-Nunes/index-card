@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model IndexCard {
+  id           Int      @id @default(autoincrement())
+  position     Int
+  sceneHeading String?
+  synopsis     String?
+  conflict     String?
+  timeline     Timeline @relation(fields: [timelineId], references: [id])
+  timelineId   Int
+
+  @@unique([timelineId, position])
+}
+
+model Timeline {
+  id             Int         @id @default(autoincrement())
+  title          String
+  description    String?
+  dateOfCreation DateTime    @default(now())
+  indexCards     IndexCard[]
+  reality        Reality     @relation(fields: [realityId], references: [id])
+  realityId      Int
+
+  @@unique([realityId, title])
+}
+
+model Reality {
+  id             Int        @id @default(autoincrement())
+  title          String
+  description    String?
+  dateOfCreation DateTime   @default(now())
+  timelines      Timeline[]
+  user           User       @relation(fields: [userId], references: [id])
+  userId         String
+}
+
+model User {
+  id        String    @id @default(cuid())
+  name      String?
+  email     String?   @unique
+  createdAt DateTime  @default(now()) @map(name: "created_at")
+  updatedAt DateTime  @updatedAt @map(name: "updated_at")
+  realities Reality[]
+
+  @@map(name: "users")
+}
