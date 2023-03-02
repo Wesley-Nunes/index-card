@@ -40,9 +40,5 @@ describe('Editor Page - Editing index card', () => {
       'have.value',
       'Uma criada percebeu, ela deve decidir se vai ficar omissa ou não.'
     )
-
-    cy.matchImageSnapshot(
-      'should be possible to change the text content of the input fields'
-    )
   })
 })

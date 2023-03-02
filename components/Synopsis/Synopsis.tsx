@@ -2,7 +2,7 @@ import React, { memo } from 'react'
 import { IoReaderSharp } from '@react-icons/all-files/io5/IoReaderSharp'
 import { TextLayout, TextLayoutWrapper } from '../@generics'
 
-function Synopsis({ text, setText, state }: TextLayoutWrapper) {
+function Synopsis({ text, setText, state, id }: TextLayoutWrapper) {
   return (
     <TextLayout
       description='synopsis'
@@ -10,6 +10,7 @@ function Synopsis({ text, setText, state }: TextLayoutWrapper) {
       text={text}
       setText={setText}
       state={state}
+      id={id}
     />
   )
 }
