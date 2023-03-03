@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import { fetcher, url, styles, useEditorMutations } from 'features/editor'
 import {
@@ -13,6 +14,8 @@ import {
 } from 'components'
 
 export default function Editor() {
+  const router = useRouter()
+  const { id } = router.query
   const [state, setState] = useState<'loading' | 'success' | 'error'>('loading')
   const [positionList, setPositionList] = useState<number[]>([0])
   const [curPosition, setCurPosition] = useState<number>(1) // Temporarily mocking the start curPosition
@@ -28,7 +31,7 @@ export default function Editor() {
 
     return newPosition || 0
   }, [curPosition, positionList])
-  const key = useMemo(() => url.timelineById(1), []) // Temporarily mocking the timeline id
+  const key = useMemo(() => url.timelineById(parseInt(id as string, 10)), [id])
   const { error, isLoading, data } = useSWR(key, fetcher, {
     onSuccess: successData => {
       setPositionList(
