@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react'
-import Head from 'next/head'
 import { useRouter } from 'next/router'
+import Head from 'next/head'
+import { useSession } from 'next-auth/react'
 import useSWR from 'swr'
 import { fetcher, url, styles, useEditorMutations } from 'features/editor'
 import {
@@ -14,6 +15,7 @@ import {
 } from 'components'
 
 export default function Editor() {
+  const { status } = useSession()
   const router = useRouter()
   const { id } = router.query
   const [state, setState] = useState<'loading' | 'success' | 'error'>('loading')
@@ -46,6 +48,10 @@ export default function Editor() {
     data!,
     key
   )
+
+  if (status === 'unauthenticated') {
+    router.push('/')
+  }
 
   if (state === 'error' || error) {
     return (
