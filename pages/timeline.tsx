@@ -1,61 +1,17 @@
 import { Timeline as Timelines } from '@prisma/client'
+import { GetServerSideProps } from 'next'
+import { getSession } from 'next-auth/react'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import React from 'react'
-import useSWR, { Fetcher } from 'swr'
+import prisma from 'features/@generics/prisma'
 
-interface Reality {
-  id: number
-  name: string
-  email: string
-  timelines: Timelines[]
-  createdAt: string
-  updatedAt: string
-}
-
-const fetcher: Fetcher<Reality[]> = (id: string) =>
-  fetch(id).then(res => res.json())
-
-export default function Timeline() {
-  const router = useRouter()
-  const { id } = router.query
-
-  const { error, isLoading, data } = useSWR(`api/reality/${id}`, fetcher)
-
-  if (error) {
-    return (
-      <div>
-        <main>
-          <strong>
-            <p>
-              An error occurred.
-              <br /> Please, check your internet connection.
-            </p>
-          </strong>
-        </main>
-      </div>
-    )
-  }
-
-  if (isLoading) {
-    return (
-      <div>
-        <main>
-          <strong>
-            <p>Loading</p>
-          </strong>
-        </main>
-      </div>
-    )
-  }
-
-  const { timelines } = data![0]
-
+export default function Timeline({ timelines }: { timelines: Timelines[] }) {
   return (
     <>
       <h1>Timeline Page</h1>
       {timelines.map((timeline, i) => (
         <Link
+          key={timeline.id}
           href={{
             pathname: '/editor',
             query: { id: timeline.id }
@@ -68,4 +24,47 @@ export default function Timeline() {
       ))}
     </>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  res,
+  query
+}) => {
+  const session = await getSession({ req })
+  if (!session) {
+    res.statusCode = 403
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/'
+      },
+      props: {}
+    }
+  }
+
+  const queryId = parseInt(query.id as string, 10)
+  const data = await prisma.reality.findMany({
+    where: { id: queryId },
+    include: {
+      timelines: true
+    }
+  })
+  const { timelines } = data[0]
+  const { id, title, description, dateOfCreation, realityId } = timelines[0]
+  const dateOfCreationStringified = JSON.stringify(dateOfCreation)
+
+  return {
+    props: {
+      timelines: [
+        {
+          id,
+          title,
+          description,
+          dateOfCreation: dateOfCreationStringified,
+          realityId
+        }
+      ]
+    }
+  }
 }
