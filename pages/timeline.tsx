@@ -39,7 +39,7 @@ export const getServerSideProps: GetServerSideProps = async ({
         permanent: false,
         destination: '/'
       },
-      props: {}
+      props: { timelines: [] }
     }
   }
 
@@ -51,20 +51,17 @@ export const getServerSideProps: GetServerSideProps = async ({
     }
   })
   const { timelines } = data[0]
-  const { id, title, description, dateOfCreation, realityId } = timelines[0]
-  const dateOfCreationStringified = JSON.stringify(dateOfCreation)
+
+  const timelinesWithDateStringified = timelines.map(timeline => {
+    const { id, title, description, dateOfCreation, realityId } = timeline
+    const dateOfCreationStringified = JSON.stringify(dateOfCreation)
+
+    return { id, title, description, dateOfCreationStringified, realityId }
+  })
 
   return {
     props: {
-      timelines: [
-        {
-          id,
-          title,
-          description,
-          dateOfCreation: dateOfCreationStringified,
-          realityId
-        }
-      ]
+      timelines: timelinesWithDateStringified
     }
   }
 }

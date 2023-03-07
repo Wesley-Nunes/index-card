@@ -35,7 +35,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
         permanent: false,
         destination: '/'
       },
-      props: {}
+      props: { realities: [] }
     }
   }
 
@@ -46,20 +46,17 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     }
   })
   const { realities } = data[0]
-  const { id, title, description, dateOfCreation, userId } = realities[0]
-  const dateOfCreationStringified = JSON.stringify(dateOfCreation)
+
+  const realitiesWithDateStringified = realities.map(reality => {
+    const { id, title, description, dateOfCreation, userId } = reality
+    const dateOfCreationStringified = JSON.stringify(dateOfCreation)
+
+    return { id, title, description, dateOfCreationStringified, userId }
+  })
 
   return {
     props: {
-      realities: [
-        {
-          id,
-          title,
-          description,
-          dateOfCreation: dateOfCreationStringified,
-          userId
-        }
-      ]
+      realities: realitiesWithDateStringified
     }
   }
 }
