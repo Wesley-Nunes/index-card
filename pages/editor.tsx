@@ -17,6 +17,9 @@ import {
 export default function Editor() {
   const { status } = useSession()
   const router = useRouter()
+  if (status === 'unauthenticated') {
+    router.push('/')
+  }
   const { id } = router.query
   const [state, setState] = useState<'loading' | 'success' | 'error'>('loading')
   const [positionList, setPositionList] = useState<number[]>([0])
@@ -48,10 +51,6 @@ export default function Editor() {
     data!,
     key
   )
-
-  if (status === 'unauthenticated') {
-    router.push('/')
-  }
 
   if (state === 'error' || error) {
     return (
