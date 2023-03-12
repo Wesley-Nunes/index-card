@@ -34,25 +34,22 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       redirect: {
         permanent: false,
         destination: '/'
-      },
-      props: { realities: [] }
+      }
     }
   }
 
-  const data = await prisma.user.findMany({
-    where: { email: session.user!.email },
-    include: {
-      realities: true
-    }
+  const realities = await prisma.reality.findMany({
+    where: { user: { email: session.user?.email as string } }
   })
-  const { realities } = data[0]
-
-  const realitiesWithDateStringified = realities.map(reality => {
-    const { id, title, description, dateOfCreation, userId } = reality
-    const dateOfCreationStringified = JSON.stringify(dateOfCreation)
-
-    return { id, title, description, dateOfCreationStringified, userId }
-  })
+  const realitiesWithDateStringified = realities.map(
+    ({ id, title, description, dateOfCreation, userId }) => ({
+      id,
+      title,
+      description,
+      dateOfCreation: JSON.stringify(dateOfCreation),
+      userId
+    })
+  )
 
   return {
     props: {

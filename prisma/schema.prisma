@@ -11,9 +11,9 @@ datasource db {
 model IndexCard {
   id           Int      @id @default(autoincrement())
   position     Int
-  sceneHeading String?
-  synopsis     String?
-  conflict     String?
+  sceneHeading String?  @default("")
+  synopsis     String?  @default("")
+  conflict     String?  @default("")
   timeline     Timeline @relation(fields: [timelineId], references: [id])
   timelineId   Int
 
@@ -23,7 +23,7 @@ model IndexCard {
 model Timeline {
   id             Int         @id @default(autoincrement())
   title          String
-  description    String?
+  description    String?     @default("")
   dateOfCreation DateTime    @default(now())
   indexCards     IndexCard[]
   reality        Reality     @relation(fields: [realityId], references: [id])
@@ -35,18 +35,20 @@ model Timeline {
 model Reality {
   id             Int        @id @default(autoincrement())
   title          String
-  description    String?
+  description    String?    @default("")
   dateOfCreation DateTime   @default(now())
   timelines      Timeline[]
   user           User       @relation(fields: [userId], references: [id])
   userId         String
+
+  @@unique([userId, title])
 }
 
 model User {
   id            String    @id @default(cuid())
   name          String?
   image         String?
-  email         String?   @unique
+  email         String    @unique
   emailVerified DateTime?
   realities     Reality[]
   accounts      Account[]

@@ -1,10 +1,11 @@
+import { IndexCard } from '@prisma/client'
 import { useSWRConfig } from 'swr'
-import { IndexCardBody, TextValues, Timeline } from './editor.interface'
+import { IndexCardBody, TextValues } from './editor.interface'
 import indexCardService from './services/indexCardService'
 import url from './services/url'
-import timelineDataUpdater from './timelineUpdater'
+import indexCardDataUpdater from './indexCardDataUpdater'
 
-function useEditorMutations(data: Timeline[], key: string) {
+function useEditorMutations(data: IndexCard[], key: string) {
   const { mutate } = useSWRConfig()
 
   const dataMaker = (indexCardBody: IndexCardBody, id: number) => {
@@ -12,7 +13,7 @@ function useEditorMutations(data: Timeline[], key: string) {
       .updateText(url.indexCardById(id), indexCardBody)
       .then(res => res.status === 500 && new Error('something wrong'))
 
-    return timelineDataUpdater(data, indexCardBody, id)
+    return indexCardDataUpdater(data, indexCardBody, id)
   }
 
   const setSceneHeading = ({ id, value }: TextValues) => {

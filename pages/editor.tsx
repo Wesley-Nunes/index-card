@@ -5,7 +5,6 @@ import { useSession } from 'next-auth/react'
 import useSWR from 'swr'
 import { fetcher, url, styles, useEditorMutations } from 'features/editor'
 import {
-  Title,
   SceneHeading,
   Synopsis,
   Conflict,
@@ -36,14 +35,10 @@ export default function Editor() {
 
     return newPosition || 0
   }, [curPosition, positionList])
-  const key = useMemo(() => url.timelineById(parseInt(id as string, 10)), [id])
+  const key = useMemo(() => url.indexCardById(parseInt(id as string, 10)), [id])
   const { error, isLoading, data } = useSWR(key, fetcher, {
     onSuccess: successData => {
-      setPositionList(
-        successData![0].indexCards
-          .map(({ position }) => position)
-          .sort((n, m) => n - m)
-      )
+      setPositionList(successData.map(({ position }) => position))
       setState('success')
     }
   })
@@ -79,7 +74,6 @@ export default function Editor() {
     )
   }
 
-  const { title, indexCards } = data![0]
   return (
     <>
       <Head>
@@ -89,25 +83,24 @@ export default function Editor() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <div className={styles.container}>
-        <Title title={title} />
-        {indexCards
+        {data!
           .filter(({ position }) => position === curPosition)
           .map(({ sceneHeading, synopsis, conflict, id: indexCardId }) => (
             <main className={styles.main} key={indexCardId}>
               <SceneHeading
-                text={sceneHeading}
+                text={sceneHeading || ''}
                 setText={setSceneHeading}
                 state={state}
                 id={indexCardId}
               />
               <Synopsis
-                text={synopsis}
+                text={synopsis || ''}
                 setText={setSynopsis}
                 state={state}
                 id={indexCardId}
               />
               <Conflict
-                text={conflict}
+                text={conflict || ''}
                 setText={setConflict}
                 state={state}
                 id={indexCardId}

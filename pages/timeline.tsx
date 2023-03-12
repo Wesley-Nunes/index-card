@@ -38,26 +38,30 @@ export const getServerSideProps: GetServerSideProps = async ({
       redirect: {
         permanent: false,
         destination: '/'
-      },
-      props: { timelines: [] }
+      }
     }
   }
 
   const queryId = parseInt(query.id as string, 10)
-  const data = await prisma.reality.findMany({
-    where: { id: queryId },
-    include: {
-      timelines: true
+  const timelines = await prisma.timeline.findMany({
+    where: {
+      reality: {
+        user: {
+          email: session.user?.email as string
+        },
+        id: queryId
+      }
     }
   })
-  const { timelines } = data[0]
-
-  const timelinesWithDateStringified = timelines.map(timeline => {
-    const { id, title, description, dateOfCreation, realityId } = timeline
-    const dateOfCreationStringified = JSON.stringify(dateOfCreation)
-
-    return { id, title, description, dateOfCreationStringified, realityId }
-  })
+  const timelinesWithDateStringified = timelines.map(
+    ({ id, title, description, dateOfCreation, realityId }) => ({
+      id,
+      title,
+      description,
+      dateOfCreation: JSON.stringify(dateOfCreation),
+      realityId
+    })
+  )
 
   return {
     props: {

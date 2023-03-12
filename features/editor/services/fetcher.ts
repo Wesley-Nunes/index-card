@@ -1,7 +1,7 @@
 import { Fetcher } from 'swr'
-import { Timeline } from '../editor.interface'
+import { IndexCard } from '@prisma/client'
 
-const fetcher: Fetcher<Timeline[]> = (id: string) =>
+const fetcher: Fetcher<IndexCard[]> = (id: string) =>
   fetch(id).then(res => res.json())
 
 export default fetcher
