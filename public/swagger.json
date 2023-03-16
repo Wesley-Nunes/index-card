@@ -1,0 +1,91 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Index Card",
+    "description": "This is the API for the index card project.\n\nYou can access the app at [index-card.vercel](https://index-card.vercel.app)\n\n\n**Endpoint relation:**\n\nA user can have zero or more realities. The reality only exists if it is related to a user.\n\nA Reality can have zero or more timelines. The timeline only exists if it is related to a reality.\n\nA timeline can have zero or more index cards. The index card only exists if it is related to a timeline.",
+    "contact": {
+      "email": "wesnmonteiro@gmail.com"
+    },
+    "version": "0.1.0"
+  },
+  "externalDocs": {
+    "description": "Find out more about Index card",
+    "url": "https://github.com/Wesley-Nunes/index-card"
+  },
+  "servers": [
+    {
+      "url": "https://index-card.vercel.app/api"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "indexcard_auth": {
+        "type": "oauth2",
+        "description": "This API uses github OAuth 2.",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "",
+            "tokenUrl": "",
+            "scopes": {
+              "read:realities": "read your realities"
+            }
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/realities": {
+      "get": {
+        "summary": "Return all realities of the authenticated user.",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "The id of the reality",
+                        "example": 1
+                      },
+                      "title": {
+                        "type": "string",
+                        "description": "The title of the reality",
+                        "example": "Reality base"
+                      },
+                      "description": {
+                        "type": "string",
+                        "description": "The description of the reality",
+                        "example": "The reality base is the starting point of the universe"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization information is missing or invalid."
+          },
+          "5XX": {
+            "description": "Unexpected error."
+          }
+        },
+        "security": [
+          {
+            "indexcard_auth": [
+              "read:realities"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "tags": []
+}
