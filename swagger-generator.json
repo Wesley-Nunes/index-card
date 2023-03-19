@@ -30,7 +30,8 @@
               "authorizationUrl": "",
               "tokenUrl": "",
               "scopes": {
-                "read:realities": "read your realities"
+                "read:realities": "read your realities",
+                "read:timelines": "read your timelines"
               }
             }
           }

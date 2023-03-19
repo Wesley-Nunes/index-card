@@ -11,32 +11,10 @@ export default async function userHandler(
   if (!session) {
     res.status(401)
   } else {
-    const { query, body, method } = req
+    const { body, method, query } = req
     const queryId = parseInt(query.id as string, 10)
 
     switch (method) {
-      case 'GET':
-        try {
-          const allIndexCards = await prisma.indexCard.findMany({
-            where: {
-              timeline: {
-                reality: { user: { email: session.user?.email as string } },
-                id: queryId
-              }
-            },
-            orderBy: [
-              {
-                position: 'asc'
-              }
-            ]
-          })
-
-          res.status(200).json(allIndexCards)
-        } catch (error) {
-          res.status(500).json({ error: 'failed to load data' })
-        }
-
-        break
       case 'PATCH':
         try {
           const updateIndex = await prisma.indexCard.updateMany({
