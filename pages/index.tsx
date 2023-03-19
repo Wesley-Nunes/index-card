@@ -11,7 +11,7 @@ function Home() {
     return <h1>Loading</h1>
   }
 
-  if (isError) {
+  if (isError && status !== 'unauthenticated') {
     return <h1>Error</h1>
   }
 
