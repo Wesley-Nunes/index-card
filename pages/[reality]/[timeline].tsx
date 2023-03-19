@@ -3,7 +3,8 @@ import { useRouter } from 'next/router'
 import Head from 'next/head'
 import { useSession } from 'next-auth/react'
 import useSWR from 'swr'
-import { fetcher, url, styles, useEditorMutations } from 'features/editor'
+import { fetcher, styles, useEditorMutations } from 'features/editor'
+import url from 'features/@generics/url'
 import {
   SceneHeading,
   Synopsis,
@@ -19,7 +20,6 @@ export default function Editor() {
   if (status === 'unauthenticated') {
     router.push('/')
   }
-  const { id } = router.query
   const [state, setState] = useState<'loading' | 'success' | 'error'>('loading')
   const [positionList, setPositionList] = useState<number[]>([0])
   const [curPosition, setCurPosition] = useState<number>(1) // Temporarily mocking the start curPosition
@@ -35,13 +35,18 @@ export default function Editor() {
 
     return newPosition || 0
   }, [curPosition, positionList])
-  const key = useMemo(() => url.indexCardById(parseInt(id as string, 10)), [id])
+  const { reality, timeline } = router.query
+  const key = useMemo(
+    () => url.getIndexCards(reality as string, timeline as string),
+    [reality, timeline]
+  )
   const { error, isLoading, data } = useSWR(key, fetcher, {
     onSuccess: successData => {
       setPositionList(successData.map(({ position }) => position))
       setState('success')
     }
   })
+
   const { setSceneHeading, setSynopsis, setConflict } = useEditorMutations(
     data!,
     key

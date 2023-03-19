@@ -1,26 +1,18 @@
 import React from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
+import { useReality } from 'features/reality'
 
 function Home() {
-  const router = useRouter()
   const { data: session, status } = useSession()
+  const { realities, isLoading, isError } = useReality()
 
-  if (session) {
-    router.push('/reality')
+  if (status === 'loading' || isLoading) {
+    return <h1>Loading</h1>
   }
 
-  if (status === 'loading') {
-    return (
-      <div>
-        <main>
-          <strong>
-            <p>Loading</p>
-          </strong>
-        </main>
-      </div>
-    )
+  if (isError) {
+    return <h1>Error</h1>
   }
 
   if (!session) {
@@ -32,6 +24,26 @@ function Home() {
           </button>
         </Link>
       </div>
+    )
+  }
+
+  if (session) {
+    return (
+      <>
+        <h1>Realities</h1>
+        {realities!.map((reality, i) => (
+          <Link
+            key={reality.id}
+            href={{
+              pathname: reality.title
+            }}
+          >
+            <button type='button' data-testid={`reality-${i + 1}`}>
+              {reality.title}
+            </button>
+          </Link>
+        ))}
+      </>
     )
   }
 }
