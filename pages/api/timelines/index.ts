@@ -58,31 +58,56 @@ export default async function handler(
       .status(401)
       .json({ message: 'Authorization information is missing or invalid.' })
   } else {
-    const { realityTitle } = req.query
+    const { method, query } = req
+    const realityTitle = query.realityTitle as string
 
-    const timelines = await prisma.timeline.findMany({
-      where: {
-        reality: {
-          user: {
-            email: session.user?.email as string
-          },
-          title: realityTitle as string
+    switch (method) {
+      case 'GET':
+        try {
+          const timelines = await prisma.timeline.findMany({
+            where: {
+              reality: {
+                user: {
+                  email: session.user?.email as string
+                },
+                title: realityTitle
+              }
+            },
+            orderBy: [
+              {
+                dateOfCreation: 'asc'
+              }
+            ]
+          })
+
+          // Temporarily keep the error handling here.
+          if (!timelines.length) {
+            const reality = await prisma.reality.findFirst({
+              where: { title: realityTitle }
+            })
+            if (!reality) {
+              // eslint-disable-next-line @typescript-eslint/no-throw-literal
+              throw 'Realidade inexistente'
+            }
+          }
+
+          const timelinesSimplified = timelines.map(
+            ({ id, title, description }) => ({
+              id,
+              title,
+              description
+            })
+          )
+
+          res.status(200).json(timelinesSimplified)
+        } catch (error) {
+          res.status(500).json({ message: error })
         }
-      },
-      orderBy: [
-        {
-          dateOfCreation: 'asc'
-        }
-      ]
-    })
-
-    const timelinesSimplified = timelines.map(({ id, title, description }) => ({
-      id,
-      title,
-      description
-    }))
-
-    res.send(timelinesSimplified)
+        break
+      default:
+        res.status(405).end(`Method ${method} Not Allowed`)
+        break
+    }
   }
   return res.end()
 }
