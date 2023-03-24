@@ -8,8 +8,8 @@ const noto = Noto_Sans({
   weight: '400'
 })
 
-function Title({ title }: { title: string }) {
-  return <h1 className={`${styles.title} ${noto.className}`}>{title}</h1>
-}
+const Title: React.FC<{ title: string }> = ({ title }) => (
+  <h1 className={`${styles.title} ${noto.className}`}>{title}</h1>
+)
 
 export default memo(Title)

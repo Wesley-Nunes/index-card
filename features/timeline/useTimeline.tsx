@@ -1,30 +1,23 @@
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
-import { Timeline } from '@prisma/client'
 import useSWR from 'swr'
+import { Timeline } from '@prisma/client'
 import fetcher from '../@generics/fetcher'
-import url from '../@generics/url'
+import { getTimelines } from '../@generics/endpoints'
 
 function useTimeline() {
   const router = useRouter()
   const { reality } = router.query
-  const key = url.getTimelines(reality as string)
-  const { data, error, isLoading } = useSWR(key, fetcher)
+  const key = getTimelines(reality as string)
   const { status } = useSession()
+  const { data, isLoading, error } = useSWR(key, fetcher)
 
   if (status === 'unauthenticated') {
     router.push('/')
   }
-  if (status === 'authenticated') {
-    return {
-      timelines: data as Timeline[],
-      isLoading,
-      isError: error
-    }
-  }
 
   return {
-    timelines: [],
+    timelines: data as Timeline[],
     isLoading,
     isError: error
   }

@@ -1,6 +1,5 @@
 import { ReactNode } from 'react'
 
-// Pegar o valor exportado do local correto depois
 interface TextValues {
   id: number
   value: string
@@ -9,7 +8,6 @@ interface TextValues {
 export interface TextLayoutWrapper {
   text: string
   setText: ({ id, value }: TextValues) => void
-  state: 'success' | 'loading'
   id: number
 }
 

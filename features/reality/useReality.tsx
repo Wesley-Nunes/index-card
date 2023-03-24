@@ -1,23 +1,13 @@
-import { useSession } from 'next-auth/react'
-import { Reality } from '@prisma/client'
 import useSWR from 'swr'
-import url from '../@generics/url'
+import { Reality } from '@prisma/client'
+import { getRealities } from '../@generics/endpoints'
 import fetcher from '../@generics/fetcher'
 
 function useReality() {
-  const { data, error, isLoading } = useSWR(url.getRealities, fetcher)
-  const { status } = useSession()
-
-  if (status === 'authenticated') {
-    return {
-      realities: data as Reality[],
-      isLoading,
-      isError: error
-    }
-  }
+  const { data, error, isLoading } = useSWR(getRealities, fetcher)
 
   return {
-    realities: [],
+    realities: data as Reality[],
     isLoading,
     isError: error
   }

@@ -1,10 +1,8 @@
 import React, { useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
-import { useSession } from 'next-auth/react'
-import useSWR from 'swr'
-import { fetcher, styles, useEditorMutations } from 'features/editor'
-import url from 'features/@generics/url'
+import { getIndexCards } from 'features/@generics/endpoints'
+import { useIndexCard, useEditorMutations, styles } from 'features/indexCard'
 import {
   SceneHeading,
   Synopsis,
@@ -15,68 +13,31 @@ import {
 } from 'components'
 
 export default function Editor() {
-  const { status } = useSession()
-  const router = useRouter()
-  if (status === 'unauthenticated') {
-    router.push('/')
-  }
-  const [state, setState] = useState<'loading' | 'success' | 'error'>('loading')
-  const [positionList, setPositionList] = useState<number[]>([0])
   const [curPosition, setCurPosition] = useState<number>(1) // Temporarily mocking the start curPosition
-  const previousPosition = useMemo<number>(() => {
-    const newIndex = positionList.indexOf(curPosition) - 1
-    const newPosition = positionList[newIndex]
-
-    return newPosition || 0
-  }, [curPosition, positionList])
-  const nextPosition = useMemo<number>(() => {
-    const newIndex = positionList.indexOf(curPosition) + 1
-    const newPosition = positionList[newIndex]
-
-    return newPosition || 0
-  }, [curPosition, positionList])
+  const router = useRouter()
   const { reality, timeline } = router.query
   const key = useMemo(
-    () => url.getIndexCards(reality as string, timeline as string),
+    () => getIndexCards(reality as string, timeline as string),
     [reality, timeline]
   )
-  const { error, isLoading, data } = useSWR(key, fetcher, {
-    onSuccess: successData => {
-      setPositionList(successData.map(({ position }) => position))
-      setState('success')
-    }
-  })
-
+  const { data, isLoading, isError } = useIndexCard(key)
   const { setSceneHeading, setSynopsis, setConflict } = useEditorMutations(
-    data!,
+    data?.indexCards,
     key
   )
+  const { indexCards = [], positionList = [] } = data || {}
+  const previousPosition = positionList.find(prev => prev < curPosition)
+  const nextPosition = positionList.find(next => next > curPosition)
+  const filteredCards = useMemo(
+    () => indexCards.filter(({ position }) => position === curPosition) || [],
+    [indexCards, curPosition]
+  )
 
-  if (state === 'error' || error) {
-    return (
-      <div className={styles.container}>
-        <main className={`${styles.main} ${styles[`${state}`]}`}>
-          <strong>
-            <p>
-              An error occurred.
-              <br /> Please, check your internet connection.
-            </p>
-          </strong>
-        </main>
-      </div>
-    )
+  if (isLoading) {
+    return <h1>loading</h1>
   }
-
-  if (state === 'loading' || isLoading) {
-    return (
-      <div className={styles.container}>
-        <main className={`${styles.main} ${styles[`${state}`]}`}>
-          <strong>
-            <p>Loading</p>
-          </strong>
-        </main>
-      </div>
-    )
+  if (isError) {
+    return <h1>Error</h1>
   }
 
   return (
@@ -88,43 +49,28 @@ export default function Editor() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <div className={styles.container}>
-        {data!
-          .filter(({ position }) => position === curPosition)
-          .map(({ sceneHeading, synopsis, conflict, id: indexCardId }) => (
-            <main className={styles.main} key={indexCardId}>
-              <SceneHeading
-                text={sceneHeading || ''}
-                setText={setSceneHeading}
-                state={state}
-                id={indexCardId}
+        {filteredCards.map(({ sceneHeading, synopsis, conflict, id }) => (
+          <main className={styles.main} key={id}>
+            <SceneHeading
+              text={sceneHeading || ''}
+              setText={setSceneHeading}
+              id={id}
+            />
+            <Synopsis text={synopsis || ''} setText={setSynopsis} id={id} />
+            <Conflict text={conflict || ''} setText={setConflict} id={id} />
+            <footer className={styles.footer}>
+              <PreviousIndexCard
+                position={previousPosition}
+                setPosition={setCurPosition}
               />
-              <Synopsis
-                text={synopsis || ''}
-                setText={setSynopsis}
-                state={state}
-                id={indexCardId}
+              <IndexCardPosition position={curPosition} />
+              <NextIndexCard
+                position={nextPosition}
+                setPosition={setCurPosition}
               />
-              <Conflict
-                text={conflict || ''}
-                setText={setConflict}
-                state={state}
-                id={indexCardId}
-              />
-              <footer className={styles.footer}>
-                <PreviousIndexCard
-                  position={previousPosition}
-                  setPosition={setCurPosition}
-                  state={state}
-                />
-                <IndexCardPosition position={curPosition} state={state} />
-                <NextIndexCard
-                  position={nextPosition}
-                  setPosition={setCurPosition}
-                  state={state}
-                />
-              </footer>
-            </main>
-          ))}
+            </footer>
+          </main>
+        ))}
       </div>
     </>
   )

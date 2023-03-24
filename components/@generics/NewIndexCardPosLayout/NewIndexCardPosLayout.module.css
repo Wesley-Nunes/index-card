@@ -37,17 +37,11 @@
     2px 2px 2px 0px var(--base-color-opacity);
 }
 
-.success {
-  background-color: var(--container-color);
-  cursor: pointer;
-}
-
-.loading {
-  opacity: 0.3;
-  cursor: wait;
-}
-
-.error {
+.last-card {
   opacity: 0.3;
   cursor: not-allowed;
+}
+
+.last-card:hover {
+  opacity: 0.3;
 }
