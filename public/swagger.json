@@ -18,6 +18,48 @@
     }
   ],
   "components": {
+    "schemas": {
+      "IndexCard": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "description": "The ID of the index card.",
+            "example": 1
+          },
+          "position": {
+            "type": "integer",
+            "description": "The position of the index card within the timeline.",
+            "example": 1
+          },
+          "sceneHeading": {
+            "type": "string",
+            "nullable": true,
+            "description": "The scene heading of the index card.",
+            "example": "INT. COFFEE SHOP - DAY"
+          },
+          "synopsis": {
+            "type": "string",
+            "nullable": true,
+            "description": "The synopsis of the index card.",
+            "example": "Jack meets Jill for coffee and they discuss their plans for the weekend."
+          },
+          "conflict": {
+            "type": "string",
+            "nullable": true,
+            "description": "The conflict of the index card.",
+            "example": "Jack wants to go to the beach, but Jill wants to go to the mountains."
+          },
+          "timelineId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "The ID of the timeline this index card belongs to.",
+            "example": 1
+          }
+        }
+      }
+    },
     "securitySchemes": {
       "indexcard_auth": {
         "type": "oauth2",
@@ -28,7 +70,9 @@
             "tokenUrl": "",
             "scopes": {
               "read:realities": "read your realities",
-              "read:timelines": "read your timelines"
+              "read:timelines": "read your timelines",
+              "read:indexcards": "read your index cards",
+              "write:indexcards": "update your index cards"
             }
           }
         }
@@ -36,6 +80,104 @@
     }
   },
   "paths": {
+    "/indexcards/{id}": {
+      "summary": "Update an index card for a given timeline.",
+      "patch": {
+        "description": "Updates an index card for a given timeline.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID of the index card.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The updated index card object.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IndexCard"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IndexCard"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed or user is not authorized to access this resource."
+          },
+          "404": {
+            "description": "The requested resource was not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "security": [
+          {
+            "indexcard_auth": ["write:indexcards"]
+          }
+        ]
+      }
+    },
+    "/indexcards": {
+      "summary": "Represents a group of index cards of timelines.",
+      "get": {
+        "summary": "Retrieve index cards for a given timeline.",
+        "description": "Returns all index cards for a given timeline, sorted by position.",
+        "parameters": [
+          {
+            "name": "timelineId",
+            "in": "query",
+            "description": "The ID of the timeline.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IndexCard"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed or user is not authorized to access this resource."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "security": [
+          {
+            "indexcard_auth": ["read:indexcards"]
+          }
+        ]
+      }
+    },
     "/timelines": {
       "summary": "Represents a group of timelines of reality.",
       "get": {
@@ -92,9 +234,7 @@
         },
         "security": [
           {
-            "indexcard_auth": [
-              "read:timelines"
-            ]
+            "indexcard_auth": ["read:timelines"]
           }
         ]
       }
@@ -143,9 +283,7 @@
         },
         "security": [
           {
-            "indexcard_auth": [
-              "read:realities"
-            ]
+            "indexcard_auth": ["read:realities"]
           }
         ]
       }

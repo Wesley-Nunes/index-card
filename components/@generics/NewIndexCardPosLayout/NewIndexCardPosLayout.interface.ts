@@ -1,9 +1,8 @@
 import { ReactNode, SetStateAction } from 'react'
 
 export interface NewIndexCardPosWrapper {
-  position: number
+  position: number | undefined
   setPosition: (value: SetStateAction<number>) => void
-  state: 'success' | 'loading' | 'error'
 }
 
 export interface NewIndexCardPosProps extends NewIndexCardPosWrapper {

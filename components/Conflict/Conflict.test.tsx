@@ -4,7 +4,7 @@ import Conflict from './Conflict'
 
 describe('Conflict', () => {
   it('should render a conflict input field', () => {
-    render(<Conflict text='' setText={() => {}} state='success' id={2} />)
+    render(<Conflict text='' setText={() => {}} id={2} />)
 
     const conflict = screen.getByRole<HTMLInputElement>('textbox', {
       name: /conflict/i
@@ -16,12 +16,7 @@ describe('Conflict', () => {
 
   it('should be possible to change the text content of the conflict', () => {
     render(
-      <Conflict
-        text='O Vizir trama matar o sultão'
-        setText={() => {}}
-        state='success'
-        id={2}
-      />
+      <Conflict text='O Vizir trama matar o sultão' setText={() => {}} id={2} />
     )
 
     const conflict = screen.getByRole<HTMLInputElement>('textbox', {
@@ -33,23 +28,5 @@ describe('Conflict', () => {
     conflict.value = 'O Vizir culpa Luna pela morte do sultão'
 
     expect(conflict.value).toBe('O Vizir culpa Luna pela morte do sultão')
-  })
-
-  it('should NOT be possible to change the text content of the conflict when the state is loading', () => {
-    render(
-      <Conflict
-        text='O Vizir trama matar o sultão'
-        setText={() => {}}
-        state='loading'
-        id={2}
-      />
-    )
-
-    const conflict = screen.getByRole<HTMLInputElement>('textbox', {
-      name: /conflict/i
-    })
-
-    expect(conflict.value).toBe('O Vizir trama matar o sultão')
-    expect(conflict).toBeDisabled()
   })
 })

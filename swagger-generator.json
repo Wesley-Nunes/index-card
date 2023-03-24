@@ -21,6 +21,48 @@
       }
     ],
     "components": {
+      "schemas": {
+        "IndexCard": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int32",
+              "description": "The ID of the index card.",
+              "example": 1
+            },
+            "position": {
+              "type": "integer",
+              "description": "The position of the index card within the timeline.",
+              "example": 1
+            },
+            "sceneHeading": {
+              "type": "string",
+              "nullable": true,
+              "description": "The scene heading of the index card.",
+              "example": "INT. COFFEE SHOP - DAY"
+            },
+            "synopsis": {
+              "type": "string",
+              "nullable": true,
+              "description": "The synopsis of the index card.",
+              "example": "Jack meets Jill for coffee and they discuss their plans for the weekend."
+            },
+            "conflict": {
+              "type": "string",
+              "nullable": true,
+              "description": "The conflict of the index card.",
+              "example": "Jack wants to go to the beach, but Jill wants to go to the mountains."
+            },
+            "timelineId": {
+              "type": "integer",
+              "format": "int32",
+              "description": "The ID of the timeline this index card belongs to.",
+              "example": 1
+            }
+          }
+        }
+      },
       "securitySchemes": {
         "indexcard_auth": {
           "type": "oauth2",
@@ -31,7 +73,9 @@
               "tokenUrl": "",
               "scopes": {
                 "read:realities": "read your realities",
-                "read:timelines": "read your timelines"
+                "read:timelines": "read your timelines",
+                "read:indexcards": "read your index cards",
+                "write:indexcards": "update your index cards"
               }
             }
           }

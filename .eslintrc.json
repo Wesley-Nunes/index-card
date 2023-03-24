@@ -7,5 +7,9 @@
   ],
   "parserOptions": {
     "project": ["./tsconfig.json", "cypress/tsconfig.json"]
+  },
+  "rules": {
+    "react/function-component-definition": "off",
+    "prefer-arrow-callback": "error"
   }
 }

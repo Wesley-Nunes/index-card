@@ -3,7 +3,39 @@ import { getServerSession } from 'next-auth'
 import prisma from 'features/@generics/prisma'
 import { options } from '../auth/[...nextauth]'
 
-export default async function userHandler(
+/**
+ * @swagger
+ * /indexcards:
+ *  summary: Represents a group of index cards of timelines.
+ *  get:
+ *    summary: Retrieve index cards for a given timeline.
+ *    description: Returns all index cards for a given timeline, sorted by position.
+ *    parameters:
+ *    - name: timelineId
+ *      in: query
+ *      description: The ID of the timeline.
+ *      required: true
+ *      schema:
+ *        type: integer
+ *    responses:
+ *      200:
+ *        description: OK
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                $ref: '#/components/schemas/IndexCard'
+ *      401:
+ *        description: Authentication failed or user is not authorized to access this resource.
+ *      500:
+ *        description: Internal server error.
+ *    security:
+ *      - indexcard_auth:
+ *        - read:indexcards
+ */
+
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {

@@ -1,37 +1,30 @@
 import React from 'react'
-import type { TextLayoutProps } from './TextLayout.interface'
 import styles from './TextLayout.module.css'
+import type { TextLayoutProps } from './TextLayout.interface'
 
-function TextLayout({
+const TextLayout: React.FC<TextLayoutProps> = ({
   icon,
   description,
   text,
   setText,
-  state,
   id
-}: TextLayoutProps) {
+}) => {
+  const containerClassNames = [
+    styles.container,
+    description !== 'conflict' ? styles.divider : '',
+    description === 'synopsis' ? styles.fullHeight : ''
+  ].join(' ')
+
   return (
-    <span
-      className={`
-        ${styles.container}
-        ${description !== 'conflict' ? styles.divider : ''}
-        ${description === 'synopsis' ? styles.fullHeight : ''}`}
-    >
+    <span className={containerClassNames}>
       {icon}
       <textarea
-        className={`
-          ${styles[`${state}`]}
-          ${styles.input} ${styles.noResize} ${styles.fullHeight}
-        `}
+        className={`${styles.input} ${styles.noResize} ${styles.fullHeight}`}
         name={description}
         aria-label={description}
         placeholder={description}
-        disabled={state === 'loading'}
-        readOnly={state === 'loading'}
         value={text}
-        onChange={e =>
-          state === 'success' && setText({ value: e.target.value, id })
-        }
+        onChange={e => setText({ value: e.target.value, id })}
         data-testid={description}
       />
     </span>
