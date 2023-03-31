@@ -9,7 +9,8 @@ import {
   Conflict,
   IndexCardPosition,
   NextIndexCard,
-  PreviousIndexCard
+  PreviousIndexCard,
+  IndexCardOptions
 } from 'components'
 
 export default function Editor() {
@@ -56,6 +57,7 @@ export default function Editor() {
               setText={setSceneHeading}
               id={id}
             />
+            <IndexCardOptions />
             <Synopsis text={synopsis || ''} setText={setSynopsis} id={id} />
             <Conflict text={conflict || ''} setText={setConflict} id={id} />
             <footer className={styles.footer}>
