@@ -5,3 +5,4 @@ export { default as IndexCardPosition } from './IndexCardPosition/IndexCardPosit
 export { default as NextIndexCard } from './NextIndexCard/NextIndexCard'
 export { default as PreviousIndexCard } from './PreviousIndexCard/PreviousIndexCard'
 export { default as Title } from './Title/Title'
+export { default as IndexCardOptions } from './IndexCardOptions/IndexCardOptions'

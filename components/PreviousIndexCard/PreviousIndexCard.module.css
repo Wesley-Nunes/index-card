@@ -1,0 +1,6 @@
+.btn-prev {
+  border-left: 1px solid var(--base-color);
+  border-radius: 0px 0px 0px 8px;
+  box-shadow: 0px 0px 1px 0px var(--base-color-opacity),
+    -2px 2px 2px 0px var(--base-color-opacity);
+}

@@ -8,9 +8,11 @@
 }
 
 .main {
-  display: flex;
-  flex-direction: column;
-  gap: 2.6rem;
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  grid-template-rows: auto 1fr auto;
+  gap: 10px;
+  align-items: baseline;
 
   width: 75vw;
   height: 75vh;
@@ -25,6 +27,7 @@
 }
 
 .footer {
+  grid-area: 4 / 1 / 5 / 3;
   display: flex;
   justify-content: space-between;
   width: 100%;
