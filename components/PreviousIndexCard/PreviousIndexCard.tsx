@@ -1,17 +1,28 @@
 import React from 'react'
 import { IoIosArrowBack } from '@react-icons/all-files/io/IoIosArrowBack'
-import { NewIndexCardPosLayout, NewIndexCardPosWrapper } from '../@generics'
+import { IndexCardBtn, IndexCardBtnWrapper } from '../@generics'
+import styles from './PreviousIndexCard.module.css'
 
-const PreviousIndexCard: React.FC<NewIndexCardPosWrapper> = ({
+const PreviousIndexCard: React.FC<IndexCardBtnWrapper> = ({
   position,
   setPosition
-}) => (
-  <NewIndexCardPosLayout
-    icon={<IoIosArrowBack size={24} />}
-    description='Previous Index Card'
-    position={position}
-    setPosition={setPosition}
-  />
-)
+}) => {
+  const disabled = !position
+  const handleClick = () => {
+    if (position) {
+      setPosition(position)
+    }
+  }
+
+  return (
+    <IndexCardBtn
+      description='Previous Index Card'
+      className={styles['btn-prev']}
+      handleClick={handleClick}
+      icon={<IoIosArrowBack size={24} />}
+      isDisabled={disabled}
+    />
+  )
+}
 
 export default PreviousIndexCard
