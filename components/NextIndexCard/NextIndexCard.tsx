@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { IoIosArrowForward } from '@react-icons/all-files/io/IoIosArrowForward'
 import { IndexCardBtn, IndexCardBtnWrapper } from '../@generics'
 import styles from './NextIndexCard.module.css'
@@ -25,4 +25,4 @@ const NextIndexCard: React.FC<IndexCardBtnWrapper> = ({
   )
 }
 
-export default NextIndexCard
+export default memo(NextIndexCard)

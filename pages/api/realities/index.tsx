@@ -37,7 +37,7 @@ import { options } from '../auth/[...nextauth]'
  *        description: Unexpected error.
  *    security: [
  *      indexcard_auth: [
- *        read:realities
+ *        readRealities
  *      ]
  *    ]
  */

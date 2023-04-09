@@ -40,19 +40,19 @@
               "type": "string",
               "nullable": true,
               "description": "The scene heading of the index card.",
-              "example": "INT. COFFEE SHOP - DAY"
+              "example": ""
             },
             "synopsis": {
               "type": "string",
               "nullable": true,
               "description": "The synopsis of the index card.",
-              "example": "Jack meets Jill for coffee and they discuss their plans for the weekend."
+              "example": ""
             },
             "conflict": {
               "type": "string",
               "nullable": true,
               "description": "The conflict of the index card.",
-              "example": "Jack wants to go to the beach, but Jill wants to go to the mountains."
+              "example": ""
             },
             "timelineId": {
               "type": "integer",
@@ -72,10 +72,11 @@
               "authorizationUrl": "",
               "tokenUrl": "",
               "scopes": {
-                "read:realities": "read your realities",
-                "read:timelines": "read your timelines",
-                "read:indexcards": "read your index cards",
-                "write:indexcards": "update your index cards"
+                "readRealities": "read your realities",
+                "readTimelines": "read your timelines",
+                "readIndexcards": "read your index cards",
+                "writeIndexcards": "update your index cards",
+                "createIndexcard": "create a new index card"
               }
             }
           }

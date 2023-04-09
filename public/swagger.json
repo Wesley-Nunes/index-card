@@ -37,19 +37,19 @@
             "type": "string",
             "nullable": true,
             "description": "The scene heading of the index card.",
-            "example": "INT. COFFEE SHOP - DAY"
+            "example": ""
           },
           "synopsis": {
             "type": "string",
             "nullable": true,
             "description": "The synopsis of the index card.",
-            "example": "Jack meets Jill for coffee and they discuss their plans for the weekend."
+            "example": ""
           },
           "conflict": {
             "type": "string",
             "nullable": true,
             "description": "The conflict of the index card.",
-            "example": "Jack wants to go to the beach, but Jill wants to go to the mountains."
+            "example": ""
           },
           "timelineId": {
             "type": "integer",
@@ -69,10 +69,11 @@
             "authorizationUrl": "",
             "tokenUrl": "",
             "scopes": {
-              "read:realities": "read your realities",
-              "read:timelines": "read your timelines",
-              "read:indexcards": "read your index cards",
-              "write:indexcards": "update your index cards"
+              "readRealities": "read your realities",
+              "readTimelines": "read your timelines",
+              "readIndexcards": "read your index cards",
+              "writeIndexcards": "update your index cards",
+              "createIndexcard": "create a new index card"
             }
           }
         }
@@ -129,7 +130,9 @@
         },
         "security": [
           {
-            "indexcard_auth": ["write:indexcards"]
+            "indexcard_auth": [
+              "writeIndexcards"
+            ]
           }
         ]
       }
@@ -140,6 +143,15 @@
         "summary": "Retrieve index cards for a given timeline.",
         "description": "Returns all index cards for a given timeline, sorted by position.",
         "parameters": [
+          {
+            "name": "realityId",
+            "in": "query",
+            "description": "The ID of the reality.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
           {
             "name": "timelineId",
             "in": "query",
@@ -173,7 +185,76 @@
         },
         "security": [
           {
-            "indexcard_auth": ["read:indexcards"]
+            "indexcard_auth": [
+              "readIndexcards"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create a new index card.",
+        "description": "Create a new index card at given position of the current timeline.",
+        "parameters": [
+          {
+            "name": "realityId",
+            "in": "query",
+            "description": "The ID of the reality.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "timelineId",
+            "in": "query",
+            "description": "The ID of the timeline.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The position to create the new index card.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "position": {
+                    "type": "integer",
+                    "description": "The position of the index card within the timeline.",
+                    "example": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IndexCard"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed or user is not authorized to access this resource."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "security": [
+          {
+            "indexcard_auth": [
+              "createIndexcard"
+            ]
           }
         ]
       }
@@ -234,7 +315,9 @@
         },
         "security": [
           {
-            "indexcard_auth": ["read:timelines"]
+            "indexcard_auth": [
+              "readTimelines"
+            ]
           }
         ]
       }
@@ -283,7 +366,9 @@
         },
         "security": [
           {
-            "indexcard_auth": ["read:realities"]
+            "indexcard_auth": [
+              "readRealities"
+            ]
           }
         ]
       }

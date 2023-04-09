@@ -30,36 +30,3 @@ const IndexCardBtn: React.FC<IndexCardBtnProps> = ({
 }
 
 export default IndexCardBtn
-
-// const NewIndexCardPosLayout: React.FC<NewIndexCardPosProps> = ({
-//   icon,
-//   description,
-//   position,
-//   setPosition
-// }) => {
-//   const disabled = !position
-// const classNames = [
-//   styles.btn,
-//   description === 'Next Index Card' ? styles['btn-next'] : '',
-//   description === 'Previous Index Card' ? styles['btn-prev'] : '',
-//   disabled ? styles['last-card'] : ''
-// ].join(' ')
-
-//   const handleClick = () => {
-//     if (position) {
-//       setPosition(position)
-//     }
-//   }
-
-//   return (
-//     <IndexCardBtn
-//       styles={classNames}
-//       description={description}
-//       handleClick={handleClick}
-//       isDisabled={disabled}
-//       icon={icon}
-//     />
-//   )
-// }
-
-// export default NewIndexCardPosLayout
