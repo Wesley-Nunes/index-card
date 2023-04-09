@@ -4,7 +4,9 @@ import IndexCardOptions from './IndexCardOptions'
 
 describe('IndexCardOptions', () => {
   it('should show the correct message when the options are closed', () => {
-    render(<IndexCardOptions />)
+    render(
+      <IndexCardOptions create={() => {}} position={1} setPosition={() => {}} />
+    )
 
     const button = screen.getByRole('button', {
       name: /options/i
@@ -16,7 +18,9 @@ describe('IndexCardOptions', () => {
   })
 
   it('should show the correct message when the options are open', () => {
-    render(<IndexCardOptions />)
+    render(
+      <IndexCardOptions create={() => {}} position={1} setPosition={() => {}} />
+    )
 
     const button = screen.getByRole('button', {
       name: /options/i
@@ -26,5 +30,29 @@ describe('IndexCardOptions', () => {
     fireEvent.click(button)
     fireEvent.mouseEnter(button)
     expect(msgOptions.getAttribute('data-msg')).toBe('Close options')
+  })
+
+  it('should show the correct message when hover the plus button', () => {
+    render(
+      <IndexCardOptions
+        create={() => {}}
+        position={12}
+        setPosition={() => {}}
+      />
+    )
+
+    const optionsButton = screen.getByRole('button', {
+      name: /options/i
+    })
+    fireEvent.click(optionsButton)
+
+    const createButton = screen.getByRole('button', {
+      name: /create new index card/i
+    })
+    const msgCreate = screen.getByTestId('index-card-options-action-create')
+    fireEvent.mouseEnter(createButton)
+    expect(msgCreate.getAttribute('data-msg')).toBe(
+      'Create a new index card at position 12'
+    )
   })
 })

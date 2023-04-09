@@ -1,8 +1,10 @@
 .container {
   display: inherit;
+  grid-template-columns: 1fr 32px;
+  gap: 0.8rem;
 }
 
-.container:hover::after {
+.container:hover::before {
   content: attr(data-msg);
   background-color: var(--base-color);
   color: var(--accent-color);
@@ -15,7 +17,10 @@
 
 .btn-options {
   grid-area: 1 / 2 / 2 / 3;
-  justify-self: end;
+}
+
+.btn-options-menu {
+  /* grid-area: 1 / 2 / 2 / 3; */
 
   border-right: 1px solid var(--base-color);
   border-left: 1px solid var(--base-color);
@@ -23,4 +28,12 @@
   box-shadow: 0px 0px 1px 0px var(--base-color-opacity),
     2px 2px 2px 0px var(--base-color-opacity),
     -2px 2px 2px 0px var(--base-color-opacity);
+}
+
+.btn-options-action {
+  border: 1px solid var(--base-color);
+}
+
+.end {
+  justify-self: end;
 }

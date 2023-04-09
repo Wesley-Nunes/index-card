@@ -1,9 +1,13 @@
-import { IndexCardBody } from './indexCard.interface'
+import { IndexCardBody, PositionBody } from './indexCard.interface'
 
-async function updateText(url: string, body: IndexCardBody): Promise<Response> {
+async function sendRequest(
+  url: string,
+  method: string,
+  body: IndexCardBody | PositionBody
+): Promise<Response> {
   try {
     const response = await fetch(url, {
-      method: 'PATCH',
+      method,
       body: JSON.stringify(body),
       headers: {
         'Content-type': 'application/json; charset=UTF-8'
@@ -11,19 +15,39 @@ async function updateText(url: string, body: IndexCardBody): Promise<Response> {
     })
 
     if (!response.ok) {
-      throw new Error('Failed to update text')
+      throw new Error(
+        `Failed to ${method === 'POST' ? 'create' : 'update'} the resource`
+      )
     }
 
     return response
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.error('Error updating text:', error)
+    console.error(
+      `Error ${method === 'POST' ? 'creating' : 'updating'} the resource:`,
+      error
+    )
     throw error
   }
 }
 
+async function createNewIndexCard(
+  url: string,
+  body: PositionBody
+): Promise<Response> {
+  return sendRequest(url, 'POST', body)
+}
+
+async function updateIndexCard(
+  url: string,
+  body: IndexCardBody
+): Promise<Response> {
+  return sendRequest(url, 'PATCH', body)
+}
+
 const indexCardService = {
-  updateText
+  createNewIndexCard,
+  updateIndexCard
 }
 
 export default indexCardService

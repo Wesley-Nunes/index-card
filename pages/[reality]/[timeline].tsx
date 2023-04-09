@@ -2,7 +2,12 @@ import React, { useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import { getIndexCards } from 'features/@generics/endpoints'
-import { useIndexCard, useEditorMutations, styles } from 'features/indexCard'
+import {
+  useIndexCard,
+  useUpdateIndexCard,
+  useCreateIndexCard,
+  styles
+} from 'features/indexCard'
 import {
   SceneHeading,
   Synopsis,
@@ -22,14 +27,34 @@ export default function Editor() {
     [reality, timeline]
   )
   const { data, isLoading, isError } = useIndexCard(key)
-  const { setSceneHeading, setSynopsis, setConflict } = useEditorMutations(
+  const { setSceneHeading, setSynopsis, setConflict } = useUpdateIndexCard(
     data?.indexCards,
     key
   )
+  const { createNewIndexCard } = useCreateIndexCard(data?.indexCards, key)
   const { indexCards = [], positionList = [] } = data || {}
-  const previousPosition = positionList.find(prev => prev < curPosition)
-  const nextPosition = positionList.find(next => next > curPosition)
-  const filteredCards = useMemo(
+  const [previousPosition, nextPosition] = useMemo(() => {
+    const curPositionIndex = positionList.findIndex(
+      position => position === curPosition
+    )
+    return [
+      positionList[curPositionIndex - 1],
+      positionList[curPositionIndex + 1]
+    ]
+  }, [positionList, curPosition])
+  const nextAvailablePosition = useMemo((): number => {
+    const smallList = positionList.filter(pos => pos >= curPosition)
+    let nextPos = smallList[0] + 1
+
+    smallList.forEach(pos => {
+      if (pos === nextPos) {
+        nextPos += 1
+      }
+    })
+
+    return nextPos
+  }, [curPosition, positionList])
+  const filteredCard = useMemo(
     () => indexCards.filter(({ position }) => position === curPosition) || [],
     [indexCards, curPosition]
   )
@@ -50,14 +75,18 @@ export default function Editor() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <div className={styles.container}>
-        {filteredCards.map(({ sceneHeading, synopsis, conflict, id }) => (
+        {filteredCard.map(({ sceneHeading, synopsis, conflict, id }) => (
           <main className={styles.main} key={id}>
             <SceneHeading
               text={sceneHeading || ''}
               setText={setSceneHeading}
               id={id}
             />
-            <IndexCardOptions />
+            <IndexCardOptions
+              create={createNewIndexCard}
+              position={nextAvailablePosition}
+              setPosition={setCurPosition}
+            />
             <Synopsis text={synopsis || ''} setText={setSynopsis} id={id} />
             <Conflict text={conflict || ''} setText={setConflict} id={id} />
             <footer className={styles.footer}>

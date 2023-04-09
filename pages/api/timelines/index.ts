@@ -45,7 +45,7 @@ import { options } from '../auth/[...nextauth]'
  *        description: Unexpected error.
  *    security:
  *      - indexcard_auth:
- *        - read:timelines
+ *        - readTimelines
  */
 
 export default async function handler(

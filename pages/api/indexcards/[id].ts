@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth'
 import prisma from 'features/@generics/prisma'
+import { Query } from 'features/indexCard/indexCard.interface'
 import { options } from '../auth/[...nextauth]'
 
 /**
@@ -38,7 +39,7 @@ import { options } from '../auth/[...nextauth]'
  *       description: Internal server error.
  *    security:
  *      - indexcard_auth:
- *        - write:indexcards
+ *        - writeIndexcards
  */
 
 export default async function handler(
@@ -50,8 +51,8 @@ export default async function handler(
     res.status(401)
   } else {
     const { body, method, query } = req
-    const { realityTitle, timelineTitle } = query
-
+    const { realityTitle, timelineTitle } = query as Query
+    const email = session.user?.email as string
     const queryId = parseInt(query.id as string, 10)
 
     switch (method) {
@@ -61,10 +62,10 @@ export default async function handler(
             where: {
               timeline: {
                 reality: {
-                  user: { email: session.user?.email as string },
-                  title: realityTitle as string
+                  user: { email },
+                  title: realityTitle
                 },
-                title: timelineTitle as string
+                title: timelineTitle
               },
               id: queryId
             },
