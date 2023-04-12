@@ -9,7 +9,10 @@ import type { IndexCardOptionsProps } from './IndexCardOptions.interface'
 
 const IndexCardOptions: React.FC<IndexCardOptionsProps> = ({
   position,
-  create,
+  newPosition,
+  createIndexCard,
+  availablePosition,
+  deleteIndexCard,
   setPosition
 }) => {
   const [isMenuOpen, setMenuState] = useState<boolean>(false)
@@ -22,11 +25,13 @@ const IndexCardOptions: React.FC<IndexCardOptionsProps> = ({
 
   const toggleMenu = () => setMenuState(prevState => !prevState)
   const createNewIndexCard = () => {
-    create(position)
-    setPosition(position)
+    createIndexCard(newPosition)
+    setPosition(newPosition)
   }
   const deleteCurrentIndexCard = () => {
-    console.log('Deleting the current index card')
+    deleteIndexCard(position)
+    // handle here if only exist one index card
+    setPosition(availablePosition || 0)
   }
 
   return (
@@ -47,7 +52,7 @@ const IndexCardOptions: React.FC<IndexCardOptionsProps> = ({
         <div className={styles['btn-options-action-container']}>
           <div
             className={styles.container}
-            data-msg={`Create a new index card at position ${position}`}
+            data-msg={`Create a new index card at position ${newPosition}`}
             data-testid='index-card-options-action-create'
           >
             <IndexCardBtn

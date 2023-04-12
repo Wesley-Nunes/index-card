@@ -1,6 +1,6 @@
 import { IndexCard } from '@prisma/client'
 import dataMaker from '../dataMaker'
-import { IndexCardBody, PositionBody } from '../indexCard.interface'
+import { IndexCardBody } from '../indexCard.interface'
 
 describe('dataMaker', () => {
   const indexCards: IndexCard[] = [
@@ -50,8 +50,7 @@ describe('dataMaker', () => {
           timelineId: 1
         }
       ]
-      const positionBody: PositionBody = { position: 4 }
-      const result = dataMaker(indexCards, positionBody)
+      const result = dataMaker(indexCards, { position: 4, delete: false })
       expect(result).toEqual(expectedIndexCards)
     })
 
@@ -82,7 +81,7 @@ describe('dataMaker', () => {
           timelineId: 1
         }
       ]
-      const result = dataMaker(indexCards, { position: 2 })
+      const result = dataMaker(indexCards, { position: 2, delete: false })
       expect(result).toEqual(expectedIndexCards)
     })
   })
@@ -149,6 +148,42 @@ describe('dataMaker', () => {
       expect(() =>
         dataMaker(indexCardData, indexCardBody, nonexistentId)
       ).toThrow(`Index card with ID ${nonexistentId} not found`)
+    })
+  })
+
+  describe('deleteIndexCard', () => {
+    it('should delete the index card at position 3', () => {
+      const expectedIndexCards: IndexCard[] = [
+        {
+          id: 1,
+          sceneHeading: 'Scene 1',
+          synopsis: 'Synopsis 1',
+          conflict: 'Conflict 1',
+          position: 1,
+          timelineId: 1
+        }
+      ]
+
+      const result = dataMaker(indexCards, { position: 3, delete: true })
+
+      expect(result).toEqual(expectedIndexCards)
+    })
+
+    it('should delete the index card at position 1', () => {
+      const expectedIndexCards: IndexCard[] = [
+        {
+          id: 3,
+          sceneHeading: 'Scene 3',
+          synopsis: 'Synopsis 3',
+          conflict: 'Conflict 3',
+          position: 3,
+          timelineId: 1
+        }
+      ]
+
+      const result = dataMaker(indexCards, { position: 1, delete: true })
+
+      expect(result).toEqual(expectedIndexCards)
     })
   })
 })

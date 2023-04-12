@@ -73,7 +73,8 @@
               "readTimelines": "read your timelines",
               "readIndexcards": "read your index cards",
               "writeIndexcards": "update your index cards",
-              "createIndexcard": "create a new index card"
+              "createIndexcard": "create a new index card",
+              "deleteIndexcard": "delete an index card"
             }
           }
         }
@@ -254,6 +255,52 @@
           {
             "indexcard_auth": [
               "createIndexcard"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete an index card at a specific position.",
+        "description": "Delete the index card located at a specific position within the timeline.",
+        "parameters": [
+          {
+            "name": "realityId",
+            "in": "query",
+            "description": "The ID of the reality.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "timelineId",
+            "in": "query",
+            "description": "The ID of the timeline.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The position of the index card to delete.",
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No content."
+          },
+          "401": {
+            "description": "Authentication failed or user is not authorized to access this resource."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "security": [
+          {
+            "indexcard_auth": [
+              "deleteIndexcard"
             ]
           }
         ]

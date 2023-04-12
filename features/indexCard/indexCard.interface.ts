@@ -1,3 +1,5 @@
+import { NextApiRequest, NextApiResponse } from 'next'
+
 export interface TextValues {
   id: number
   value: string
@@ -9,7 +11,7 @@ export type IndexCardBody =
   | { sceneHeading: string }
   | { synopsis: string }
   | { conflict: string }
-  | { position: number }
+  | { position: number; delete: boolean }
   | { timelineId: number }
 
 export interface UpdateIndexCard {
@@ -25,4 +27,19 @@ export interface PositionBody {
 export type Query = {
   realityTitle: string
   timelineTitle: string
+}
+
+export type DeleteQuery = {
+  realityTitle: string
+  timelineTitle: string
+  position: string
+}
+
+export type Handler = (
+  req: NextApiRequest,
+  res: NextApiResponse
+) => Promise<void>
+
+export interface MethodHandlers {
+  [method: string]: Handler
 }

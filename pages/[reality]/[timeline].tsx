@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import { getIndexCards } from 'features/@generics/endpoints'
@@ -6,6 +6,8 @@ import {
   useIndexCard,
   useUpdateIndexCard,
   useCreateIndexCard,
+  useDeleteIndexCard,
+  positions,
   styles
 } from 'features/indexCard'
 import {
@@ -19,7 +21,6 @@ import {
 } from 'components'
 
 export default function Editor() {
-  const [curPosition, setCurPosition] = useState<number>(1) // Temporarily mocking the start curPosition
   const router = useRouter()
   const { reality, timeline } = router.query
   const key = useMemo(
@@ -28,35 +29,33 @@ export default function Editor() {
   )
   const { data, isLoading, isError } = useIndexCard(key)
   const { setSceneHeading, setSynopsis, setConflict } = useUpdateIndexCard(
-    data?.indexCards,
+    data.indexCards,
     key
   )
   const { createNewIndexCard } = useCreateIndexCard(data?.indexCards, key)
-  const { indexCards = [], positionList = [] } = data || {}
-  const [previousPosition, nextPosition] = useMemo(() => {
-    const curPositionIndex = positionList.findIndex(
-      position => position === curPosition
-    )
-    return [
-      positionList[curPositionIndex - 1],
-      positionList[curPositionIndex + 1]
-    ]
-  }, [positionList, curPosition])
-  const nextAvailablePosition = useMemo((): number => {
-    const smallList = positionList.filter(pos => pos >= curPosition)
-    let nextPos = smallList[0] + 1
-
-    smallList.forEach(pos => {
-      if (pos === nextPos) {
-        nextPos += 1
-      }
-    })
-
-    return nextPos
-  }, [curPosition, positionList])
+  const { deleteIndexCard } = useDeleteIndexCard(data?.indexCards, key)
+  const {
+    indexCards = [],
+    positionList = [],
+    setCurrentPosition,
+    currentPosition
+  } = data || {}
+  const [previousPosition, nextPosition] = positions.getAdjacentPositions(
+    positionList,
+    currentPosition
+  )
+  const positionOfTheNewIndexCard = positions.getPositionOfTheNewIndexCard(
+    positionList,
+    currentPosition
+  )
+  const availablePosition = positions.getAvailablePosition(
+    positionList,
+    currentPosition
+  )
   const filteredCard = useMemo(
-    () => indexCards.filter(({ position }) => position === curPosition) || [],
-    [indexCards, curPosition]
+    () =>
+      indexCards.filter(({ position }) => position === currentPosition) || [],
+    [indexCards, currentPosition]
   )
 
   if (isLoading) {
@@ -83,21 +82,24 @@ export default function Editor() {
               id={id}
             />
             <IndexCardOptions
-              create={createNewIndexCard}
-              position={nextAvailablePosition}
-              setPosition={setCurPosition}
+              position={currentPosition}
+              deleteIndexCard={deleteIndexCard}
+              availablePosition={availablePosition}
+              createIndexCard={createNewIndexCard}
+              newPosition={positionOfTheNewIndexCard}
+              setPosition={setCurrentPosition}
             />
             <Synopsis text={synopsis || ''} setText={setSynopsis} id={id} />
             <Conflict text={conflict || ''} setText={setConflict} id={id} />
             <footer className={styles.footer}>
               <PreviousIndexCard
                 position={previousPosition}
-                setPosition={setCurPosition}
+                setPosition={setCurrentPosition}
               />
-              <IndexCardPosition position={curPosition} />
+              <IndexCardPosition position={currentPosition} />
               <NextIndexCard
                 position={nextPosition}
-                setPosition={setCurPosition}
+                setPosition={setCurrentPosition}
               />
             </footer>
           </main>
