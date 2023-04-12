@@ -5,7 +5,14 @@ import IndexCardOptions from './IndexCardOptions'
 describe('IndexCardOptions', () => {
   it('should show the correct message when the options are closed', () => {
     render(
-      <IndexCardOptions create={() => {}} position={1} setPosition={() => {}} />
+      <IndexCardOptions
+        availablePosition={0}
+        position={1}
+        newPosition={2}
+        createIndexCard={() => {}}
+        setPosition={() => {}}
+        deleteIndexCard={() => {}}
+      />
     )
 
     const button = screen.getByRole('button', {
@@ -19,7 +26,14 @@ describe('IndexCardOptions', () => {
 
   it('should show the correct message when the options are open', () => {
     render(
-      <IndexCardOptions create={() => {}} position={1} setPosition={() => {}} />
+      <IndexCardOptions
+        availablePosition={0}
+        position={1}
+        newPosition={2}
+        createIndexCard={() => {}}
+        setPosition={() => {}}
+        deleteIndexCard={() => {}}
+      />
     )
 
     const button = screen.getByRole('button', {
@@ -35,9 +49,12 @@ describe('IndexCardOptions', () => {
   it('should show the correct message when hover the plus button', () => {
     render(
       <IndexCardOptions
-        create={() => {}}
-        position={12}
+        availablePosition={0}
+        position={1}
+        newPosition={2}
+        createIndexCard={() => {}}
         setPosition={() => {}}
+        deleteIndexCard={() => {}}
       />
     )
 
@@ -52,7 +69,7 @@ describe('IndexCardOptions', () => {
     const msgCreate = screen.getByTestId('index-card-options-action-create')
     fireEvent.mouseEnter(createButton)
     expect(msgCreate.getAttribute('data-msg')).toBe(
-      'Create a new index card at position 12'
+      'Create a new index card at position 2'
     )
   })
 })

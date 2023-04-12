@@ -1,9 +1,15 @@
 import { IndexCardBody, PositionBody } from './indexCard.interface'
 
+const httpMethodMap = {
+  POST: 'create',
+  PATCH: 'update',
+  DELETE: 'delete'
+}
+
 async function sendRequest(
   url: string,
   method: string,
-  body: IndexCardBody | PositionBody
+  body?: IndexCardBody | PositionBody
 ): Promise<Response> {
   try {
     const response = await fetch(url, {
@@ -16,7 +22,9 @@ async function sendRequest(
 
     if (!response.ok) {
       throw new Error(
-        `Failed to ${method === 'POST' ? 'create' : 'update'} the resource`
+        `Failed to ${
+          httpMethodMap[method as keyof typeof httpMethodMap]
+        } the resource`
       )
     }
 
@@ -24,7 +32,9 @@ async function sendRequest(
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error(
-      `Error ${method === 'POST' ? 'creating' : 'updating'} the resource:`,
+      `Error ${
+        httpMethodMap[method as keyof typeof httpMethodMap]
+      } the resource:`,
       error
     )
     throw error
@@ -45,9 +55,14 @@ async function updateIndexCard(
   return sendRequest(url, 'PATCH', body)
 }
 
+async function deleteIndexCard(url: string): Promise<Response> {
+  return sendRequest(url, 'DELETE')
+}
+
 const indexCardService = {
   createNewIndexCard,
-  updateIndexCard
+  updateIndexCard,
+  deleteIndexCard
 }
 
 export default indexCardService

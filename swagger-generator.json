@@ -76,7 +76,8 @@
                 "readTimelines": "read your timelines",
                 "readIndexcards": "read your index cards",
                 "writeIndexcards": "update your index cards",
-                "createIndexcard": "create a new index card"
+                "createIndexcard": "create a new index card",
+                "deleteIndexcard": "delete an index card"
               }
             }
           }

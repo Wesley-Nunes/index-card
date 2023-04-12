@@ -16,7 +16,9 @@ function useCreateIndexCard(data: IndexCard[], key: string) {
       { position }
     )
 
-    mutate(key, dataMaker(data, { position }), { revalidate: false })
+    mutate(key, dataMaker(data, { position, delete: false }), {
+      revalidate: false
+    })
   }
 
   return {

@@ -1,5 +1,5 @@
 .container {
-  display: inherit;
+  display: grid;
   grid-template-columns: 1fr 32px;
   gap: 0.8rem;
 }
@@ -15,13 +15,16 @@
   margin-left: auto;
 }
 
+.btn-options-action-container {
+  display: grid;
+  grid-template-rows: 7.2rem;
+}
+
 .btn-options {
   grid-area: 1 / 2 / 2 / 3;
 }
 
 .btn-options-menu {
-  /* grid-area: 1 / 2 / 2 / 3; */
-
   border-right: 1px solid var(--base-color);
   border-left: 1px solid var(--base-color);
   border-radius: 0px 0px 8px 8px;

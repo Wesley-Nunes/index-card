@@ -12,7 +12,13 @@ const endpoints = {
     id: number
   ): string =>
     `/api/indexcards/${id}?realityTitle=${realityTitle}&timelineTitle=${timelineTitle}`,
-  createIndexCardAtPosition: indexCards
+  createIndexCardAtPosition: indexCards,
+  deleteIndexCardAtPosition: (
+    realityTitle: string,
+    timelineTitle: string,
+    position: number
+  ): string =>
+    `/api/indexcards?realityTitle=${realityTitle}&timelineTitle=${timelineTitle}&position=${position}`
 }
 
 export const {
@@ -20,5 +26,6 @@ export const {
   getTimelines,
   getIndexCards,
   updateIndexCardById,
-  createIndexCardAtPosition
+  createIndexCardAtPosition,
+  deleteIndexCardAtPosition
 } = endpoints
