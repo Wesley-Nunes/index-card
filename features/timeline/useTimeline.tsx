@@ -4,6 +4,7 @@ import useSWR from 'swr'
 import { Timeline } from '@prisma/client'
 import fetcher from '../@generics/fetcher'
 import { getTimelines } from '../@generics/endpoints'
+import { loginPage } from '../@generics/urls'
 
 function useTimeline() {
   const router = useRouter()
@@ -13,7 +14,7 @@ function useTimeline() {
   const { data, isLoading, error } = useSWR(key, fetcher)
 
   if (status === 'unauthenticated') {
-    router.push('/')
+    router.push(loginPage)
   }
 
   return {

@@ -1,11 +1,63 @@
-import React from 'react'
-import Link from 'next/link'
+import React, { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
-import { useReality } from 'features/reality'
+
+import { IoIosArrowUp } from '@react-icons/all-files/io/IoIosArrowUp'
+import { IoIosArrowDown } from '@react-icons/all-files/io/IoIosArrowDown'
+import { IoIosMore } from '@react-icons/all-files/io/IoIosMore'
+// import { useRouter } from 'next/router'
+// import { loginPage } from 'features/@generics/urls'
+import { useUniverse } from 'features/universe'
+// import Link from 'next/link'
+
+const Item = ({
+  title,
+  children
+}: {
+  title: string | number
+  children?: JSX.Element | JSX.Element[] | null
+}) => {
+  const [childrenVisibility, toggleChildrenVisibility] = useState(false)
+  const Arrow = childrenVisibility ? (
+    <IoIosArrowUp size={24} />
+  ) : (
+    <IoIosArrowDown size={24} />
+  )
+
+  useEffect(() => {
+    if (children) {
+      toggleChildrenVisibility(true)
+    }
+  }, [children, childrenVisibility])
+
+  return (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'flex-end',
+        flexDirection: 'column',
+        rowGap: 8,
+        fontSize: '2.4rem',
+        marginBottom: 16
+      }}
+    >
+      <div style={{ display: 'flex', columnGap: 32 }}>
+        <span style={{ borderBottom: '1px dashed green' }}>{title}</span>
+        {typeof title === 'string' ? Arrow : <div style={{ width: 24 }} />}
+        <IoIosMore size={24} />
+      </div>
+      {children ? <div style={{ marginLeft: 32 }}>{children}</div> : <> </>}
+    </div>
+  )
+}
+
+Item.defaultProps = {
+  children: null
+}
 
 function Home() {
+  // const router = useRouter()
   const { data: session, status } = useSession()
-  const { realities, isLoading, isError } = useReality()
+  const { universes, isLoading, isError } = useUniverse()
 
   if (status === 'loading' || isLoading) {
     return <h1>Loading</h1>
@@ -15,37 +67,79 @@ function Home() {
     return <h1>Error</h1>
   }
 
-  if (!session) {
+  if (session) {
     return (
-      <div className='right'>
-        <Link href='/api/auth/signin'>
-          <button type='button' data-testid='signBtn'>
-            Log in
-          </button>
-        </Link>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '99vh'
+        }}
+      >
+        {universes.length ? (
+          universes.map(({ title, id }) => <Item title={title} key={id} />)
+        ) : (
+          <> </>
+        )}
       </div>
     )
   }
 
-  if (session) {
-    return (
-      <>
-        <h1>Realities</h1>
-        {realities!.map((reality, i) => (
-          <Link
-            key={reality.id}
-            href={{
-              pathname: reality.title
-            }}
-          >
-            <button type='button' data-testid={`reality-${i + 1}`}>
-              {reality.title}
-            </button>
-          </Link>
-        ))}
-      </>
-    )
-  }
+  // if (session) {
+  //   return (
+  //     <div
+  //       style={{
+  //         display: 'flex',
+  //         flexDirection: 'column',
+  //         alignItems: 'center',
+  //         justifyContent: 'center',
+  //         height: '99vh'
+  //       }}
+  //     >
+  //       {realities.length ? (
+  //         realities.map(reality => (
+  //           <Item title={reality.title} key={reality.id}>
+  //             {reality?.timelines.length ? (
+  //               reality.timelines.map(timeline => (
+  //                 <Item title={timeline.title} key={timeline.id}>
+  //                   {timeline?.indexCards.length ? (
+  //                     timeline.indexCards.map(indexCard => (
+  //                       <Link
+  //                         key={indexCard.id}
+  //                         href={{
+  //                           pathname: `${reality.title}/${timeline.title}/${indexCard.position}`
+  //                         }}
+  //                       >
+  //                         <Item title={indexCard.position} key={indexCard.id} />
+  //                       </Link>
+  //                     ))
+  //                   ) : (
+  //                     <> </>
+  //                   )}
+  //                 </Item>
+  //               ))
+  //             ) : (
+  //               <> </>
+  //             )}
+  //           </Item>
+  //         ))
+  //       ) : (
+  //         <> </>
+  //       )}
+
+  //       {/* <Item title='Marvel Cinematic'>
+  //         <Item title='Iron Man'>
+  //           <Item title={1} />
+  //           <Item title={2} />
+  //           <Item title={3} />
+  //         </Item>
+  //         <Item title='Thor' />
+  //       </Item> */}
+  //     </div>
+  //   )
+  // }
 }
 
 export default Home

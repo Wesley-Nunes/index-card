@@ -10,7 +10,6 @@ import {
   PositionBody
 } from 'features/indexCard/indexCard.interface'
 import { options } from '../auth/[...nextauth]'
-
 /**
  * @swagger
  * /indexcards:

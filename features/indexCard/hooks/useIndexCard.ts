@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import { IndexCard } from '@prisma/client'
 import fetcher from '../../@generics/fetcher'
+import { loginPage } from '../../@generics/urls'
 
 function useIndexCard(key: string) {
   const router = useRouter()
@@ -16,7 +17,7 @@ function useIndexCard(key: string) {
     : [-1]
 
   if (status === 'unauthenticated') {
-    router.push('/')
+    router.push(loginPage)
   }
 
   return {

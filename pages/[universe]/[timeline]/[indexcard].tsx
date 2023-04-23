@@ -21,6 +21,10 @@ import {
 } from 'components'
 
 export default function Editor() {
+  /*
+  Estou pensando em adicionar o map criado em index em um contexto
+  e usar esse contexto nessa pagina aqui e nas specials
+  */
   const router = useRouter()
   const { reality, timeline } = router.query
   const key = useMemo(
@@ -57,6 +61,27 @@ export default function Editor() {
       indexCards.filter(({ position }) => position === currentPosition) || [],
     [indexCards, currentPosition]
   )
+  // const [realities, setRealities] = useState([])
+  // useEffect(() => {
+  //   if (!isLoading && !isError) {
+  //     const fetcher = async (url: string) => {
+  //       const res = await fetch(url)
+
+  //       if (!res.ok) {
+  //         const { message } = await res.json()
+  //         const error = new Error(message)
+
+  //         throw error
+  //       }
+
+  //       return res.json()
+  //     }
+
+  //     fetcher('/api/map').then(res => setRealities(res.realities))
+  //   }
+  // }, [isLoading, isError])
+
+  // console.log(realities)
 
   if (isLoading) {
     return <h1>loading</h1>

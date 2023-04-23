@@ -1,9 +1,7 @@
 import { Fetcher } from 'swr'
-import { IndexCard, Reality, Timeline } from '@prisma/client'
+import { IndexCard, Universe } from '@prisma/client'
 
-const fetcher: Fetcher<Reality[] | Timeline[] | IndexCard[]> = async (
-  url: string
-) => {
+const fetcher: Fetcher<Universe[] | IndexCard[]> = async (url: string) => {
   const res = await fetch(url)
 
   if (!res.ok) {

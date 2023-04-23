@@ -2,7 +2,7 @@ const indexCards = (realityTitle: string, timelineTitle: string) =>
   `/api/indexcards?realityTitle=${realityTitle}&timelineTitle=${timelineTitle}`
 
 const endpoints = {
-  getRealities: 'api/realities',
+  getUniverses: 'api/universes',
   getTimelines: (realityTitle: string) =>
     `api/timelines?realityTitle=${realityTitle}`,
   getIndexCards: indexCards,
@@ -22,7 +22,7 @@ const endpoints = {
 }
 
 export const {
-  getRealities,
+  getUniverses,
   getTimelines,
   getIndexCards,
   updateIndexCardById,

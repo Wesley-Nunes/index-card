@@ -73,6 +73,11 @@ export default async function handler(
                 title: realityTitle
               }
             },
+            select: {
+              id: true,
+              title: true,
+              description: true
+            },
             orderBy: [
               {
                 dateOfCreation: 'asc'
@@ -86,20 +91,19 @@ export default async function handler(
               where: { title: realityTitle }
             })
             if (!reality) {
-              // eslint-disable-next-line @typescript-eslint/no-throw-literal
-              throw 'Realidade inexistente'
+              res.status(404).json({ error: 'Reality not found' })
             }
           }
 
-          const timelinesSimplified = timelines.map(
-            ({ id, title, description }) => ({
-              id,
-              title,
-              description
-            })
-          )
+          // const timelinesSimplified = timelines.map(
+          //   ({ id, title, description }) => ({
+          //     id,
+          //     title,
+          //     description
+          //   })
+          // )
 
-          res.status(200).json(timelinesSimplified)
+          res.status(200).json(timelines)
         } catch (error) {
           res.status(500).json({ message: error })
         }
