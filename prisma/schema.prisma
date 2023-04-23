@@ -9,48 +9,48 @@ datasource db {
 }
 
 model IndexCard {
-  id           Int      @id @default(autoincrement())
+  id           Int     @id @default(autoincrement())
   position     Int
-  sceneHeading String?  @default("")
-  synopsis     String?  @default("")
-  conflict     String?  @default("")
-  timeline     Timeline @relation(fields: [timelineId], references: [id])
-  timelineId   Int
+  sceneHeading String? @default("")
+  synopsis     String? @default("")
+  conflict     String? @default("")
+  story        Story   @relation(fields: [storyId], references: [id])
+  storyId      Int
 
-  @@unique([timelineId, position])
+  @@unique([storyId, position])
 }
 
-model Timeline {
+model Story {
   id             Int         @id @default(autoincrement())
   title          String
   description    String?     @default("")
   dateOfCreation DateTime    @default(now())
   indexCards     IndexCard[]
-  reality        Reality     @relation(fields: [realityId], references: [id])
-  realityId      Int
+  universe       Universe    @relation(fields: [universeId], references: [id])
+  universeId     Int
 
-  @@unique([realityId, title])
+  @@unique([universeId, title])
 }
 
-model Reality {
-  id             Int        @id @default(autoincrement())
+model Universe {
+  id             Int      @id @default(autoincrement())
   title          String
-  description    String?    @default("")
-  dateOfCreation DateTime   @default(now())
-  timelines      Timeline[]
-  user           User       @relation(fields: [userId], references: [id])
+  description    String?  @default("")
+  dateOfCreation DateTime @default(now())
+  stories        Story[]
+  user           User     @relation(fields: [userId], references: [id])
   userId         String
 
   @@unique([userId, title])
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String     @id @default(cuid())
   name          String?
   image         String?
-  email         String    @unique
+  email         String     @unique
   emailVerified DateTime?
-  realities     Reality[]
+  universes     Universe[]
   accounts      Account[]
   sessions      Session[]
 }
