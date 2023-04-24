@@ -1,10 +1,10 @@
 import useSWR from 'swr'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
-import { Universe } from '@prisma/client'
 import { getUniverses } from '../@generics/endpoints'
 import fetcher from '../@generics/fetcher'
 import { loginPage } from '../@generics/urls'
+import type { Universe } from './universe.interface'
 
 /**
  * A React hook that fetches the list of universes of an authenticated user.
@@ -12,8 +12,8 @@ import { loginPage } from '../@generics/urls'
  */
 function useUniverse() {
   const router = useRouter()
-  const { data, error, isLoading } = useSWR(getUniverses, fetcher)
   const { status } = useSession()
+  const { data, error, isLoading } = useSWR(getUniverses, fetcher)
 
   if (!isLoading && status === 'unauthenticated') {
     router.push(loginPage)
@@ -21,8 +21,8 @@ function useUniverse() {
 
   return {
     universes: data as Universe[],
-    isLoading,
-    isError: error
+    loadingUniverses: isLoading,
+    errorUniverses: error
   }
 }
 

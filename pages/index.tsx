@@ -7,6 +7,7 @@ import { IoIosMore } from '@react-icons/all-files/io/IoIosMore'
 // import { useRouter } from 'next/router'
 // import { loginPage } from 'features/@generics/urls'
 import { useUniverse } from 'features/universe'
+import { useStory } from 'features/story'
 // import Link from 'next/link'
 
 const Item = ({
@@ -57,13 +58,14 @@ Item.defaultProps = {
 function Home() {
   // const router = useRouter()
   const { data: session, status } = useSession()
-  const { universes, isLoading, isError } = useUniverse()
+  const { universes, loadingUniverses, errorUniverses } = useUniverse()
+  const { stories, loadingStories, errorStories } = useStory()
 
-  if (status === 'loading' || isLoading) {
+  if (status === 'loading' || loadingUniverses || loadingStories) {
     return <h1>Loading</h1>
   }
 
-  if (isError && status !== 'unauthenticated') {
+  if ((errorUniverses || errorStories) && status !== 'unauthenticated') {
     return <h1>Error</h1>
   }
 
@@ -79,7 +81,17 @@ function Home() {
         }}
       >
         {universes.length ? (
-          universes.map(({ title, id }) => <Item title={title} key={id} />)
+          universes.map(universe => (
+            <Item title={universe.title} key={universe.id}>
+              {stories.length ? (
+                stories
+                  .filter(story => story.universeId === universe.id)
+                  .map(story => <Item title={story.title} key={story.id} />)
+              ) : (
+                <> </>
+              )}
+            </Item>
+          ))
         ) : (
           <> </>
         )}
