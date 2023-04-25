@@ -3,11 +3,12 @@ const endpoints = () => {
 
   return {
     getUniverses: `${root}universes`,
-    getStories: `${root}stories`
+    getStories: `${root}stories`,
+    getIndexCards: `${root}indexcards`
   }
 }
 
-export const { getUniverses, getStories } = endpoints()
+export const { getUniverses, getStories, getIndexCards } = endpoints()
 
 // const indexCards = (realityTitle: string, timelineTitle: string) =>
 //   `/api/indexcards?realityTitle=${realityTitle}&timelineTitle=${timelineTitle}`

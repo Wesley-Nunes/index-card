@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
+import Link from 'next/link'
+import { useUniverse } from 'features/universe'
+import { useStory } from 'features/story'
+import { useIndexCard } from 'features/indexCard'
 
 import { IoIosArrowUp } from '@react-icons/all-files/io/IoIosArrowUp'
 import { IoIosArrowDown } from '@react-icons/all-files/io/IoIosArrowDown'
 import { IoIosMore } from '@react-icons/all-files/io/IoIosMore'
-// import { useRouter } from 'next/router'
-// import { loginPage } from 'features/@generics/urls'
-import { useUniverse } from 'features/universe'
-import { useStory } from 'features/story'
-// import Link from 'next/link'
 
 const Item = ({
   title,
@@ -56,16 +55,24 @@ Item.defaultProps = {
 }
 
 function Home() {
-  // const router = useRouter()
   const { data: session, status } = useSession()
   const { universes, loadingUniverses, errorUniverses } = useUniverse()
   const { stories, loadingStories, errorStories } = useStory()
+  const { indexCards, loadingIndexCards, errorIndexCards } = useIndexCard()
 
-  if (status === 'loading' || loadingUniverses || loadingStories) {
+  if (
+    status === 'loading' ||
+    loadingUniverses ||
+    loadingStories ||
+    loadingIndexCards
+  ) {
     return <h1>Loading</h1>
   }
 
-  if ((errorUniverses || errorStories) && status !== 'unauthenticated') {
+  if (
+    (errorUniverses || errorStories || errorIndexCards) &&
+    status !== 'unauthenticated'
+  ) {
     return <h1>Error</h1>
   }
 
@@ -86,7 +93,29 @@ function Home() {
               {stories.length ? (
                 stories
                   .filter(story => story.universeId === universe.id)
-                  .map(story => <Item title={story.title} key={story.id} />)
+                  .map(story => (
+                    <Item title={story.title} key={story.id}>
+                      {indexCards.length ? (
+                        indexCards
+                          .filter(indexCard => indexCard.storyId === story.id)
+                          .map(indexCard => (
+                            <Link
+                              key={indexCard.id}
+                              href={{
+                                pathname: `${universe.title}/${story.title}/${indexCard.position}`
+                              }}
+                            >
+                              <Item
+                                title={indexCard.position}
+                                key={indexCard.id}
+                              />
+                            </Link>
+                          ))
+                      ) : (
+                        <> </>
+                      )}
+                    </Item>
+                  ))
               ) : (
                 <> </>
               )}
@@ -118,12 +147,12 @@ function Home() {
   //                 <Item title={timeline.title} key={timeline.id}>
   //                   {timeline?.indexCards.length ? (
   //                     timeline.indexCards.map(indexCard => (
-  //                       <Link
-  //                         key={indexCard.id}
-  //                         href={{
-  //                           pathname: `${reality.title}/${timeline.title}/${indexCard.position}`
-  //                         }}
-  //                       >
+  // <Link
+  //   key={indexCard.id}
+  //   href={{
+  //     pathname: `${reality.title}/${timeline.title}/${indexCard.position}`
+  //   }}
+  // >
   //                         <Item title={indexCard.position} key={indexCard.id} />
   //                       </Link>
   //                     ))

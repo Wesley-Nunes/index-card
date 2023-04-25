@@ -1,5 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
+export interface IndexCard {
+  id: number
+  position: number
+  sceneHeading: string
+  synopsis: string
+  conflict: string
+  storyId: number
+}
+
 export interface TextValues {
   id: number
   value: string

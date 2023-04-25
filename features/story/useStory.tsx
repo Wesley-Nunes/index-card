@@ -1,7 +1,7 @@
 import useSWR from 'swr'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
-import { Story } from '@prisma/client'
+import { Story } from './story.interface'
 import fetcher from '../@generics/fetcher'
 import { getStories } from '../@generics/endpoints'
 import { loginPage } from '../@generics/urls'
