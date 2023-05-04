@@ -14,7 +14,7 @@ model IndexCard {
   sceneHeading String? @default("")
   synopsis     String? @default("")
   conflict     String? @default("")
-  story        Story   @relation(fields: [storyId], references: [id])
+  story        Story   @relation(fields: [storyId], references: [id], onDelete: Cascade)
   storyId      Int
 
   @@unique([storyId, position])
@@ -26,7 +26,7 @@ model Story {
   description    String?     @default("")
   dateOfCreation DateTime    @default(now())
   indexCards     IndexCard[]
-  universe       Universe    @relation(fields: [universeId], references: [id])
+  universe       Universe    @relation(fields: [universeId], references: [id], onDelete: Cascade)
   universeId     Int
 
   @@unique([universeId, title])
@@ -38,7 +38,7 @@ model Universe {
   description    String?  @default("")
   dateOfCreation DateTime @default(now())
   stories        Story[]
-  user           User     @relation(fields: [userId], references: [id])
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId         String
 
   @@unique([userId, title])
