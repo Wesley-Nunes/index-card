@@ -1,5 +1,7 @@
 import { Fetcher } from 'swr'
-import { IndexCard, Story, Universe } from '@prisma/client'
+import { Story } from '../story/story.interface'
+import { IndexCard } from '../indexCard/indexCard.interface'
+import Universe from '../universe/universe.interface'
 
 const fetcher: Fetcher<Universe[] | Story[] | IndexCard[]> = async (
   url: string

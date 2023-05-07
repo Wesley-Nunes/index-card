@@ -1,5 +1,6 @@
-export interface Universe {
-  id: number
+interface Universe {
   title: string
   description: string | null
 }
+
+export default Universe

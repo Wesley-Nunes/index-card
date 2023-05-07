@@ -1,17 +1,21 @@
-import { ReactNode } from 'react'
-
-interface TextValues {
-  id: number
-  value: string
+type TextField = {
+  sceneHeading: string
+  synopsis: string
+  conflict: string
 }
 
-export interface TextLayoutWrapper {
+type TextFieldMapped = {
+  [P in keyof TextField]?: TextField[P]
+}
+
+export type TextLayoutTextFields = 'scene heading' | 'synopsis' | 'conflict'
+
+export type TextLayoutWrapper = {
   text: string
-  setText: ({ id, value }: TextValues) => void
-  id: number
+  setText: (textField: TextFieldMapped) => void
 }
 
-export interface TextLayoutProps extends TextLayoutWrapper {
-  icon: ReactNode
-  description: string
+export type TextLayoutProps = TextLayoutWrapper & {
+  icon: React.ReactNode
+  description: TextLayoutTextFields
 }

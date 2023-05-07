@@ -1,54 +1,32 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+interface Titles {
+  storyTitle: string
+  universeTitle: string
+}
 
-export interface IndexCard {
+export interface IndexCardFields {
   id: number
   position: number
   sceneHeading: string
   synopsis: string
   conflict: string
-  storyId: number
 }
 
-export interface TextValues {
-  id: number
-  value: string
+export type PartialIndexCard = {
+  [P in keyof IndexCardFields]?: IndexCardFields[P]
 }
 
-export type IndexCardBodyProp = 'sceneHeading' | 'synopsis' | 'conflict'
-
-export type IndexCardBody =
-  | { sceneHeading: string }
-  | { synopsis: string }
-  | { conflict: string }
-  | { position: number; delete: boolean }
-  | { timelineId: number }
-
-export interface UpdateIndexCard {
-  setSceneHeading: (values: TextValues) => void
-  setSynopsis: (values: TextValues) => void
-  setConflict: (values: TextValues) => void
+export interface IndexCardPosAndTitles extends Titles {
+  position?: number
 }
 
-export interface PositionBody {
+export interface UseIndexCardInfo extends Titles {
   position: number
 }
 
-export type Query = {
-  realityTitle: string
-  timelineTitle: string
+export interface Body extends IndexCardPosAndTitles {
+  field: PartialIndexCard
 }
 
-export type DeleteQuery = {
-  realityTitle: string
-  timelineTitle: string
-  position: string
-}
-
-export type Handler = (
-  req: NextApiRequest,
-  res: NextApiResponse
-) => Promise<void>
-
-export interface MethodHandlers {
-  [method: string]: Handler
+export interface IndexCard extends Titles {
+  indexCards: IndexCardFields[]
 }

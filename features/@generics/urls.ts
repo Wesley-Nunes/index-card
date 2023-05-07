@@ -1,5 +1,5 @@
 const urls = {
-  loginPage: '/api/auth/signin',
+  loginPage: '/login',
   homePage: '/'
 }
 

@@ -1,198 +1,99 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-console */
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth'
+import { IndexCard } from '@prisma/client'
 import prisma from 'features/@generics/prisma'
-import {
-  Query,
-  DeleteQuery,
-  MethodHandlers,
-  Handler,
-  PositionBody
-} from 'features/indexCard/indexCard.interface'
 import { options } from '../auth/[...nextauth]'
-/**
- * @swagger
- * /indexcards:
- *  summary: Represents a group of index cards of timelines.
- *  get:
- *    summary: Retrieve index cards for a given timeline.
- *    description: Returns all index cards for a given timeline, sorted by position.
- *    parameters:
- *    - name: realityId
- *      in: query
- *      description: The ID of the reality.
- *      required: true
- *      schema:
- *        type: integer
- *    - name: timelineId
- *      in: query
- *      description: The ID of the timeline.
- *      required: true
- *      schema:
- *        type: integer
- *    responses:
- *      200:
- *        description: OK
- *        content:
- *          application/json:
- *            schema:
- *              type: array
- *              items:
- *                $ref: '#/components/schemas/IndexCard'
- *      401:
- *        description: Authentication failed or user is not authorized to access this resource.
- *      500:
- *        description: Internal server error.
- *    security:
- *      - indexcard_auth:
- *        - readIndexcards
- *
- *  post:
- *    summary: Create a new index card.
- *    description: Create a new index card at given position of the current timeline.
- *    parameters:
- *    - name: realityId
- *      in: query
- *      description: The ID of the reality.
- *      required: true
- *      schema:
- *        type: integer
- *    - name: timelineId
- *      in: query
- *      description: The ID of the timeline.
- *      required: true
- *      schema:
- *        type: integer
- *    requestBody:
- *     description: The position to create the new index card.
- *     required: true
- *     content:
- *       application/json:
- *         schema:
- *          type: object
- *          properties:
- *            position:
- *              type: integer
- *              description: "The position of the index card within the timeline."
- *              example: 1
- *    responses:
- *      201:
- *        description: Created
- *        content:
- *          application/json:
- *            schema:
- *              $ref: '#/components/schemas/IndexCard'
- *      401:
- *        description: Authentication failed or user is not authorized to access this resource.
- *      500:
- *        description: Internal server error.
- *    security:
- *      - indexcard_auth:
- *        - createIndexcard
- *  delete:
- *    summary: Delete an index card at a specific position.
- *    description: Delete the index card located at a specific position within the timeline.
- *    parameters:
- *    - name: realityId
- *      in: query
- *      description: The ID of the reality.
- *      required: true
- *      schema:
- *        type: integer
- *    - name: timelineId
- *      in: query
- *      description: The ID of the timeline.
- *      required: true
- *      schema:
- *        type: integer
- *    - name: position
- *      in: query
- *      description: The position of the index card.
- *      required: true
- *      schema:
- *        type: integer
- *    responses:
- *      204:
- *        description: No content.
- *      401:
- *        description: Authentication failed or user is not authorized to access this resource.
- *      500:
- *        description: Internal server error.
- *    security:
- *      - indexcard_auth:
- *        - deleteIndexcard
- */
 
-const getHandler: Handler = async (req, res) => {
-  try {
-    const { query } = req
-    const { realityTitle, timelineTitle } = query as Query
+interface FormattedIndexCards {
+  storyTitle: string
+  universeTitle: string
+  indexCards: Omit<IndexCard, 'storyId'>[]
+}
 
-    const session = await getServerSession(req, res, options)
-    if (!session) {
-      res.status(401).end()
-      return
-    }
-    const email = session.user?.email as string
+type Handler = (req: NextApiRequest, res: NextApiResponse) => Promise<void>
 
-    const allIndexCards = await prisma.indexCard.findMany({
-      where: {
-        timeline: {
-          reality: {
-            user: { email },
-            title: realityTitle
-          },
-          title: timelineTitle
-        }
-      },
-      orderBy: [
-        {
-          position: 'asc'
-        }
-      ]
-    })
-
-    res.status(200).json(allIndexCards)
-  } catch (error) {
-    console.error(error)
-    res.status(500).json({ error: 'Internal server error' })
-  }
+interface MethodHandlers {
+  [method: string]: Handler
 }
 
 const postHandler: Handler = async (req, res) => {
   try {
     const session = await getServerSession(req, res, options)
-    if (!session) {
-      res.status(401).end()
-      return
+
+    if (!session || !session.user) {
+      return res
+        .status(401)
+        .json({ message: 'Authorization information is missing or invalid.' })
     }
 
-    const { timelineTitle, realityTitle } = req.query as Query
-    const email = session.user?.email as string
+    const userEmail = session.user.email
 
-    const timeline = await prisma.timeline.findFirst({
-      where: {
-        title: timelineTitle,
-        reality: { title: realityTitle, user: { email } }
+    if (!userEmail) {
+      return res
+        .status(400)
+        .json({ message: 'Request payload is missing or invalid.' })
+    }
+    const bodyProps = ['storyTitle', 'universeTitle', 'position']
+
+    const { body } = req
+    Object.keys(body).forEach(prop => {
+      if (!bodyProps.includes(prop)) {
+        return res.status(400).json({
+          message:
+            'Wrong object key. The body only accepts: storyTitle, universeTitle or position.'
+        })
+      }
+    })
+    bodyProps.forEach(prop => {
+      if (!body[prop]) {
+        return res.status(400).json({
+          message: `Missing parameters. The parameter ${prop} is required.`
+        })
+      }
+    })
+    bodyProps.forEach(prop => {
+      if (prop === 'position') {
+        if (typeof body[prop] !== 'number') {
+          return res.status(400).json({
+            message:
+              'Wrong variable type. The position type should be of type number.'
+          })
+        }
+      } else if (typeof body[prop] !== 'string') {
+        return res.status(400).json({
+          message: `Wrong variable type. The ${prop} type should be of type string.`
+        })
       }
     })
 
-    if (!timeline) {
-      res.status(404).json({ error: 'Timeline not found' })
-      return
-    }
+    const { storyTitle, universeTitle, position } = body
 
-    const { position } = req.body as PositionBody
+    const story = await prisma.story.findFirst({
+      where: {
+        title: storyTitle,
+        universe: {
+          title: universeTitle,
+          user: {
+            email: userEmail
+          }
+        }
+      }
+    })
 
-    if (position === undefined) {
-      res.status(400).json({ error: 'Position is required' })
-      return
+    if (!story) {
+      return res.status(404).json({ message: 'Story not found' })
     }
 
     const createdIndexCard = await prisma.indexCard.create({
       data: {
         position,
-        timeline: { connect: { id: timeline.id } }
+        story: {
+          connect: {
+            id: story.id
+          }
+        }
       }
     })
 
@@ -203,41 +104,261 @@ const postHandler: Handler = async (req, res) => {
   }
 }
 
-const deleteHandler: Handler = async (req, res) => {
+const getHandler: Handler = async (req, res) => {
   try {
-    const { realityTitle, timelineTitle, position } = req.query as DeleteQuery
-    const pos: number = +position
     const session = await getServerSession(req, res, options)
-    if (!session) {
-      res.status(401).end()
-      return
-    }
-    const email = session.user?.email as string
 
-    const timeline = await prisma.timeline.findFirst({
+    if (!session || !session.user) {
+      return res
+        .status(401)
+        .json({ message: 'Authorization information is missing or invalid.' })
+    }
+
+    const userEmail = session.user.email
+
+    if (!userEmail) {
+      return res
+        .status(400)
+        .json({ message: 'Request payload is missing or invalid.' })
+    }
+    const indexCards = await prisma.indexCard.findMany({
       where: {
-        title: timelineTitle,
-        reality: { title: realityTitle, user: { email } }
+        story: {
+          universe: {
+            user: {
+              email: userEmail
+            }
+          }
+        }
+      },
+      select: {
+        id: true,
+        position: true,
+        sceneHeading: true,
+        synopsis: true,
+        conflict: true,
+        story: {
+          select: { title: true, universe: { select: { title: true } } }
+        }
+      },
+      orderBy: [
+        {
+          position: 'asc'
+        }
+      ]
+    })
+
+    const formattedIndexCards = indexCards.reduce(
+      (acc: FormattedIndexCards[], cur) => {
+        const { story, ...rest } = cur
+        const indexCard = { ...rest }
+        const storyIndex = acc.findIndex(
+          (item: FormattedIndexCards) =>
+            item.storyTitle === story.title &&
+            item.universeTitle === story.universe.title
+        )
+        if (storyIndex === -1) {
+          acc.push({
+            storyTitle: story.title,
+            universeTitle: story.universe.title,
+            indexCards: [indexCard]
+          })
+        } else {
+          acc[storyIndex].indexCards.push(indexCard)
+        }
+        return acc
+      },
+      []
+    )
+
+    return res.status(200).json(formattedIndexCards)
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
+const patchHandler: Handler = async (req, res) => {
+  try {
+    const session = await getServerSession(req, res, options)
+
+    if (!session || !session.user) {
+      return res
+        .status(401)
+        .json({ message: 'Authorization information is missing or invalid.' })
+    }
+
+    const userEmail = session.user.email
+
+    if (!userEmail) {
+      return res
+        .status(400)
+        .json({ message: 'Request payload is missing or invalid.' })
+    }
+    const bodyProps = ['storyTitle', 'universeTitle', 'field']
+    const inputFieldProps = ['sceneHeading', 'synopsis', 'conflict']
+    const fieldProps = [...inputFieldProps, 'position']
+
+    const { body } = req
+    Object.keys(body).forEach(prop => {
+      if (!bodyProps.includes(prop)) {
+        res.status(400).json({
+          message:
+            'Wrong object key. The body only accepts: storyTitle, universeTitle or field.'
+        })
+      }
+    })
+    bodyProps.forEach(prop => {
+      if (!body[prop]) {
+        res.status(400).json({
+          message: `Missing parameters. The parameter ${prop} is required.`
+        })
+      }
+    })
+    bodyProps.forEach(prop => {
+      if (prop === 'field') {
+        if (typeof body[prop] !== 'object') {
+          res.status(400).json({
+            message:
+              'Wrong variable type. The field type should be of type object.'
+          })
+        }
+      } else if (typeof body[prop] !== 'string') {
+        res.status(400).json({
+          message: `Wrong variable type. The ${prop} type should be of type string.`
+        })
       }
     })
 
-    if (!timeline) {
-      res.status(404).json({ error: 'Timeline not found' })
-      return
+    const { storyTitle, universeTitle, field } = body
+    Object.keys(field).forEach(prop => {
+      if (!fieldProps.includes(prop)) {
+        res.status(400).json({
+          message:
+            'Wrong object key. The field only accepts: sceneHeading, synopsis, conflict or position.'
+        })
+      }
+    })
+    if (field.position && typeof field.position !== 'number') {
+      res.status(400).json({
+        message:
+          'Wrong variable type. The position type should be of type number.'
+      })
+    }
+    inputFieldProps.forEach(prop => {
+      if (field[prop] && typeof field[prop] !== 'string') {
+        res.status(400).json({
+          message:
+            'Wrong variable type. The position type should be of type number.'
+        })
+      }
+    })
+
+    const inputField = inputFieldProps.reduce(
+      (obj, prop) => ({
+        ...obj,
+        [prop]: field[prop]
+      }),
+      {}
+    )
+
+    await prisma.indexCard.updateMany({
+      where: {
+        position: field.position,
+        story: {
+          title: storyTitle,
+          universe: {
+            title: universeTitle,
+            user: {
+              email: userEmail
+            }
+          }
+        }
+      },
+      data: inputField
+    })
+
+    res.status(204).end()
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
+const deleteHandler: Handler = async (req, res) => {
+  try {
+    const session = await getServerSession(req, res, options)
+
+    if (!session || !session.user) {
+      return res
+        .status(401)
+        .json({ message: 'Authorization information is missing or invalid.' })
     }
 
-    console.log(typeof pos)
+    const userEmail = session.user.email
 
-    await prisma.indexCard.delete({
+    if (!userEmail) {
+      return res
+        .status(400)
+        .json({ message: 'Request payload is missing or invalid.' })
+    }
+    const queryProps = ['storyTitle', 'universeTitle', 'position']
+    const { query } = req
+    Object.keys(query).forEach(prop => {
+      if (!queryProps.includes(prop)) {
+        return res.status(400).json({
+          message:
+            'Wrong query name. The query only accepts: storyTitle, universeTitle or position.'
+        })
+      }
+    })
+    queryProps.forEach(prop => {
+      if (!query[prop]) {
+        return res.status(400).json({
+          message: `Missing parameters. The parameter ${prop} is required.`
+        })
+      }
+    })
+    queryProps.forEach(prop => {
+      if (typeof query[prop] !== 'string') {
+        return res.status(400).json({
+          message: `Wrong variable type. The ${prop} type should be of type string.`
+        })
+      }
+    })
+
+    const { storyTitle, universeTitle, position } = query
+    const story = await prisma.story.findFirst({
       where: {
-        timelineId_position: {
-          position: pos,
-          timelineId: timeline.id
+        indexCards: {
+          some: {
+            position: +position!
+          }
+        },
+        title: storyTitle as string,
+        universe: {
+          title: universeTitle as string,
+          user: {
+            email: userEmail
+          }
         }
       }
     })
 
-    res.status(204).json(null)
+    if (!story) {
+      return res.status(404).json({ message: 'Story not found' })
+    }
+
+    await prisma.indexCard.delete({
+      where: {
+        storyId_position: {
+          storyId: story.id,
+          position: +position!
+        }
+      }
+    })
+
+    res.status(204).end()
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Internal server error' })
@@ -245,8 +366,9 @@ const deleteHandler: Handler = async (req, res) => {
 }
 
 const methodHandlers: MethodHandlers = {
-  GET: (req, res) => getHandler(req, res),
   POST: (req, res) => postHandler(req, res),
+  GET: (req, res) => getHandler(req, res),
+  PATCH: (req, res) => patchHandler(req, res),
   DELETE: (req, res) => deleteHandler(req, res)
 }
 
@@ -255,8 +377,8 @@ const handler: NextApiHandler = async (
   res: NextApiResponse
 ) => {
   try {
-    if (!['GET', 'POST', 'DELETE'].includes(req.method!)) {
-      res.setHeader('Allow', ['GET', 'POST', 'DELETE'])
+    if (!['POST', 'GET', 'PATCH', 'DELETE'].includes(req.method!)) {
+      res.setHeader('Allow', ['POST', 'GET', 'PATCH', 'DELETE'])
       res.status(405).end(`Method ${req.method} Not Allowed`)
       return
     }

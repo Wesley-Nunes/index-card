@@ -1,8 +1,8 @@
-import { ReactNode, SetStateAction } from 'react'
+import { ReactNode } from 'react'
 
 export interface IndexCardBtnWrapper {
   position: number | undefined
-  setPosition: (value: SetStateAction<number>) => void
+  setPosition: (pos: number) => void
 }
 
 export interface IndexCardBtnProps {

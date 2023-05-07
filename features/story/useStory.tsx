@@ -1,19 +1,16 @@
 import useSWR from 'swr'
-import { useRouter } from 'next/router'
-import { useSession } from 'next-auth/react'
-import { Story } from './story.interface'
 import fetcher from '../@generics/fetcher'
-import { getStories } from '../@generics/endpoints'
-import { loginPage } from '../@generics/urls'
+import { storiesURI } from '../@generics/endpoints'
+import { useCheckAuthentication } from '../@generics/hooks'
+import type { Story } from './story.interface'
 
+/**
+ * A React hook that fetches the list of stories of an authenticated user.
+ * If the user is not authenticated, it redirects to the login page.
+ */
 function useStory() {
-  const router = useRouter()
-  const { status } = useSession()
-  const { data, isLoading, error } = useSWR(getStories, fetcher)
-
-  if (status === 'unauthenticated') {
-    router.push(loginPage)
-  }
+  useCheckAuthentication()
+  const { data, isLoading, error } = useSWR(storiesURI, fetcher)
 
   return {
     stories: data as Story[],

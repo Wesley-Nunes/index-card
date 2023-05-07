@@ -1,2 +1,2 @@
-// eslint-disable-next-line import/prefer-default-export
 export { default as useUniverse } from './useUniverse'
+export type { default as Universe } from './universe.interface'

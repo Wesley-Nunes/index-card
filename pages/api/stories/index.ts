@@ -35,10 +35,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
       },
       select: {
-        id: true,
         title: true,
         description: true,
-        universeId: true
+        universe: { select: { title: true } }
       },
       orderBy: [
         {

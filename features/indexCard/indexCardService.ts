@@ -1,4 +1,4 @@
-import { IndexCardBody, PositionBody } from './indexCard.interface'
+import { Body } from './indexCard.interface'
 
 const httpMethodMap = {
   POST: 'create',
@@ -9,7 +9,7 @@ const httpMethodMap = {
 async function sendRequest(
   url: string,
   method: string,
-  body?: IndexCardBody | PositionBody
+  body?: Body
 ): Promise<Response> {
   try {
     const response = await fetch(url, {
@@ -41,17 +41,11 @@ async function sendRequest(
   }
 }
 
-async function createNewIndexCard(
-  url: string,
-  body: PositionBody
-): Promise<Response> {
+async function createNewIndexCard(url: string, body: Body): Promise<Response> {
   return sendRequest(url, 'POST', body)
 }
 
-async function updateIndexCard(
-  url: string,
-  body: IndexCardBody
-): Promise<Response> {
+async function updateIndexCard(url: string, body: Body): Promise<Response> {
   return sendRequest(url, 'PATCH', body)
 }
 
