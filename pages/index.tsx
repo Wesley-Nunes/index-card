@@ -1,50 +1,75 @@
 import React from 'react'
-import Link from 'next/link'
 import { useSession } from 'next-auth/react'
-import { useReality } from 'features/reality'
+import Link from 'next/link'
+import { useUniverse } from 'features/universe'
+import { useStory } from 'features/story'
+import { getFilteredIndexCards, useGetAllIndexCards } from 'features/indexCard'
+import { slugify } from 'features/@generics/slugOperations'
+import { Item } from 'components'
+import { useCheckAuthentication } from 'features/@generics/hooks'
 
 function Home() {
+  useCheckAuthentication()
   const { data: session, status } = useSession()
-  const { realities, isLoading, isError } = useReality()
+  const { universes, loadingUniverses, errorUniverses } = useUniverse()
+  const { stories, loadingStories, errorStories } = useStory()
+  const { indexCardsContainer, loadingIndexCards, errorIndexCards } =
+    useGetAllIndexCards()
 
-  if (status === 'loading' || isLoading) {
+  if (
+    status === 'loading' ||
+    loadingUniverses ||
+    loadingStories ||
+    loadingIndexCards
+  ) {
     return <h1>Loading</h1>
   }
 
-  if (isError && status !== 'unauthenticated') {
+  if (
+    (errorUniverses || errorStories || errorIndexCards) &&
+    status !== 'unauthenticated'
+  ) {
     return <h1>Error</h1>
   }
 
-  if (!session) {
-    return (
-      <div className='right'>
-        <Link href='/api/auth/signin'>
-          <button type='button' data-testid='signBtn'>
-            Log in
-          </button>
-        </Link>
-      </div>
-    )
-  }
-
   if (session) {
-    return (
-      <>
-        <h1>Realities</h1>
-        {realities!.map((reality, i) => (
-          <Link
-            key={reality.id}
-            href={{
-              pathname: reality.title
-            }}
-          >
-            <button type='button' data-testid={`reality-${i + 1}`}>
-              {reality.title}
-            </button>
-          </Link>
-        ))}
-      </>
-    )
+    if (universes.length) {
+      return universes.map(universe => (
+        <Item title={universe.title} key={universe.title}>
+          {stories.length ? (
+            stories
+              .filter(story => story.universe.title === universe.title)
+              .map(story => (
+                <Item title={story.title} key={story.title}>
+                  {indexCardsContainer.length ? (
+                    getFilteredIndexCards(
+                      indexCardsContainer,
+                      universe.title,
+                      story.title
+                    ).map(({ position }) => {
+                      const universeTitle = slugify(universe.title)
+                      const storyTitle = slugify(story.title)
+                      const pathname = `${universeTitle}/${storyTitle}/${position}`
+
+                      return (
+                        <Link key={position} href={{ pathname }}>
+                          <Item title={position} />
+                        </Link>
+                      )
+                    })
+                  ) : (
+                    <> </>
+                  )}
+                </Item>
+              ))
+          ) : (
+            <> </>
+          )}
+        </Item>
+      ))
+    }
+
+    return <> </>
   }
 }
 

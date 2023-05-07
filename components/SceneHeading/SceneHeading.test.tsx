@@ -4,7 +4,7 @@ import SceneHeading from './SceneHeading'
 
 describe('Scene Heading', () => {
   it('should render a scene heading input field', () => {
-    render(<SceneHeading text='' setText={() => {}} id={2} />)
+    render(<SceneHeading text='' setText={() => {}} />)
 
     const sceneHeading = screen.getByRole<HTMLInputElement>('textbox', {
       name: /scene heading/i
@@ -15,7 +15,7 @@ describe('Scene Heading', () => {
   })
 
   it('should be possible to change the text content of the scene heading', () => {
-    render(<SceneHeading text='INT. Castelo' setText={() => {}} id={2} />)
+    render(<SceneHeading text='INT. Castelo' setText={() => {}} />)
 
     const sceneHeading = screen.getByRole<HTMLInputElement>('textbox', {
       name: /scene heading/i

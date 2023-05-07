@@ -1,28 +1,35 @@
 import React, { useMemo } from 'react'
 import styles from './TextLayout.module.css'
-import type { TextLayoutProps } from './TextLayout.interface'
+import type {
+  TextLayoutProps,
+  TextLayoutTextFields
+} from './TextLayout.interface'
 
 const TextLayout: React.FC<TextLayoutProps> = ({
   icon,
   description,
   text,
-  setText,
-  id
+  setText
 }) => {
-  const containerClassNames = useMemo(
-    () =>
-      [
-        styles.container,
-        description === 'scene heading'
-          ? styles['grid-scene-heading-item']
-          : '',
-        description === 'synopsis'
-          ? `${styles['full-height']} ${styles['grid-synopsis-item']}`
-          : '',
-        description === 'conflict' ? styles['grid-conflict-item'] : ''
-      ].join(' '),
-    [description]
-  )
+  const containerClassNames = useMemo(() => {
+    const classes = [styles.container]
+    if (description === 'scene heading') {
+      classes.push(styles['grid-scene-heading-item'])
+    } else if (description === 'synopsis') {
+      classes.push(styles['full-height'], styles['grid-synopsis-item'])
+    } else if (description === 'conflict') {
+      classes.push(styles['grid-conflict-item'])
+    }
+    return classes.join(' ')
+  }, [description])
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const fieldName =
+      e.target.name === 'scene heading'
+        ? 'sceneHeading'
+        : (e.target.name as TextLayoutTextFields)
+    setText({ [fieldName]: e.target.value })
+  }
 
   return (
     <span className={containerClassNames}>
@@ -33,7 +40,7 @@ const TextLayout: React.FC<TextLayoutProps> = ({
         aria-label={description}
         placeholder={description}
         value={text}
-        onChange={e => setText({ value: e.target.value, id })}
+        onChange={e => handleChange(e)}
         data-testid={description}
       />
     </span>
