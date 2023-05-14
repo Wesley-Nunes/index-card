@@ -1,6 +1,15 @@
 import type { Body, IndexCard, IndexCardFields } from '../indexCard.interface'
 
-const addIndexCard = (indexCardData: IndexCard[], indexCardBody: Body) =>
+/**
+ * Adds an index card to the indexCardData array based on the indexCardBody data.
+ * @param {IndexCard[]} indexCardData - The array of index cards to add the new index card to.
+ * @param {Body} indexCardBody - The data of the index card to be added.
+ * @returns {IndexCard[]} - The updated array of index cards after adding the new index card.
+ */
+const addIndexCard = (
+  indexCardData: IndexCard[],
+  indexCardBody: Body
+): IndexCard[] =>
   indexCardData.map(indexCard => {
     if (
       indexCard.universeTitle !== indexCardBody.universeTitle ||
@@ -31,7 +40,17 @@ const addIndexCard = (indexCardData: IndexCard[], indexCardBody: Body) =>
     return { ...indexCard, indexCards: updatedIndexCards }
   })
 
-const updateIndexCard = (indexCardData: IndexCard[], indexCardBody: Body) =>
+/**
+ * Updates an index card in the indexCardData array based on the indexCardBody data.
+ * @param {IndexCard[]} indexCardData - The array of index cards to update.
+ * @param {Body} indexCardBody - The data of the index card to be updated.
+ * @returns {IndexCard[]} - The updated array of index cards after updating the specified index card.
+ * @throws {Error} - Throws an error if a required key is missing in indexCardBody.field.
+ */
+const updateIndexCard = (
+  indexCardData: IndexCard[],
+  indexCardBody: Body
+): IndexCard[] =>
   indexCardData.map(indexCard => {
     if (
       indexCard.universeTitle !== indexCardBody.universeTitle ||
@@ -62,6 +81,12 @@ const updateIndexCard = (indexCardData: IndexCard[], indexCardBody: Body) =>
     return { ...indexCard, indexCards: updatedIndexCards }
   })
 
+/**
+ * Deletes an index card from the indexCardData array based on the position specified in indexCardBody.
+ * @param {IndexCard[]} indexCardData - The array of index cards to delete from.
+ * @param {Body} indexCardBody - The data of the index card to be deleted.
+ * @returns {IndexCard[]} - The updated array of index cards after deleting the specified index card.
+ */
 const deleteIndexCardByPos = (
   indexCardData: IndexCard[],
   indexCardBody: Body

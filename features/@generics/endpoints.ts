@@ -1,11 +1,7 @@
-const endpoints = () => {
-  const root = '/api/'
+const root = '/api/'
 
-  return {
-    universesURI: `${root}universes`,
-    storiesURI: `${root}stories`,
-    indexCardsURI: `${root}indexcards`
-  }
-}
+const universesURI = `${root}universes`
+const storiesURI = `${root}stories`
+const indexCardsURI = `${root}indexcards`
 
-export const { universesURI, storiesURI, indexCardsURI } = endpoints()
+export { universesURI, storiesURI, indexCardsURI }
