@@ -23,7 +23,7 @@ export interface UseIndexCardInfo extends Titles {
   position: number
 }
 
-export interface Body extends IndexCardPosAndTitles {
+export interface Body extends Titles {
   field: PartialIndexCard
 }
 

@@ -18,6 +18,15 @@ const addIndexCard = (
       return indexCard
     }
 
+    indexCard.indexCards.forEach(({ position }) => {
+      if (position === indexCardBody.field.position) {
+        const error = new Error(
+          'Invalid position. The position already exists.'
+        )
+        throw error
+      }
+    })
+
     const nextId = Math.max(...indexCard.indexCards.map(iC => iC.id)) + 1
 
     const posToInsert =
@@ -28,7 +37,7 @@ const addIndexCard = (
       sceneHeading: '',
       synopsis: '',
       conflict: '',
-      position: indexCardBody.position!
+      position: indexCardBody.field.position!
     }
 
     const updatedIndexCards = [
@@ -58,6 +67,18 @@ const updateIndexCard = (
     ) {
       return indexCard
     }
+
+    let positionTitleNotFound = true
+    indexCard.indexCards.forEach(({ position }) => {
+      if (position === indexCardBody.field.position) {
+        positionTitleNotFound = false
+      }
+    })
+    if (positionTitleNotFound) {
+      const error = new Error('Invalid position. The position no exists.')
+      throw error
+    }
+
     const updatedIndexCards = indexCard.indexCards.map(iC => {
       if (iC.position !== indexCardBody.field.position) {
         return iC
@@ -90,13 +111,24 @@ const updateIndexCard = (
 const deleteIndexCardByPos = (
   indexCardData: IndexCard[],
   indexCardBody: Body
-) =>
+): IndexCard[] =>
   indexCardData.map(indexCard => {
     if (
       indexCard.universeTitle !== indexCardBody.universeTitle ||
       indexCard.storyTitle !== indexCardBody.storyTitle
     ) {
       return indexCard
+    }
+
+    let positionTitleNotFound = true
+    indexCard.indexCards.forEach(({ position }) => {
+      if (position === indexCardBody.field.position) {
+        positionTitleNotFound = false
+      }
+    })
+    if (positionTitleNotFound) {
+      const error = new Error('Invalid position. The position no exists.')
+      throw error
     }
 
     const updatedIndexCards = indexCard.indexCards.filter(
@@ -121,6 +153,32 @@ export default function dataMaker(
     type: 'create' | 'update' | 'delete'
   }
 ): IndexCard[] {
+  let universeTitleNotFound = true
+  let storyTitleNotFound = true
+  if (!Object.keys(indexCardBody).length) {
+    const error = new Error('indexCardBody information missing')
+    throw error
+  }
+  if (!indexCardBody.field.position) {
+    const error = new Error('position information missing')
+    throw error
+  }
+
+  data.forEach(({ universeTitle, storyTitle }) => {
+    if (universeTitle === indexCardBody.universeTitle) {
+      universeTitleNotFound = false
+    }
+
+    if (storyTitle === indexCardBody.storyTitle) {
+      storyTitleNotFound = false
+    }
+  })
+
+  if (universeTitleNotFound || storyTitleNotFound) {
+    const error = new Error('The universe/story title is not found')
+    throw error
+  }
+
   if (operation.type === 'create') {
     return addIndexCard(data, indexCardBody)
   }
@@ -129,5 +187,6 @@ export default function dataMaker(
     return updateIndexCard(data, indexCardBody)
   }
 
+  // Se tentar delete em um posição inexistente deve throw
   return deleteIndexCardByPos(data, indexCardBody)
 }

@@ -1,4 +1,4 @@
-import { Body } from './indexCard.interface'
+import { Body, IndexCardPosAndTitles } from './indexCard.interface'
 
 const httpMethodMap = {
   POST: 'create',
@@ -10,14 +10,14 @@ const httpMethodMap = {
  * Sends an HTTP request to the specified URL using the provided method and optional request body.
  * @param {string} url - The URL to send the request to.
  * @param {string} method - The HTTP method to use for the request.
- * @param {Body} [body] - The optional request body.
+ * @param {Body | IndexCardPosAndTitles} [body] - The optional request body.
  * @returns {Promise<Response>} - A promise that resolves to the response from the server.
  * @throws {Error} - Throws an error if the request fails or encounters an error.
  */
 async function sendRequest(
   url: string,
   method: string,
-  body?: Body
+  body?: Body | IndexCardPosAndTitles
 ): Promise<Response> {
   try {
     const response = await fetch(url, {
@@ -52,11 +52,14 @@ async function sendRequest(
 /**
  * Creates a new index card by sending a POST request to the specified URL with the provided body.
  * @param {string} url - The URL to send the request to.
- * @param {Body} body - The request body containing data for creating the new index card.
+ * @param {IndexCardPosAndTitles} body - The request body containing data for creating the new index card.
  * @returns {Promise<Response>} - A promise that resolves to the response from the server.
  * @throws {Error} - Throws an error if the request fails or encounters an error.
  */
-async function createNewIndexCard(url: string, body: Body): Promise<Response> {
+async function createNewIndexCard(
+  url: string,
+  body: IndexCardPosAndTitles
+): Promise<Response> {
   return sendRequest(url, 'POST', body)
 }
 

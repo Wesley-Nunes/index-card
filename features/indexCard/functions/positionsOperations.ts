@@ -23,7 +23,7 @@ const positionsOperations = (
   }
 
   const getPositionOfTheNewIndexCard = (): number => {
-    if (positionList[0] > 1) {
+    if (positionList[0] > 1 || !positionList.length) {
       return 1
     }
 

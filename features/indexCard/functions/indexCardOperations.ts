@@ -3,9 +3,8 @@ import indexCardService from '../indexCardService'
 import { indexCardsURI } from '../../@generics/endpoints'
 import type {
   IndexCard,
-  Body,
-  IndexCardPosAndTitles,
-  PartialIndexCard
+  PartialIndexCard,
+  IndexCardPosAndTitles
 } from '../indexCard.interface'
 import dataMaker from './dataMaker'
 
@@ -24,16 +23,25 @@ const indexCardOperations = (
   const { universeTitle, storyTitle, position } = indexCardInfo
 
   const createIndexCard = (body: number) => {
-    const requestBody = {
+    indexCardService.createNewIndexCard(indexCardsURI, {
       universeTitle,
       storyTitle,
       position: body
-    }
-    indexCardService.createNewIndexCard(indexCardsURI, requestBody as Body)
+    })
 
     mutate(
       indexCardsURI,
-      dataMaker(data, requestBody as Body, { type: 'create' }),
+      dataMaker(
+        data,
+        {
+          universeTitle,
+          storyTitle,
+          field: {
+            position: body
+          }
+        },
+        { type: 'create' }
+      ),
       {
         revalidate: false
       }
