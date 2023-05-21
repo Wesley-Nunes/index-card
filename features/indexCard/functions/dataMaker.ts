@@ -27,10 +27,9 @@ const addIndexCard = (
       }
     })
 
-    const nextId = Math.max(...indexCard.indexCards.map(iC => iC.id)) + 1
-
-    const posToInsert =
-      indexCard.indexCards.findIndex(iC => iC.id === nextId - 1) + 1
+    const nextId = indexCard.indexCards.length
+      ? Math.max(...indexCard.indexCards.map(iC => iC.id)) + 1
+      : 1
 
     const newIndexCard: IndexCardFields = {
       id: nextId,
@@ -39,12 +38,9 @@ const addIndexCard = (
       conflict: '',
       position: indexCardBody.field.position!
     }
-
-    const updatedIndexCards = [
-      ...indexCard.indexCards.slice(0, posToInsert),
-      newIndexCard,
-      ...indexCard.indexCards.slice(posToInsert)
-    ]
+    const updatedIndexCards = [...indexCard.indexCards, newIndexCard].sort(
+      (a, b) => a.position - b.position
+    )
 
     return { ...indexCard, indexCards: updatedIndexCards }
   })
@@ -88,7 +84,7 @@ const updateIndexCard = (
       )
 
       if (!key) {
-        throw new Error('Missing th key')
+        throw new Error('Missing the key')
       }
 
       const updatedIndexCard = {
@@ -153,6 +149,11 @@ export default function dataMaker(
     type: 'create' | 'update' | 'delete'
   }
 ): IndexCard[] {
+  const functionMap = {
+    create: () => addIndexCard(data, indexCardBody),
+    update: () => updateIndexCard(data, indexCardBody),
+    delete: () => deleteIndexCardByPos(data, indexCardBody)
+  }
   let universeTitleNotFound = true
   let storyTitleNotFound = true
   if (!Object.keys(indexCardBody).length) {
@@ -179,14 +180,5 @@ export default function dataMaker(
     throw error
   }
 
-  if (operation.type === 'create') {
-    return addIndexCard(data, indexCardBody)
-  }
-
-  if (operation.type === 'update') {
-    return updateIndexCard(data, indexCardBody)
-  }
-
-  // Se tentar delete em um posição inexistente deve throw
-  return deleteIndexCardByPos(data, indexCardBody)
+  return functionMap[operation.type]()
 }
