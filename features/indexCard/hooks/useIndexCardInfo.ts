@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { unslugify } from '../../@generics/slugOperations'
+import { unslugify } from '../../@generics'
 import { UseIndexCardInfo } from '../indexCard.interface'
 
 /**

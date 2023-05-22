@@ -1,7 +1,6 @@
 import { Fetcher } from 'swr'
-import { Story } from '../story/story.interface'
+import { Universe, Story } from '@prisma/client'
 import { IndexCard } from '../indexCard/indexCard.interface'
-import Universe from '../universe/universe.interface'
 
 /**
  * Helper function for fetching data from a specified URL.

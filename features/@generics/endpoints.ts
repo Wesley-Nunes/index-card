@@ -1,7 +1,9 @@
 const root = '/api/'
 
-const universesURI = `${root}universes`
-const storiesURI = `${root}stories`
-const indexCardsURI = `${root}indexcards`
+const endpoints = {
+  universesURI: `${root}universes`,
+  storiesURI: `${root}stories`,
+  indexCardsURI: `${root}indexcards`
+}
 
-export { universesURI, storiesURI, indexCardsURI }
+export default endpoints

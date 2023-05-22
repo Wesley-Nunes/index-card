@@ -1,8 +1,12 @@
 import React from 'react'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import { homePage } from 'features/@generics/urls'
 
+/**
+ * Hey, developer.
+ * Please, ignore this page,
+ * for now, this will help me focus on the most priority part of the app.
+ */
 function Login() {
   const { data: session, status } = useSession()
   const { push } = useRouter()
@@ -12,16 +16,23 @@ function Login() {
   }
 
   if (session) {
-    push(homePage)
+    push('universe/story/1')
     return <> </>
   }
 
   if (!session) {
     return (
-      <div className='right'>
+      <div
+        style={{
+          height: '75vh',
+          display: 'grid',
+          alignContent: 'center',
+          justifyContent: 'space-around'
+        }}
+      >
         <button
+          style={{ width: 128, height: 32 }}
           type='button'
-          data-testid='signBtn'
           onClick={async () => {
             await signIn()
           }}

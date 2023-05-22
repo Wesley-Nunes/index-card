@@ -1,8 +1,6 @@
 import useSWR from 'swr'
 import { useRouter } from 'next/router'
-import fetcher from '../../@generics/fetcher'
-import { indexCardsURI } from '../../@generics/endpoints'
-import { slugify } from '../../@generics/slugOperations'
+import { slugify, endpoints, fetcher } from '../../@generics'
 import getFilteredIndexCards from '../functions/getFilteredIndexCards'
 import { IndexCard } from '../indexCard.interface'
 import useIndexCardInfo from './useIndexCardInfo'
@@ -25,7 +23,7 @@ function useGetIndexCardsOfStory(): {
   const router = useRouter()
   const { universeTitle, storyTitle, position } = useIndexCardInfo()
 
-  const { data, isLoading, error } = useSWR(indexCardsURI, fetcher)
+  const { data, isLoading, error } = useSWR(endpoints.indexCardsURI, fetcher)
 
   const indexCards = data as IndexCard[]
 
