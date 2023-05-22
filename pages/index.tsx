@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSession } from 'next-auth/react'
 import { useCheckAuthentication } from 'features/@generics'
-import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 /**
  * Hey, developer.
@@ -10,7 +10,6 @@ import { useRouter } from 'next/router'
  */
 function Home() {
   useCheckAuthentication()
-  const { push } = useRouter()
   const { data: session, status } = useSession()
 
   if (status === 'loading') {
@@ -18,9 +17,30 @@ function Home() {
   }
 
   if (session) {
-    push('universe/story/1')
+    const pathname = 'universe/story/1'
 
-    return <> </>
+    return (
+      <div
+        style={{
+          height: '75vh',
+          display: 'grid',
+          alignContent: 'center',
+          justifyContent: 'space-around'
+        }}
+      >
+        <Link
+          style={{
+            border: '0.5rem solid',
+            borderRadius: 16,
+            padding: 8,
+            cursor: 'pointer'
+          }}
+          href={{ pathname }}
+        >
+          Abrir Editor
+        </Link>
+      </div>
+    )
   }
 }
 
