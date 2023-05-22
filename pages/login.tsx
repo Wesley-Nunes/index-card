@@ -1,6 +1,7 @@
 import React from 'react'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
+import { urls } from 'features/@generics'
 
 /**
  * Hey, developer.
@@ -16,7 +17,7 @@ function Login() {
   }
 
   if (session) {
-    push('universe/story/1')
+    push(urls.homePage)
     return <> </>
   }
 
