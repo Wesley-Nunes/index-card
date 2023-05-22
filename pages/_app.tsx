@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import type { AppProps } from 'next/app'
 import { SessionProvider } from 'next-auth/react'
 import { IconContext } from '@react-icons/all-files'
-import 'features/@generics/global.css'
+import 'components/@generics/AppStyles/AppStyles.css'
 
 export default function App({ Component, pageProps }: AppProps) {
   const textColor = useMemo(() => ({ color: '#7bae8c' }), [])

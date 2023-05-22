@@ -1,4 +1,5 @@
-import { slugify, unslugify } from '../slugOperations'
+import slugify from '../functions/slugify'
+import unslugify from '../functions/unslugify'
 
 describe('slugOperations', () => {
   it('should slugify a title', () => {

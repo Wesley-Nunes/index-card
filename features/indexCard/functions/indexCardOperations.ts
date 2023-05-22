@@ -1,12 +1,12 @@
 import type { ScopedMutator } from 'swr/_internal'
+import { endpoints } from '../../@generics'
 import indexCardService from '../indexCardService'
-import { indexCardsURI } from '../../@generics/endpoints'
+import dataMaker from './dataMaker'
 import type {
   IndexCard,
   PartialIndexCard,
   IndexCardPosAndTitles
 } from '../indexCard.interface'
-import dataMaker from './dataMaker'
 
 /**
  * Provides operations for performing CRUD operations on index cards.
@@ -23,14 +23,14 @@ const indexCardOperations = (
   const { universeTitle, storyTitle, position } = indexCardInfo
 
   const createIndexCard = (body: number) => {
-    indexCardService.createNewIndexCard(indexCardsURI, {
+    indexCardService.createNewIndexCard(endpoints.indexCardsURI, {
       universeTitle,
       storyTitle,
       position: body
     })
 
     mutate(
-      indexCardsURI,
+      endpoints.indexCardsURI,
       dataMaker(
         data,
         {
@@ -57,11 +57,15 @@ const indexCardOperations = (
         position
       }
     }
-    indexCardService.updateIndexCard(indexCardsURI, requestBody)
+    indexCardService.updateIndexCard(endpoints.indexCardsURI, requestBody)
 
-    mutate(indexCardsURI, dataMaker(data, requestBody, { type: 'update' }), {
-      revalidate: false
-    })
+    mutate(
+      endpoints.indexCardsURI,
+      dataMaker(data, requestBody, { type: 'update' }),
+      {
+        revalidate: false
+      }
+    )
   }
 
   const deleteIndexCard = () => {
@@ -73,12 +77,16 @@ const indexCardOperations = (
       }
     }
     indexCardService.deleteIndexCard(
-      `${indexCardsURI}?universeTitle=${universeTitle}&storyTitle=${storyTitle}&position=${position}`
+      `${endpoints.indexCardsURI}?universeTitle=${universeTitle}&storyTitle=${storyTitle}&position=${position}`
     )
 
-    mutate(indexCardsURI, dataMaker(data, requestBody, { type: 'delete' }), {
-      revalidate: false
-    })
+    mutate(
+      endpoints.indexCardsURI,
+      dataMaker(data, requestBody, { type: 'delete' }),
+      {
+        revalidate: false
+      }
+    )
   }
 
   return {

@@ -1,38 +1,74 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+![TypeScript](https://img.shields.io/badge/TypeScript-93CAED?style=for-the-badge&logo=typescript&logoColor=white 'Typescript')
+![Next.JS](https://img.shields.io/badge/Next.js-20232A?style=for-the-badge&logo=next.js&logoColor=white 'NextJs')
+![Swr](https://img.shields.io/badge/swr-111313?style=for-the-badge&logoColor=black 'Swr')
+![Prisma.io](https://img.shields.io/badge/Prisma-1B1D1E?style=for-the-badge&logo=prisma&logoColor=white 'PrismaIo')
+![Jest](https://img.shields.io/badge/Jest-18DF16?style=for-the-badge&logo=jest&logoColor=black 'Jest')
+![React Testing Library](https://img.shields.io/badge/-React%20Testing%20Library-141414?style=for-the-badge&logo=Testing%20Library 'React Testing Library')
 
-## Getting Started
+# Index Card
 
-First, run the development server:
+The Index Card is a tool for organizing stories in a structured and user-friendly way.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+## Table of Content
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- [Motivation](#motivation)
+- [How to use](#how-to-use)
+- [Organization](#organization)
+- [Tools](#tools)
+- [API Docs](#api-docs)
+- [Preview](#preview)
+- [License](#license)
+- [Author](#author)
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## <a name="motivation"></a>Motivation
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+The motivation to create this app is to test my developer skills.  
+I decided in this personal project to make the project from idea to deployment.  
+The idea is an online version of the [index card](https://en.wikipedia.org/wiki/Index_card).  
+The type of index card developed here is more focused on story creation.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## <a name="how-to-use"></a>How to use
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+In the current version(0.8.0), GitHub oAuth handles the authentication,  
+you only need to log in with your GitHub account, and the app will redirect to the index card page.  
+![Index Card Page](https://lh3.googleusercontent.com/drive-viewer/AFGJ81r5_p9cYwzwv10LKUNg81IVmnLoixJM_V5jfLuDQqtoQUUauH5AJIW2-oK7USd7aT8kiQpB9BMKNbWsn70jNkGZNaNZWw=w720-h980 'Index Card Page')  
+On this page, you can edit index cards.  
+Accessing the options, you can add or delete an index card.  
+And using the navigation buttons, you can navigate between the index cards.
 
-## Learn More
+## <a name="Organization"></a>organization
 
-To learn more about Next.js, take a look at the following resources:
+The folder pages organize all pages of the app.  
+The folder components make the UI.  
+The folder features handles the logic.  
+The folder pages/API is the backend.  
+The folder prisma is the database schema.  
+![Organization](https://docs.google.com/drawings/d/e/2PACX-1vRZ18LHBRsmo7eOI792C01F4nH7gKUmd4dA9CrwCUxdlKsmVUfLsM6OZ2MnE8SUHBciajTOYlejMK4-/pub?w=475&h=731 'organization')
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## <a name="tools"></a>Tools
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+The Index Card is a full-stack application built using the following technologies and tools:
 
-## Deploy on Vercel
+- **Frontend:** TypeScript, Next.js, Swr
+- **Backend:** TypeScript, Next.js, Prisma
+- **Tests:** Jest with React Testing Library
+- **API Specification:** OpenAPI Specification
+- **Hosting:** Vercel
+- **Database Storage:** Supabase
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## <a name="api-docs"></a>API Docs
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+The API documentation is available here: [Index Card API docs](https://app.swaggerhub.com/apis-docs/WESNMONTEIRO/index-card/0.1.0).
+
+## <a name="preview"></a>Preview
+
+The project is available on [Index Card](https://index-card.vercel.app/)
+
+## <a name="license"></a>License
+
+The code is under [MIT License](./LICENSE).
+
+## <a name="author"></a>Author
+
+Developed by @Wesley-Nunes  
+[![Connect](https://img.shields.io/badge/-Connect-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/dev-wesley-nunes/)](https://www.linkedin.com/in/dev-wesley-nunes/)

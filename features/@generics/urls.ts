@@ -3,4 +3,4 @@ const urls = {
   homePage: '/'
 }
 
-export const { loginPage, homePage } = urls
+export default urls

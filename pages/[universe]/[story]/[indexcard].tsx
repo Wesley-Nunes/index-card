@@ -2,14 +2,6 @@ import React, { useMemo } from 'react'
 import Head from 'next/head'
 import { useSWRConfig } from 'swr'
 import {
-  useGetIndexCardsOfStory,
-  positionsOperations,
-  getFilteredIndexCards,
-  useIndexCardInfo,
-  indexCardOperations,
-  styles
-} from 'features/indexCard'
-import {
   SceneHeading,
   Synopsis,
   Conflict,
@@ -18,7 +10,15 @@ import {
   PreviousIndexCard,
   IndexCardOptions
 } from 'components'
-import { useCheckAuthentication } from 'features/@generics/hooks'
+import { styles } from 'components/@generics'
+import {
+  useGetIndexCardsOfStory,
+  positionsOperations,
+  getFilteredIndexCards,
+  useIndexCardInfo,
+  indexCardOperations
+} from 'features/indexCard'
+import { useCheckAuthentication } from 'features/@generics'
 
 export default function Editor() {
   useCheckAuthentication()
