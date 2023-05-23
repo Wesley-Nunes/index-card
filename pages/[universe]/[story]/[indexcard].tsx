@@ -15,17 +15,24 @@ import {
   useGetIndexCardsOfStory,
   positionsOperations,
   getFilteredIndexCards,
-  useIndexCardInfo,
   indexCardOperations
 } from 'features/indexCard'
 import { useCheckAuthentication } from 'features/@generics'
 
-export default function Editor() {
+export default function Editor({
+  params
+}: {
+  params: { universeTitle: string; storyTitle: string; position: number }
+}) {
   useCheckAuthentication()
   const { mutate } = useSWRConfig()
-  const { universeTitle, storyTitle, position } = useIndexCardInfo()
-  const { data, isLoading, isError } = useGetIndexCardsOfStory()
+  const { universeTitle, storyTitle, position } = params
+  const { data, isLoading, isError } = useGetIndexCardsOfStory(params)
   const { indexCards, positionList, currentPosition, setCurrentPosition } = data
+  console.log(JSON.stringify({ params }, null, 2))
+  console.log(JSON.stringify({ data }, null, 2))
+  console.log(JSON.stringify({ isLoading }, null, 2))
+  console.log(JSON.stringify({ isError }, null, 2))
 
   const { createIndexCard, updateIndexCardTextField, deleteIndexCard } =
     indexCardOperations(indexCards, mutate, {
@@ -55,6 +62,8 @@ export default function Editor() {
   if (isError) {
     return <h1>Error</h1>
   }
+
+  console.log({ filteredCard })
 
   return (
     <>
@@ -103,4 +112,16 @@ export default function Editor() {
       </div>
     </>
   )
+}
+
+export async function getServerSideProps(context: { params: any }) {
+  return {
+    props: {
+      params: {
+        universeTitle: context.params.universe,
+        storyTitle: context.params.story,
+        position: +context.params.indexcard
+      }
+    }
+  }
 }
