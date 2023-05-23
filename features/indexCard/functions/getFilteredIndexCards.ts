@@ -13,6 +13,10 @@ function getFilteredIndexCards(
   universeTitle: string,
   storyTitle: string
 ): IndexCardFields[] | [] {
+  console.log({ data })
+  console.log({ universeTitle })
+  console.log({ storyTitle })
+
   try {
     if (!data) {
       return []
@@ -22,6 +26,8 @@ function getFilteredIndexCards(
         indexCardBlock.universeTitle === universeTitle &&
         indexCardBlock.storyTitle === storyTitle
     )
+
+    console.log({ foundData })
 
     return foundData?.indexCards || []
   } catch (error) {

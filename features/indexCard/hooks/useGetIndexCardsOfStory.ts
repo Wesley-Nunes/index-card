@@ -3,14 +3,17 @@ import { useRouter } from 'next/router'
 import { slugify, endpoints, fetcher } from '../../@generics'
 import getFilteredIndexCards from '../functions/getFilteredIndexCards'
 import { IndexCard } from '../indexCard.interface'
-import useIndexCardInfo from './useIndexCardInfo'
 
 /**
  * Hook that fetches index cards for a specific story and returns a list of positions,
  * along with functions for setting the current position and fetching index card data.
  * @returns Object containing index card data and loading/error states.
  */
-function useGetIndexCardsOfStory(): {
+function useGetIndexCardsOfStory(params: {
+  universeTitle: string
+  storyTitle: string
+  position: number
+}): {
   data: {
     indexCards: IndexCard[]
     positionList: number[]
@@ -21,7 +24,7 @@ function useGetIndexCardsOfStory(): {
   isError: any
 } {
   const router = useRouter()
-  const { universeTitle, storyTitle, position } = useIndexCardInfo()
+  const { universeTitle, storyTitle, position } = params
 
   const { data, isLoading, error } = useSWR(endpoints.indexCardsURI, fetcher)
 
