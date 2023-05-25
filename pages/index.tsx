@@ -1,7 +1,8 @@
 import React from 'react'
 import { useSession } from 'next-auth/react'
-import { useCheckAuthentication } from 'features/@generics'
 import Link from 'next/link'
+import { useCheckAuthentication } from 'features/@generics'
+import { useIndexCards } from 'features/indexCard'
 
 /**
  * Hey, developer.
@@ -11,13 +12,16 @@ import Link from 'next/link'
 function Home() {
   useCheckAuthentication()
   const { data: session, status } = useSession()
+  const { indexCards: data, isLoading, isError } = useIndexCards()
 
-  if (status === 'loading') {
+  if (status === 'loading' || isLoading) {
     return <h1>Loading</h1>
   }
 
-  if (session) {
-    const pathname = 'universe/story/1'
+  if (session && !isError) {
+    const { universeTitle, storyTitle, indexCards } = data[0]
+    const { position } = indexCards[0]
+    const pathname = `${universeTitle}/${storyTitle}/${position}`
 
     return (
       <div
