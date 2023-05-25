@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import Head from 'next/head'
 import { useSWRConfig } from 'swr'
 import {
@@ -12,12 +12,13 @@ import {
 } from 'components'
 import { styles } from 'components/@generics'
 import {
-  useGetIndexCardsOfStory,
+  useIndexCards,
   positionsOperations,
   getFilteredIndexCards,
   indexCardOperations
 } from 'features/indexCard'
-import { useCheckAuthentication } from 'features/@generics'
+import { useCheckAuthentication, slugify, urls } from 'features/@generics'
+import { useRouter } from 'next/router'
 
 export default function Editor({
   universeTitle,
@@ -27,34 +28,66 @@ export default function Editor({
   storyTitle: string
 }) {
   useCheckAuthentication()
-  const { mutate } = useSWRConfig()
-  const { data, isLoading, isError } = useGetIndexCardsOfStory(
-    universeTitle,
-    storyTitle
-  )
-  const { indexCards, positionList, currentPosition, setCurrentPosition } = data
 
+  const { query, push } = useRouter()
+  const { mutate } = useSWRConfig()
+
+  const { indexCards, isLoading, isError } = useIndexCards()
+
+  const position = useMemo(() => {
+    const pos = +query.indexcard!
+    if (!pos || Number.isNaN(+pos)) {
+      push(urls.homePage)
+    }
+    return pos
+  }, [query, push])
+  const positionList = useMemo(
+    () =>
+      getFilteredIndexCards(indexCards, universeTitle, storyTitle).map(
+        indexCard => indexCard.position
+      ),
+    [indexCards, universeTitle, storyTitle]
+  )
+  const {
+    previousPosition,
+    nextPosition,
+    newIndexCardPosition,
+    availablePosition
+  } = useMemo(() => {
+    const positionsObj = positionsOperations(positionList, position)
+
+    return {
+      previousPosition: positionsObj.getAdjacentPositions[0],
+      nextPosition: positionsObj.getAdjacentPositions[1],
+      newIndexCardPosition: positionsObj.getPositionOfTheNewIndexCard,
+      availablePosition: positionsObj.getAvailablePosition
+    }
+  }, [position, positionList])
+  const filteredCard = useMemo(
+    () =>
+      getFilteredIndexCards(indexCards, universeTitle, storyTitle).filter(
+        indexCard => indexCard.position === position
+      ),
+    [indexCards, universeTitle, storyTitle, position]
+  )
+
+  const setCurrentPosition = useCallback(
+    (newPosition: number) => {
+      const pathname = '/[universe]/[story]/[indexcard]'
+      const universe = slugify(universeTitle)
+      const story = slugify(storyTitle)
+      const indexCardInfo = { universe, story, indexcard: newPosition }
+
+      push({ pathname, query: indexCardInfo }, undefined, { shallow: true })
+    },
+    [universeTitle, storyTitle, push]
+  )
   const { createIndexCard, updateIndexCardTextField, deleteIndexCard } =
     indexCardOperations(indexCards, mutate, {
       universeTitle,
       storyTitle,
-      position: currentPosition
+      position
     })
-
-  const {
-    getAdjacentPositions,
-    getPositionOfTheNewIndexCard,
-    getAvailablePosition
-  } = positionsOperations(positionList, currentPosition)
-  const [previousPosition, nextPosition] = getAdjacentPositions
-
-  const filteredCard = useMemo(
-    () =>
-      getFilteredIndexCards(indexCards, universeTitle, storyTitle).filter(
-        indexCard => indexCard.position === currentPosition
-      ) || [],
-    [indexCards, universeTitle, storyTitle, currentPosition]
-  )
 
   if (isLoading) {
     return <h1>loading</h1>
@@ -79,11 +112,11 @@ export default function Editor({
               setText={updateIndexCardTextField}
             />
             <IndexCardOptions
-              position={currentPosition}
+              position={position}
               deleteIndexCard={deleteIndexCard}
-              availablePosition={getAvailablePosition}
+              availablePosition={availablePosition}
               createIndexCard={createIndexCard}
-              newPosition={getPositionOfTheNewIndexCard}
+              newPosition={newIndexCardPosition}
               setPosition={setCurrentPosition}
             />
             <Synopsis
@@ -99,7 +132,7 @@ export default function Editor({
                 position={previousPosition}
                 setPosition={setCurrentPosition}
               />
-              <IndexCardPosition position={currentPosition} />
+              <IndexCardPosition position={position} />
               <NextIndexCard
                 position={nextPosition}
                 setPosition={setCurrentPosition}
