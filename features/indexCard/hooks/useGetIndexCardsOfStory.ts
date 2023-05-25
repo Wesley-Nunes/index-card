@@ -1,6 +1,6 @@
 import useSWR from 'swr'
 import { useRouter } from 'next/router'
-import { slugify, endpoints, fetcher } from '../../@generics'
+import { slugify, endpoints, fetcher, urls } from '../../@generics'
 import getFilteredIndexCards from '../functions/getFilteredIndexCards'
 import { IndexCard } from '../indexCard.interface'
 
@@ -9,11 +9,10 @@ import { IndexCard } from '../indexCard.interface'
  * along with functions for setting the current position and fetching index card data.
  * @returns Object containing index card data and loading/error states.
  */
-function useGetIndexCardsOfStory(params: {
-  universeTitle: string
+function useGetIndexCardsOfStory(
+  universeTitle: string,
   storyTitle: string
-  position: number
-}): {
+): {
   data: {
     indexCards: IndexCard[]
     positionList: number[]
@@ -24,10 +23,12 @@ function useGetIndexCardsOfStory(params: {
   isError: any
 } {
   const router = useRouter()
-  const { universeTitle, storyTitle, position } = params
+  const { indexcard: position } = router.query
+  if (!position || Number.isNaN(+position)) {
+    router.push(urls.loginPage)
+  }
 
   const { data, isLoading, error } = useSWR(endpoints.indexCardsURI, fetcher)
-
   const indexCards = data as IndexCard[]
 
   const positionList = indexCards?.length
@@ -49,7 +50,7 @@ function useGetIndexCardsOfStory(params: {
     data: {
       indexCards,
       positionList,
-      currentPosition: position,
+      currentPosition: +position!,
       setCurrentPosition
     },
     isLoading,
