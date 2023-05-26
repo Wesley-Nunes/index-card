@@ -17,6 +17,7 @@ The Index Card is a tool for organizing stories in a structured and user-friendl
 - [Tools](#tools)
 - [API Docs](#api-docs)
 - [Preview](#preview)
+- [Next steps](#next-steps)
 - [License](#license)
 - [Author](#author)
 
@@ -29,7 +30,7 @@ The type of index card developed here is more focused on story creation.
 
 ## <a name="how-to-use"></a>How to use
 
-In the current version(0.8.0), GitHub oAuth handles the authentication,  
+In the current version(0.8.1), GitHub oAuth handles the authentication,  
 you only need to log in with your GitHub account, and the app will redirect to the index card page.  
 ![Index Card Page](https://lh3.googleusercontent.com/drive-viewer/AFGJ81r5_p9cYwzwv10LKUNg81IVmnLoixJM_V5jfLuDQqtoQUUauH5AJIW2-oK7USd7aT8kiQpB9BMKNbWsn70jNkGZNaNZWw=w720-h980 'Index Card Page')  
 On this page, you can edit index cards.  
@@ -63,6 +64,14 @@ The API documentation is available here: [Index Card API docs](https://app.swagg
 ## <a name="preview"></a>Preview
 
 The project is available on [Index Card](https://index-card.vercel.app/)
+
+## <a name="next-steps"></a>Next steps
+
+- Sign up by email;
+- E2E tests and CI;
+- Story page v1(for management of stories);
+- Universe page v1(for management of universes);
+- ...
 
 ## <a name="license"></a>License
 
