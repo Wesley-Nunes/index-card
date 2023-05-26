@@ -1,8 +1,9 @@
 import React from 'react'
 import { useSession } from 'next-auth/react'
-import { useCheckAuthentication } from 'features/@generics'
-import { useIndexCards } from 'features/indexCard'
+import { urls, useCheckAuthentication } from 'features/@generics'
+import { useIndexCards, indexCardOperations } from 'features/indexCard'
 import { useRouter } from 'next/router'
+import { useSWRConfig } from 'swr'
 
 /**
  * Hey, developer.
@@ -14,6 +15,7 @@ function Home() {
   const { push } = useRouter()
   const { data: session, status } = useSession()
   const { indexCards: data, isLoading, isError } = useIndexCards()
+  const { mutate } = useSWRConfig()
 
   if (status === 'loading' || isLoading) {
     return <h1>Loading</h1>
@@ -21,9 +23,24 @@ function Home() {
 
   if (session && !isError) {
     const { universeTitle, storyTitle, indexCards } = data[0]
-    const { position } = indexCards[0]
-    push(`${universeTitle}/${storyTitle}/${position}`)
-    return <> </>
+    try {
+      const { position } = indexCards[0]
+
+      push(`${universeTitle}/${storyTitle}/${position}`)
+      return <> </>
+    } catch (error) {
+      if (!data[0].indexCards.length) {
+        const { createIndexCard } = indexCardOperations(data, mutate, {
+          universeTitle,
+          storyTitle
+        })
+        createIndexCard(1)
+
+        return <> </>
+      }
+      push(urls.loginPage)
+      return <> </>
+    }
   }
 }
 
