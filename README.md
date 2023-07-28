@@ -32,7 +32,7 @@ The type of index card developed here is more focused on story creation.
 
 In the current version(0.8.2), GitHub oAuth handles the authentication,  
 you only need to log in with your GitHub account, and the app will redirect to the index card page.  
-![Index Card Page](https://lh3.googleusercontent.com/drive-viewer/AFGJ81r5_p9cYwzwv10LKUNg81IVmnLoixJM_V5jfLuDQqtoQUUauH5AJIW2-oK7USd7aT8kiQpB9BMKNbWsn70jNkGZNaNZWw=w720-h980 'Index Card Page')  
+![Index Card Page](https://lh3.googleusercontent.com/pw/AIL4fc8ExU9wVZ3r1t_xdsezPNixMwB4iCNd-sJcoRZyjD5J73W2be7WWDNalsKrsNVW3f22BteI0Plq5pvBIJkyUlmSkhczAfYZZvnil8v7ecAcVcHKl30d2zceYgc0jsOSQrF8Rt5MvSoGJ8eoz2ba5Qk=w1313-h691-s-no 'Index Card Page')  
 On this page, you can edit index cards.  
 Accessing the options, you can add or delete an index card.  
 And using the navigation buttons, you can navigate between the index cards.
