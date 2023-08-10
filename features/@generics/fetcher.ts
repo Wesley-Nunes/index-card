@@ -1,5 +1,5 @@
 import { Fetcher } from 'swr'
-import { Universe, Story } from '@prisma/client'
+// import { Universe, Story } from '@prisma/client'
 import { IndexCard } from '../indexCard/indexCard.interface'
 
 /**
@@ -9,9 +9,7 @@ import { IndexCard } from '../indexCard/indexCard.interface'
  * @returns {Promise<T>} - A promise that resolves to the fetched data.
  * @throws {Error} - Throws an error if the fetch request fails.
  */
-const fetcher: Fetcher<Universe[] | Story[] | IndexCard[]> = async <T>(
-  url: string
-): Promise<T> => {
+const fetcher: Fetcher<IndexCard[]> = async <T>(url: string): Promise<T> => {
   const res = await fetch(url)
 
   if (!res.ok) {

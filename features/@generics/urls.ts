@@ -1,5 +1,4 @@
 const urls = {
-  loginPage: '/login',
   homePage: '/'
 }
 

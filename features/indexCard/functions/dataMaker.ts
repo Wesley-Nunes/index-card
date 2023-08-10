@@ -1,4 +1,8 @@
-import type { Body, IndexCard, IndexCardFields } from '../indexCard.interface'
+import type {
+  IndexCardPosition,
+  IndexCard,
+  PartialBody
+} from '../indexCard.interface'
 
 /**
  * Adds an index card to the indexCardData array based on the indexCardBody data.
@@ -8,42 +12,34 @@ import type { Body, IndexCard, IndexCardFields } from '../indexCard.interface'
  */
 const addIndexCard = (
   indexCardData: IndexCard[],
-  indexCardBody: Body
-): IndexCard[] =>
-  indexCardData.map(indexCard => {
-    if (
-      indexCard.universeTitle !== indexCardBody.universeTitle ||
-      indexCard.storyTitle !== indexCardBody.storyTitle
-    ) {
-      return indexCard
+  indexCardBody: IndexCardPosition
+): IndexCard[] => {
+  const { position } = indexCardBody
+
+  indexCardData.forEach(indexCard => {
+    if (indexCard.position === position) {
+      const error = new Error('Invalid position. The position already exists.')
+      throw error
     }
-
-    indexCard.indexCards.forEach(({ position }) => {
-      if (position === indexCardBody.field.position) {
-        const error = new Error(
-          'Invalid position. The position already exists.'
-        )
-        throw error
-      }
-    })
-
-    const nextId = indexCard.indexCards.length
-      ? Math.max(...indexCard.indexCards.map(iC => iC.id)) + 1
-      : 1
-
-    const newIndexCard: IndexCardFields = {
-      id: nextId,
-      sceneHeading: '',
-      synopsis: '',
-      conflict: '',
-      position: indexCardBody.field.position!
-    }
-    const updatedIndexCards = [...indexCard.indexCards, newIndexCard].sort(
-      (a, b) => a.position - b.position
-    )
-
-    return { ...indexCard, indexCards: updatedIndexCards }
   })
+
+  const nextId = indexCardData.length
+    ? Math.max(...indexCardData.map(iC => iC.id)) + 1
+    : 1
+  const newIndexCard: IndexCard = {
+    id: nextId,
+    sceneHeading: '',
+    synopsis: '',
+    conflict: '',
+    position
+  }
+
+  const updatedIndexCards = [...indexCardData, newIndexCard].sort(
+    (a, b) => a.position - b.position
+  )
+
+  return updatedIndexCards
+}
 
 /**
  * Updates an index card in the indexCardData array based on the indexCardBody data.
@@ -54,49 +50,38 @@ const addIndexCard = (
  */
 const updateIndexCard = (
   indexCardData: IndexCard[],
-  indexCardBody: Body
-): IndexCard[] =>
-  indexCardData.map(indexCard => {
-    if (
-      indexCard.universeTitle !== indexCardBody.universeTitle ||
-      indexCard.storyTitle !== indexCardBody.storyTitle
-    ) {
-      return indexCard
+  indexCardBody: PartialBody
+): IndexCard[] => {
+  let positionNotFound = true
+  const { position } = indexCardBody
+
+  indexCardData.forEach(indexCard => {
+    if (indexCard.position === position) {
+      positionNotFound = false
     }
-
-    let positionTitleNotFound = true
-    indexCard.indexCards.forEach(({ position }) => {
-      if (position === indexCardBody.field.position) {
-        positionTitleNotFound = false
-      }
-    })
-    if (positionTitleNotFound) {
-      const error = new Error('Invalid position. The position no exists.')
-      throw error
-    }
-
-    const updatedIndexCards = indexCard.indexCards.map(iC => {
-      if (iC.position !== indexCardBody.field.position) {
-        return iC
-      }
-      const key = Object.keys(indexCardBody.field).find(
-        prop => prop !== 'position'
-      )
-
-      if (!key) {
-        throw new Error('Missing the key')
-      }
-
-      const updatedIndexCard = {
-        ...iC,
-        [key]: indexCardBody.field[key as keyof typeof indexCardBody.field]
-      }
-
-      return updatedIndexCard
-    })
-
-    return { ...indexCard, indexCards: updatedIndexCards }
   })
+  if (positionNotFound) {
+    const error = new Error('Invalid position. The position no exists.')
+    throw error
+  }
+  const key = Object.keys(indexCardBody).find(prop => prop !== 'position')
+  if (!key) {
+    throw new Error('Missing the key')
+  }
+
+  const updatedIndexCards = indexCardData.map(indexCard => {
+    if (indexCard.position === position) {
+      return {
+        ...indexCard,
+        [key]: indexCardBody[key as keyof typeof indexCardBody]
+      }
+    }
+
+    return indexCard
+  })
+
+  return updatedIndexCards
+}
 
 /**
  * Deletes an index card from the indexCardData array based on the position specified in indexCardBody.
@@ -106,33 +91,27 @@ const updateIndexCard = (
  */
 const deleteIndexCardByPos = (
   indexCardData: IndexCard[],
-  indexCardBody: Body
-): IndexCard[] =>
-  indexCardData.map(indexCard => {
-    if (
-      indexCard.universeTitle !== indexCardBody.universeTitle ||
-      indexCard.storyTitle !== indexCardBody.storyTitle
-    ) {
-      return indexCard
+  indexCardBody: IndexCardPosition
+): IndexCard[] => {
+  let positionNotFound = true
+  const { position } = indexCardBody
+
+  indexCardData.forEach(indexCard => {
+    if (indexCard.position === position) {
+      positionNotFound = false
     }
-
-    let positionTitleNotFound = true
-    indexCard.indexCards.forEach(({ position }) => {
-      if (position === indexCardBody.field.position) {
-        positionTitleNotFound = false
-      }
-    })
-    if (positionTitleNotFound) {
-      const error = new Error('Invalid position. The position no exists.')
-      throw error
-    }
-
-    const updatedIndexCards = indexCard.indexCards.filter(
-      iC => iC.position !== indexCardBody.field.position
-    )
-
-    return { ...indexCard, indexCards: updatedIndexCards }
   })
+  if (positionNotFound) {
+    const error = new Error('Invalid position. The position no exists.')
+    throw error
+  }
+
+  const updatedIndexCards = indexCardData.filter(
+    indexCard => indexCard.position !== indexCardBody.position
+  )
+
+  return updatedIndexCards
+}
 
 /**
  * A utility function that returns a new array of index cards after performing
@@ -144,41 +123,41 @@ const deleteIndexCardByPos = (
  */
 export default function dataMaker(
   data: IndexCard[],
-  indexCardBody: Body,
+  indexCardBody: IndexCardPosition | PartialBody,
   operation: {
     type: 'create' | 'update' | 'delete'
   }
-): IndexCard[] {
+): IndexCard[] | void {
   const functionMap = {
     create: () => addIndexCard(data, indexCardBody),
     update: () => updateIndexCard(data, indexCardBody),
     delete: () => deleteIndexCardByPos(data, indexCardBody)
   }
-  let universeTitleNotFound = true
-  let storyTitleNotFound = true
-  if (!Object.keys(indexCardBody).length) {
-    const error = new Error('indexCardBody information missing')
-    throw error
-  }
-  if (!indexCardBody.field.position) {
-    const error = new Error('position information missing')
-    throw error
-  }
+  // let universeTitleNotFound = true
+  // let storyTitleNotFound = true
+  // if (!Object.keys(indexCardBody).length) {
+  //   const error = new Error('indexCardBody information missing')
+  //   throw error
+  // }
+  // if (!indexCardBody.field.position) {
+  //   const error = new Error('position information missing')
+  //   throw error
+  // }
 
-  data.forEach(({ universeTitle, storyTitle }) => {
-    if (universeTitle === indexCardBody.universeTitle) {
-      universeTitleNotFound = false
-    }
+  // data.forEach(({ universeTitle, storyTitle }) => {
+  //   if (universeTitle === indexCardBody.universeTitle) {
+  //     universeTitleNotFound = false
+  //   }
 
-    if (storyTitle === indexCardBody.storyTitle) {
-      storyTitleNotFound = false
-    }
-  })
+  //   if (storyTitle === indexCardBody.storyTitle) {
+  //     storyTitleNotFound = false
+  //   }
+  // })
 
-  if (universeTitleNotFound || storyTitleNotFound) {
-    const error = new Error('The universe/story title is not found')
-    throw error
-  }
+  // if (universeTitleNotFound || storyTitleNotFound) {
+  //   const error = new Error('The universe/story title is not found')
+  //   throw error
+  // }
 
   return functionMap[operation.type]()
 }

@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo } from 'react'
+import { useRouter } from 'next/router'
 import Head from 'next/head'
 import { useSWRConfig } from 'swr'
 import {
@@ -8,46 +9,50 @@ import {
   IndexCardPosition,
   NextIndexCard,
   PreviousIndexCard,
-  IndexCardOptions
+  IndexCardOptions,
+  Loading,
+  ReturnToHomeBtn
 } from 'components'
-import { styles } from 'components/@generics'
+import { editorStyles } from 'components/@generics'
+import { useCheckAuthentication, urls } from 'features/@generics'
 import {
   useIndexCards,
   positionsOperations,
-  getFilteredIndexCards,
   indexCardOperations
 } from 'features/indexCard'
-import { useCheckAuthentication, slugify, urls } from 'features/@generics'
-import { useRouter } from 'next/router'
 
-export default function Editor({
-  universeTitle,
-  storyTitle
-}: {
-  universeTitle: string
-  storyTitle: string
-}) {
+export default function Editor() {
   useCheckAuthentication()
 
   const { query, push } = useRouter()
   const { mutate } = useSWRConfig()
 
-  const { indexCards, isLoading, isError } = useIndexCards()
+  const { indexCards = [], isLoading, isError } = useIndexCards()
+  const positionList = indexCards.map(indexCard => indexCard.position)
+  const setCurrentPosition = useCallback(
+    (newPosition: number) => {
+      const pathname = '/[indexcard]'
+      const indexCardInfo = { indexcard: newPosition }
 
+      push({ pathname, query: indexCardInfo }, undefined, { shallow: true })
+    },
+    [push]
+  )
   const position = useMemo(() => {
     const pos = +query.indexcard!
-    if (!pos || Number.isNaN(+pos)) {
-      push(urls.homePage)
+    const positionNotFound = !positionList.find(
+      indexCardPos => indexCardPos === pos
+    )
+
+    if (!isLoading && (!pos || Number.isNaN(+pos) || positionNotFound)) {
+      if (positionList.length) {
+        setCurrentPosition(positionList[0])
+      } else {
+        push(urls.homePage)
+      }
     }
     return pos
-  }, [query, push])
-  const positionList = useMemo(
-    () =>
-      getFilteredIndexCards(indexCards, universeTitle, storyTitle).map(
-        indexCard => indexCard.position
-      ),
-    [indexCards, universeTitle, storyTitle]
-  )
+  }, [query, push, isLoading, positionList, setCurrentPosition])
   const {
     previousPosition,
     nextPosition,
@@ -64,33 +69,15 @@ export default function Editor({
     }
   }, [position, positionList])
   const filteredCard = useMemo(
-    () =>
-      getFilteredIndexCards(indexCards, universeTitle, storyTitle).filter(
-        indexCard => indexCard.position === position
-      ),
-    [indexCards, universeTitle, storyTitle, position]
+    () => indexCards.filter(indexCard => indexCard.position === position),
+    [indexCards, position]
   )
 
-  const setCurrentPosition = useCallback(
-    (newPosition: number) => {
-      const pathname = '/[universe]/[story]/[indexcard]'
-      const universe = slugify(universeTitle)
-      const story = slugify(storyTitle)
-      const indexCardInfo = { universe, story, indexcard: newPosition }
-
-      push({ pathname, query: indexCardInfo }, undefined, { shallow: true })
-    },
-    [universeTitle, storyTitle, push]
-  )
   const { createIndexCard, updateIndexCardTextField, deleteIndexCard } =
-    indexCardOperations(indexCards, mutate, {
-      universeTitle,
-      storyTitle,
-      position
-    })
+    indexCardOperations(indexCards, mutate)
 
   if (isLoading) {
-    return <h1>loading</h1>
+    return <Loading />
   }
   if (isError) {
     return <h1>Error</h1>
@@ -104,9 +91,12 @@ export default function Editor({
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <div className={styles.container}>
+      <div className={editorStyles['return-btn-container']}>
+        <ReturnToHomeBtn />
+      </div>
+      <section className={editorStyles.container}>
         {filteredCard.map(({ sceneHeading, synopsis, conflict, id }) => (
-          <main className={styles.main} key={id}>
+          <main className={editorStyles.main} key={id}>
             <SceneHeading
               text={sceneHeading || ''}
               setText={updateIndexCardTextField}
@@ -127,7 +117,7 @@ export default function Editor({
               text={conflict || ''}
               setText={updateIndexCardTextField}
             />
-            <footer className={styles.footer}>
+            <footer className={editorStyles.footer}>
               <PreviousIndexCard
                 position={previousPosition}
                 setPosition={setCurrentPosition}
@@ -140,16 +130,7 @@ export default function Editor({
             </footer>
           </main>
         ))}
-      </div>
+      </section>
     </>
   )
-}
-
-export async function getServerSideProps(context: { params: any }) {
-  return {
-    props: {
-      universeTitle: context.params.universe,
-      storyTitle: context.params.story
-    }
-  }
 }

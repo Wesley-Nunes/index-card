@@ -1,4 +1,4 @@
-import { Body, IndexCardPosAndTitles } from './indexCard.interface'
+import { PartialBody, IndexCardPosition } from './indexCard.interface'
 
 const httpMethodMap = {
   POST: 'create',
@@ -17,7 +17,7 @@ const httpMethodMap = {
 async function sendRequest(
   url: string,
   method: string,
-  body?: Body | IndexCardPosAndTitles
+  body?: PartialBody | IndexCardPosition
 ): Promise<Response> {
   try {
     const response = await fetch(url, {
@@ -58,7 +58,7 @@ async function sendRequest(
  */
 async function createNewIndexCard(
   url: string,
-  body: IndexCardPosAndTitles
+  body: IndexCardPosition
 ): Promise<Response> {
   return sendRequest(url, 'POST', body)
 }
@@ -70,7 +70,10 @@ async function createNewIndexCard(
  * @returns {Promise<Response>} - A promise that resolves to the response from the server.
  * @throws {Error} - Throws an error if the request fails or encounters an error.
  */
-async function updateIndexCard(url: string, body: Body): Promise<Response> {
+async function updateIndexCard(
+  url: string,
+  body: PartialBody
+): Promise<Response> {
   return sendRequest(url, 'PATCH', body)
 }
 

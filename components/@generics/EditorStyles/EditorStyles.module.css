@@ -1,10 +1,14 @@
+.return-btn-container {
+  margin: 3.2rem 0 0 3.2rem;
+}
+
 .container {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
 
-  height: 92vh;
+  height: 86vh;
 }
 
 .main {
