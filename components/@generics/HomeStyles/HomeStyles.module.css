@@ -1,0 +1,36 @@
+.container-page {
+  display: grid;
+  height: 75vh;
+  justify-content: space-around;
+  align-content: center;
+  gap: 1.6rem;
+}
+
+.container-description {
+  max-width: 60vw;
+}
+
+.container-items {
+  display: flex;
+  justify-content: flex-start;
+  gap: 1.6rem;
+  max-width: 320px;
+  flex-wrap: wrap;
+}
+
+.container-btns {
+  display: flex;
+  column-gap: 4px;
+}
+
+.btn-del {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.btn-del:hover {
+  background-color: var(--container-color);
+}

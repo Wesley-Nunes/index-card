@@ -1,0 +1,16 @@
+.btn {
+  font-weight: 600;
+  background-color: var(--container-color);
+  padding: 0.8rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  width: -moz-fit-content;
+  width: fit-content;
+  font-size: 1.6rem;
+  border-color: var(--container-color);
+  border-style: solid;
+}
+
+.btn:hover {
+  border: 2px solid var(--text-color);
+}

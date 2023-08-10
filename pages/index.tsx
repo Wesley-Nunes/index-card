@@ -1,47 +1,119 @@
 import React from 'react'
-import { useSession } from 'next-auth/react'
-import { urls, useCheckAuthentication } from 'features/@generics'
-import { useIndexCards, indexCardOperations } from 'features/indexCard'
-import { useRouter } from 'next/router'
+import Link from 'next/link'
+import { useSession, signIn, signOut } from 'next-auth/react'
 import { useSWRConfig } from 'swr'
+import { IoTrashSharp } from '@react-icons/all-files/io5/IoTrashSharp'
+import { Loading } from 'components'
+import { Button, homeStyles } from 'components/@generics'
+import {
+  useIndexCards,
+  indexCardOperations,
+  positionsOperations,
+  IndexCard
+} from 'features/indexCard'
 
-/**
- * Hey, developer.
- * Please, ignore this page,
- * for now, this will help me focus on the most priority part of the app.
- */
-function Home() {
-  useCheckAuthentication()
-  const { push } = useRouter()
-  const { data: session, status } = useSession()
-  const { indexCards: data, isLoading, isError } = useIndexCards()
+const IndexCardsContainer = ({
+  indexCards = []
+}: {
+  indexCards: IndexCard[]
+}) => {
   const { mutate } = useSWRConfig()
+  const { createIndexCard, deleteIndexCard } = indexCardOperations(
+    indexCards,
+    mutate
+  )
+  const handleClick = () => {
+    const positionList = indexCards.map(indexCard => indexCard.position)
+    const { getPositionOfTheNewIndexCard } = positionsOperations(
+      positionList,
+      1
+    )
 
-  if (status === 'loading' || isLoading) {
-    return <h1>Loading</h1>
+    createIndexCard(getPositionOfTheNewIndexCard)
   }
 
-  if (session && !isError) {
-    const { universeTitle, storyTitle, indexCards } = data[0]
-    try {
-      const { position } = indexCards[0]
+  return (
+    <>
+      <Button handleClick={handleClick}>Create new index card</Button>
+      <section className={homeStyles['container-items']}>
+        {indexCards.map(({ position, id }) => (
+          <div className={homeStyles['container-btns']} key={id}>
+            <Link href={`${position}`}>
+              <Button>{`${position}`}</Button>
+            </Link>
+            <button
+              onClick={() => deleteIndexCard(position)}
+              type='button'
+              className={homeStyles['btn-del']}
+            >
+              <IoTrashSharp size={22} color='var(--accent-color)' />
+            </button>
+          </div>
+        ))}
+      </section>
+    </>
+  )
+}
 
-      push(`${universeTitle}/${storyTitle}/${position}`)
-      return <> </>
-    } catch (error) {
-      if (!data[0].indexCards.length) {
-        const { createIndexCard } = indexCardOperations(data, mutate, {
-          universeTitle,
-          storyTitle
-        })
-        createIndexCard(1)
+const AuthenticatedHome = () => {
+  const { indexCards, isError, isLoading } = useIndexCards()
 
-        return <> </>
-      }
-      push(urls.loginPage)
-      return <> </>
-    }
+  if (!isLoading && !isError) {
+    return (
+      <div className={homeStyles['container-page']}>
+        <span>
+          <h1>Index Card</h1>
+          <Button
+            handleClick={async () => {
+              await signOut()
+            }}
+          >
+            Logout
+          </Button>
+        </span>
+        <hr />
+        <IndexCardsContainer indexCards={indexCards} />
+      </div>
+    )
   }
+
+  return <Loading />
+}
+
+const UnauthenticatedHome = () => (
+  <div className={homeStyles['container-page']}>
+    <h1>Index Card</h1>
+    <p className={homeStyles['container-description']}>
+      The Index Card is a tool for organizing stories in a structured and
+      user-friendly way.
+    </p>
+    <section className={homeStyles['container-items']}>
+      <Link href='how-to'>
+        <Button>How To</Button>
+      </Link>
+      <Button
+        handleClick={async () => {
+          await signIn()
+        }}
+      >
+        Login
+      </Button>
+    </section>
+  </div>
+)
+
+function Home() {
+  const { status } = useSession()
+
+  if (status === 'authenticated') {
+    return <AuthenticatedHome />
+  }
+
+  if (status === 'unauthenticated') {
+    return <UnauthenticatedHome />
+  }
+
+  return <Loading />
 }
 
 export default Home

@@ -1,32 +1,20 @@
-interface Titles {
-  storyTitle: string
-  universeTitle: string
-}
-
-export interface IndexCardFields {
+interface IndexCardWithoutPosition {
   id: number
-  position: number
   sceneHeading: string
   synopsis: string
   conflict: string
 }
 
-export type PartialIndexCard = {
-  [P in keyof IndexCardFields]?: IndexCardFields[P]
-}
+export interface IndexCard
+  extends IndexCardWithoutPosition,
+    IndexCardPosition {}
 
-export interface IndexCardPosAndTitles extends Titles {
-  position?: number
-}
-
-export interface UseIndexCardInfo extends Titles {
+export interface IndexCardPosition {
   position: number
 }
 
-export interface Body extends Titles {
-  field: PartialIndexCard
+export type PartialIndexCard = {
+  [P in keyof IndexCardWithoutPosition]?: IndexCardWithoutPosition[P]
 }
 
-export interface IndexCard extends Titles {
-  indexCards: IndexCardFields[]
-}
+export interface PartialBody extends PartialIndexCard, IndexCardPosition {}

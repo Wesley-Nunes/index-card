@@ -10,7 +10,7 @@ function useCheckAuthentication(): void {
   const { status } = useSession()
 
   if (status === 'unauthenticated') {
-    router.push(urls.loginPage)
+    router.push(urls.homePage)
   }
 }
 
