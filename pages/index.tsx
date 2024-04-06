@@ -11,6 +11,7 @@ import {
   positionsOperations,
   IndexCard
 } from 'features/indexCard'
+import { Url } from 'next/dist/shared/lib/router/router'
 
 const IndexCardsContainer = ({
   indexCards = []
@@ -88,7 +89,7 @@ const UnauthenticatedHome = () => (
       user-friendly way.
     </p>
     <section className={homeStyles['container-items']}>
-      <Link href='how-to'>
+      <Link href={process.env.NEXT_PUBLIC_DOCS as Url}>
         <Button>How To</Button>
       </Link>
       <Button
