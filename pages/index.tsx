@@ -4,7 +4,7 @@ import { useSession, signIn, signOut } from 'next-auth/react'
 import { useSWRConfig } from 'swr'
 import { IoTrashSharp } from '@react-icons/all-files/io5/IoTrashSharp'
 import { Loading } from 'components'
-import { Button, homeStyles } from 'components/@generics'
+import { Button, homeStyles, IndexCardBtn } from 'components/@generics'
 import {
   useIndexCards,
   indexCardOperations,
@@ -42,13 +42,12 @@ const IndexCardsContainer = ({
             <Link href={`${position}`}>
               <Button>{`${position}`}</Button>
             </Link>
-            <button
-              onClick={() => deleteIndexCard(position)}
-              type='button'
+            <IndexCardBtn
+              description='Delete current index card'
               className={homeStyles['btn-del']}
-            >
-              <IoTrashSharp size={22} color='var(--accent-color)' />
-            </button>
+              handleClick={() => deleteIndexCard(position)}
+              icon={<IoTrashSharp size={22} color='var(--accent-color)' />}
+            />
           </div>
         ))}
       </section>
