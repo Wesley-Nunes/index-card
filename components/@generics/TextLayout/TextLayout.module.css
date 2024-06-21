@@ -1,14 +1,10 @@
 .container {
   display: flex;
   align-items: baseline;
-  column-gap: 0.5rem;
+  column-gap: 3.2rem;
   flex-wrap: wrap;
 
   width: 100%;
-}
-
-.container > svg {
-  margin-left: 0.5rem;
 }
 
 .input {
@@ -18,7 +14,7 @@
 
   color: var(--text-color);
   caret-color: var(--accent-color);
-  background-color: var(--container-color);
+  background-color: var(--editor-color);
 
   border: none;
   outline: none;
@@ -26,7 +22,7 @@
 }
 
 .input::placeholder {
-  color: var(--text-color);
+  color: rgba(0, 0, 0, 25%);
   text-transform: capitalize;
 }
 

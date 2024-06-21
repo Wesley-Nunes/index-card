@@ -2,4 +2,7 @@
   font-weight: bold;
   cursor: default;
   color: var(--accent-color);
+  grid-area: 3 / 2;
+  justify-self: flex-end;
+  align-self: flex-end;
 }
