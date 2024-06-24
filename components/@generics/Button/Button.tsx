@@ -11,7 +11,7 @@ const Button: React.FC<{
 )
 
 Button.defaultProps = {
-  handleClick: () => {}
+ handleClick: () => { }
 }
 
 export default memo(Button)
