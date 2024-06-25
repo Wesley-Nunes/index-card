@@ -14,6 +14,8 @@
   caret-color: var(--accent-color);
   background-color: var(--editor-color);
 
+  font: 1.6rem "Fira Mono", monospace;
+
   border: none;
   outline: none;
   border-radius: 3px;

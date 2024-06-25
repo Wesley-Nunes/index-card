@@ -1,8 +1,4 @@
 :root {
-  --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
-    'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
-    'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
-
   --base-color: hsl(195, 70%, 13%);
   --base-color-opacity: hsla(195, 70%, 13%, 0.6);
   --container-color: hsl(195, 52%, 21%);
@@ -31,7 +27,7 @@ body {
 body {
   background-color: var(--bg-color);
 
-  font: 1.8rem var(--font-mono);
+  font: 1.6rem "Noto Sans", sans-serif;
   color: var(--text-color);
 }
 
@@ -40,4 +36,7 @@ a {
   text-decoration: none;
 }
 
+button {
+  font-family: inherit;
+}
 

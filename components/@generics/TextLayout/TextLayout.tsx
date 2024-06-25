@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import { firaMono } from 'app/fonts'
 import styles from './TextLayout.module.css'
 import type {
   TextLayoutProps,
@@ -32,7 +33,7 @@ const TextLayout: React.FC<TextLayoutProps> = ({
   }
 
   return (
-    <span className={containerClassNames}>
+    <span className={`${containerClassNames} ${firaMono.className}`}>
       {icon}
       <textarea
         className={`${styles.input} ${styles['no-resize']} ${styles['full-height']}`}
