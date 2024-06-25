@@ -2,9 +2,10 @@ import React from 'react'
 import Link from 'next/link'
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { useSWRConfig } from 'swr'
-import { IoTrashSharp } from '@react-icons/all-files/io5/IoTrashSharp'
+import { IoTrashBinOutline } from '@react-icons/all-files/io5/IoTrashBinOutline'
+import { IoLogOut } from '@react-icons/all-files/io5/IoLogOut'
 import { Loading } from 'components'
-import { Button, homeStyles, IndexCardBtn } from 'components/@generics'
+import { Button, homeStyles, IndexCardBtn, editorStyles } from 'components/@generics'
 import {
   useIndexCards,
   indexCardOperations,
@@ -34,24 +35,33 @@ const IndexCardsContainer = ({
   }
 
   return (
-    <>
-      <Button handleClick={handleClick}>Create new index card</Button>
-      <section className={homeStyles['container-items']}>
-        {indexCards.map(({ position, id }) => (
-          <div className={homeStyles['container-btns']} key={id}>
-            <Link href={`${position}`}>
-              <Button>{`${position}`}</Button>
-            </Link>
-            <IndexCardBtn
-              description='Delete current index card'
-              className={homeStyles['btn-del']}
-              handleClick={() => deleteIndexCard(position)}
-              icon={<IoTrashSharp size={22} color='var(--accent-color)' />}
-            />
-          </div>
-        ))}
-      </section>
-    </>
+    <section className={homeStyles['container-items']}>
+      {indexCards.map(({ position, id }) => (
+        <div
+          className={
+            `${homeStyles['container-btns']} ${homeStyles['shadow-home']}`
+          }
+          key={id}
+        >
+          <Link href={`${position}`}>
+            <Button>{`${position}`}</Button>
+          </Link>
+          <IndexCardBtn
+            description='Delete current index card'
+            className={homeStyles['btn-del']}
+            handleClick={() => deleteIndexCard(position)}
+            icon={<IoTrashBinOutline size={32} />}
+          />
+        </div>
+      ))}
+      <div
+        className={
+          `${homeStyles['create-wrapper']} ${homeStyles['shadow-home']}`
+        }
+      >
+        <Button handleClick={handleClick}>Create new index card</Button>
+      </div>
+    </section>
   )
 }
 
@@ -60,19 +70,18 @@ const AuthenticatedHome = () => {
 
   if (!isLoading && !isError) {
     return (
-      <div className={homeStyles['container-page']}>
-        <span>
-          <h1>Index Card</h1>
-          <Button
-            handleClick={async () => {
-              await signOut()
-            }}
-          >
-            Logout
-          </Button>
-        </span>
-        <hr />
-        <IndexCardsContainer indexCards={indexCards} />
+      <div className={editorStyles.wrapper}>
+        <Button
+          handleClick={async () => {
+            await signOut()
+          }}
+        >
+          <IoLogOut size={36} />
+        </Button>
+        <section className={editorStyles.container}>
+          <h1 className={editorStyles.title}>Index cards</h1>
+          <IndexCardsContainer indexCards={indexCards} />
+        </section>
       </div>
     )
   }
