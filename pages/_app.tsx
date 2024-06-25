@@ -5,7 +5,7 @@ import { IconContext } from '@react-icons/all-files'
 import 'components/@generics/AppStyles/AppStyles.css'
 
 export default function App({ Component, pageProps }: AppProps) {
-  const textColor = useMemo(() => ({ color: '#7bae8c' }), [])
+  const textColor = useMemo(() => ({ color: '#006083' }), [])
 
   return (
     <SessionProvider session={pageProps.session}>

@@ -1,26 +1,18 @@
 .btn {
-  width: 2.8rem;
-  height: 2.4rem;
+  width: 3.2rem;
+  height: 3.2rem;
 
-  background-color: var(--container-color);
+  background-color: transparent; 
 
   border: none;
-  border-bottom: 1px solid var(--base-color);
 
-  opacity: 0.6;
   cursor: pointer;
+
+  opacity: 0.8;
 }
 
 .btn:hover {
   opacity: 1;
-}
-
-.btn > svg {
-  fill: var(--text-color);
-}
-
-.btn:hover > svg {
-  fill: var(--accent-color);
 }
 
 .last-card {
@@ -31,3 +23,4 @@
 .last-card:hover {
   opacity: 0.3;
 }
+

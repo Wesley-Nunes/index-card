@@ -91,46 +91,46 @@ export default function Editor() {
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <div className={editorStyles['return-btn-container']}>
+      <div className={editorStyles.wrapper}>
         <ReturnToHomeBtn />
+        <section className={editorStyles.container}>
+          {filteredCard.map(({ sceneHeading, synopsis, conflict, id }) => (
+            <main className={editorStyles.main} key={id}>
+              <SceneHeading
+                text={sceneHeading || ''}
+                setText={updateIndexCardTextField}
+              />
+              <IndexCardOptions
+                position={position}
+                deleteIndexCard={deleteIndexCard}
+                availablePosition={availablePosition}
+                createIndexCard={createIndexCard}
+                newPosition={newIndexCardPosition}
+                setPosition={setCurrentPosition}
+              />
+              <Synopsis
+                text={synopsis || ''}
+                setText={updateIndexCardTextField}
+              />
+              <Conflict
+                text={conflict || ''}
+                setText={updateIndexCardTextField}
+              />
+              <footer className={editorStyles.footer}>
+                <PreviousIndexCard
+                  position={previousPosition}
+                  setPosition={setCurrentPosition}
+                />
+                <IndexCardPosition position={position} />
+                <NextIndexCard
+                  position={nextPosition}
+                  setPosition={setCurrentPosition}
+                />
+              </footer>
+            </main>
+          ))}
+        </section>
       </div>
-      <section className={editorStyles.container}>
-        {filteredCard.map(({ sceneHeading, synopsis, conflict, id }) => (
-          <main className={editorStyles.main} key={id}>
-            <SceneHeading
-              text={sceneHeading || ''}
-              setText={updateIndexCardTextField}
-            />
-            <IndexCardOptions
-              position={position}
-              deleteIndexCard={deleteIndexCard}
-              availablePosition={availablePosition}
-              createIndexCard={createIndexCard}
-              newPosition={newIndexCardPosition}
-              setPosition={setCurrentPosition}
-            />
-            <Synopsis
-              text={synopsis || ''}
-              setText={updateIndexCardTextField}
-            />
-            <Conflict
-              text={conflict || ''}
-              setText={updateIndexCardTextField}
-            />
-            <footer className={editorStyles.footer}>
-              <PreviousIndexCard
-                position={previousPosition}
-                setPosition={setCurrentPosition}
-              />
-              <IndexCardPosition position={position} />
-              <NextIndexCard
-                position={nextPosition}
-                setPosition={setCurrentPosition}
-              />
-            </footer>
-          </main>
-        ))}
-      </section>
     </>
   )
 }

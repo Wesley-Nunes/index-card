@@ -1,24 +1,20 @@
 .container {
   display: flex;
   align-items: baseline;
-  column-gap: 0.5rem;
+  column-gap: 3.2rem;
   flex-wrap: wrap;
 
   width: 100%;
 }
 
-.container > svg {
-  margin-left: 0.5rem;
-}
-
 .input {
   flex-grow: 1;
 
-  font: 500 2.2rem var(--font-mono);
-
   color: var(--text-color);
   caret-color: var(--accent-color);
-  background-color: var(--container-color);
+  background-color: var(--editor-color);
+
+  font: 1.6rem "Fira Mono", monospace;
 
   border: none;
   outline: none;
@@ -26,7 +22,7 @@
 }
 
 .input::placeholder {
-  color: var(--text-color);
+  color: rgba(0, 0, 0, 25%);
   text-transform: capitalize;
 }
 
