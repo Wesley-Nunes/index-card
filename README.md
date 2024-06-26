@@ -30,7 +30,7 @@ The type of index card developed here is more focused on story creation.
 
 ## <a name="how-to-use"></a>How to use
 
-In the current version(0.9), GitHub or Google oAuth handles the authentication,  
+In the current version(0.10.x), GitHub or Google oAuth handles the authentication,  
 you only need to log in with your GitHub account or Google account,  
 and the app will redirect to the index card page.  
 ![Index Card Page](https://lh3.googleusercontent.com/pw/AIL4fc8ExU9wVZ3r1t_xdsezPNixMwB4iCNd-sJcoRZyjD5J73W2be7WWDNalsKrsNVW3f22BteI0Plq5pvBIJkyUlmSkhczAfYZZvnil8v7ecAcVcHKl30d2zceYgc0jsOSQrF8Rt5MvSoGJ8eoz2ba5Qk=w1313-h691-s-no 'Index Card Page')  
