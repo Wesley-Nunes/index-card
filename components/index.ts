@@ -7,3 +7,4 @@ export { default as PreviousIndexCard } from './PreviousIndexCard/PreviousIndexC
 export { default as IndexCardOptions } from './IndexCardOptions/IndexCardOptions'
 export { default as Loading } from './Loading/Loading'
 export { default as ReturnToHomeBtn } from './ReturnToHomeBtn/ReturnToHomeBtn'
+export { default as Instructions } from './Instructions/Instructions'
