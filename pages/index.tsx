@@ -4,7 +4,7 @@ import { useSession, signIn, signOut } from 'next-auth/react'
 import { useSWRConfig } from 'swr'
 import { IoTrashBinOutline } from '@react-icons/all-files/io5/IoTrashBinOutline'
 import { IoLogOut } from '@react-icons/all-files/io5/IoLogOut'
-import { Loading } from 'components'
+import { Loading, Instructions } from 'components'
 import { Button, homeStyles, IndexCardBtn, editorStyles } from 'components/@generics'
 import {
   useIndexCards,
@@ -12,7 +12,6 @@ import {
   positionsOperations,
   IndexCard
 } from 'features/indexCard'
-import { Url } from 'next/dist/shared/lib/router/router'
 
 const IndexCardsContainer = ({
   indexCards = []
@@ -88,27 +87,30 @@ const AuthenticatedHome = () => {
 
   return <Loading />
 }
-
-const UnauthenticatedHome = () => (
-  <div className={homeStyles['container-page']}>
-    <h1>Index Card</h1>
-    <p className={homeStyles['container-description']}>
-      The Index Card is a tool for organizing stories in a structured and
-      user-friendly way.
-    </p>
-    <section className={homeStyles['container-items']}>
-      <Link href={process.env.NEXT_PUBLIC_DOCS as Url}>
-        <Button>How To</Button>
-      </Link>
+const NavBar = () => (
+  <nav className={homeStyles.navbar}>
+    <h1 className={homeStyles["main-heading"]}>Index Card</h1>
+    <span className={homeStyles["login-wrapper"]}>
       <Button
         handleClick={async () => {
-          await signIn()
+          await signIn();
         }}
       >
         Login
       </Button>
-    </section>
-  </div>
+    </span>
+  </nav>
+);
+
+const UnauthenticatedHome = () => (
+  <>
+    <NavBar />
+    <p className={homeStyles['container-description']}>
+      The Index Card is a tool for organizing stories in a structured and
+      user-friendly way.
+    </p>
+    <Instructions />
+  </>
 )
 
 function Home() {
