@@ -33,7 +33,6 @@ The type of index card developed here is more focused on story creation.
 In the current version(0.10.x), GitHub or Google oAuth handles the authentication,  
 you only need to log in with your GitHub account or Google account,  
 and the app will redirect to the index card page.  
-![Index Card Page](https://lh3.googleusercontent.com/pw/AIL4fc8ExU9wVZ3r1t_xdsezPNixMwB4iCNd-sJcoRZyjD5J73W2be7WWDNalsKrsNVW3f22BteI0Plq5pvBIJkyUlmSkhczAfYZZvnil8v7ecAcVcHKl30d2zceYgc0jsOSQrF8Rt5MvSoGJ8eoz2ba5Qk=w1313-h691-s-no 'Index Card Page')  
 On this page, you can edit index cards.  
 Accessing the options, you can add or delete an index card.  
 And using the navigation buttons, you can navigate between the index cards.
@@ -64,8 +63,8 @@ The API documentation is available here: [Index Card API docs](https://app.swagg
 
 ## <a name="preview"></a>Preview
 
-The project is available on [Index Card](https://index-card.vercel.app/)
-
+The project is available on [Index Card](https://index-card.vercel.app/)  
+![index card image preview](https://github.com/Wesley-Nunes/index-card/assets/43190808/25183578-5120-446d-b0b6-a79e5f1e0253)  
 ## <a name="next-steps"></a>Next steps
 
 - Sign up by email;
